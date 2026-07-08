@@ -28,8 +28,9 @@ func _on_upgrade_button_pressed() -> void:
 	print("Upgrade Button Clicked")
 	if clicks >= upgrade_cost:
 		clicks -= upgrade_cost
+		clicks_per_click += 1
 		update_clicks_label()
-		upgrade_modifier += clicks_per_click
+		upgrade_modifier = clicks_per_click
 		print("Upgrade bought")
 		print("Upgrade modif: ",upgrade_modifier)
 	else:
