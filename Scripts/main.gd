@@ -13,7 +13,8 @@ var upgrade_modifier: int = 1
 # on-click function definition
 func update_clicks_label() -> void:
 	print("Clicks: ", clicks)
-	clicks_label.text = "Clicks: " + str(clicks)
+	#clicks_label.text = "Clicks: " + str(clicks)
+	clicks_label.text = "Clicks: " + str(clicks) + "\nPer Click: " + str(clicks_per_click)
 #
 func update_upgrade_button() -> void:
 	upgrade_button.text = "Upgrade Cost: " + str(upgrade_cost)
