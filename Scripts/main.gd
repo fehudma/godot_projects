@@ -1,14 +1,23 @@
+#========================================
 extends Control
-
+#========================================
 var clicks: int = 0
 var clicks_per_click: int = 1
 var upgrade_cost: int = 3
 var upgrade_modifier: int = 1
-
+#========================================
 @onready var clicks_label: Label = $VBoxContainer/Label
 @onready var click_button: Button = $VBoxContainer/ClickButton
 @onready var upgrade_button: Button = $VBoxContainer/UpgradeButton
-
+#========================================
+# on-click function definition
+func update_clicks_label() -> void:
+	print("Clicks: ", clicks)
+	clicks_label.text = "Clicks: " + str(clicks)
+#
+func update_upgrade_button() -> void:
+	upgrade_button.text = "Upgrade Cost: " + str(upgrade_cost)
+#========================================
 # initialize custom signal and on-click functionality
 func _ready() -> void:
 	click_button.pressed.connect(_on_click_button_pressed)
@@ -29,6 +38,7 @@ func _on_upgrade_button_pressed() -> void:
 	if clicks >= upgrade_cost:
 		clicks -= upgrade_cost
 		clicks_per_click += 1
+		upgrade_cost += 2
 		update_clicks_label()
 		update_upgrade_button()
 		upgrade_modifier = clicks_per_click
@@ -37,11 +47,3 @@ func _on_upgrade_button_pressed() -> void:
 	else:
 		print("can't buy upg")
 	
-
-# on-click function definition
-func update_clicks_label() -> void:
-	print("Clicks: ", clicks)
-	clicks_label.text = "Clicks: " + str(clicks)
-#
-func update_upgrade_button() -> void:
-	upgrade_button.text = "Upgrade Cost: " + str(upgrade_cost)
