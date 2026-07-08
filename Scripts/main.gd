@@ -18,6 +18,7 @@ func update_clicks_label() -> void:
 #
 func update_upgrade_button() -> void:
 	upgrade_button.text = "Upgrade Cost: " + str(upgrade_cost)
+	upgrade_button.disabled = clicks < upgrade_cost
 #========================================
 # initialize custom signal and on-click functionality
 func _ready() -> void:
@@ -32,6 +33,7 @@ func _on_click_button_pressed() -> void:
 	print("Upgrade modif: ",upgrade_modifier)
 	clicks += clicks_per_click
 	update_clicks_label()
+	update_upgrade_button()
 
 # on-upgrade functionality
 func _on_upgrade_button_pressed() -> void:
