@@ -1,6 +1,7 @@
 extends Control
 
 var clicks: int = 0
+var clicks_per_click: int = 1
 
 @onready var clicks_label: Label = $VBoxContainer/Label
 @onready var click_button: Button = $VBoxContainer/Button
@@ -13,7 +14,7 @@ func _ready() -> void:
 # on-click functionality
 func _on_click_button_pressed() -> void:
 	print("Button Clicked")
-	clicks += 1
+	clicks += clicks_per_click
 	update_clicks_label()
 
 # on-click function definition
