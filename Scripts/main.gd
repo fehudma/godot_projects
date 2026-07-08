@@ -2,20 +2,31 @@ extends Control
 
 var clicks: int = 0
 var clicks_per_click: int = 1
+var upgrade_modifier: int = 1
 
 @onready var clicks_label: Label = $VBoxContainer/Label
-@onready var click_button: Button = $VBoxContainer/Button
+@onready var click_button: Button = $VBoxContainer/ClickButton
+@onready var upgrade_button: Button = $VBoxContainer/UpgradeButton
 
 # initialize custom signal and on-click functionality
 func _ready() -> void:
 	click_button.pressed.connect(_on_click_button_pressed)
+	upgrade_button.pressed.connect(_on_upgrade_button_pressed)
 	update_clicks_label()
+	
 
 # on-click functionality
 func _on_click_button_pressed() -> void:
-	print("Button Clicked")
+	print("Click Button Clicked")
+	print("Upgrade modif: ",upgrade_modifier)
 	clicks += clicks_per_click
 	update_clicks_label()
+
+#
+func _on_upgrade_button_pressed() -> void:
+	print("Upgrade Button Clicked")
+	upgrade_modifier += clicks_per_click
+	print(upgrade_modifier)
 
 # on-click function definition
 func update_clicks_label() -> void:
