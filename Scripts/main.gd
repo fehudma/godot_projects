@@ -14,7 +14,7 @@ func _ready() -> void:
 	click_button.pressed.connect(_on_click_button_pressed)
 	upgrade_button.pressed.connect(_on_upgrade_button_pressed)
 	update_clicks_label()
-	
+	update_upgrade_button()
 
 # on-click functionality
 func _on_click_button_pressed() -> void:
@@ -30,6 +30,7 @@ func _on_upgrade_button_pressed() -> void:
 		clicks -= upgrade_cost
 		clicks_per_click += 1
 		update_clicks_label()
+		update_upgrade_button()
 		upgrade_modifier = clicks_per_click
 		print("Upgrade bought")
 		print("Upgrade modif: ",upgrade_modifier)
@@ -41,3 +42,6 @@ func _on_upgrade_button_pressed() -> void:
 func update_clicks_label() -> void:
 	print("Clicks: ", clicks)
 	clicks_label.text = "Clicks: " + str(clicks)
+#
+func update_upgrade_button() -> void:
+	upgrade_button.text = "Upgrade Cost: " + str(upgrade_cost)
