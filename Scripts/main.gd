@@ -5,6 +5,8 @@ const STARTING_CLICKS: int = 0
 const STARTING_CLICKS_PER_CLICK: int = 1
 const STARTING_UPGRADE_COST: int = 3
 const STARTING_UPGRADE_LEVEL: int = 0
+const UPGRADE_COST_INCREASE: int = 2
+const CLICKS_PER_CLICK_INCREASE: int = 1
 #========================================
 var clicks: int = STARTING_CLICKS
 var clicks_per_click: int = STARTING_CLICKS_PER_CLICK
@@ -44,11 +46,7 @@ func _on_click_button_pressed() -> void:
 	print("Upgrade modif: ",upgrade_modifier)
 	clicks += clicks_per_click
 	# check grammar for 1 click and multiple clicks
-	if clicks_per_click == 1:
-		message_label.text = "+" + str(clicks_per_click) + " click!"
-	else:
-		message_label.text = "+" + str(clicks_per_click) + " clicks!"
-	
+	show_click_message()
 	update_ui()
 
 # on-upgrade functionality
@@ -56,8 +54,8 @@ func _on_upgrade_button_pressed() -> void:
 	print("Upgrade Button Clicked")
 	if clicks >= upgrade_cost:
 		clicks -= upgrade_cost
-		clicks_per_click += 1
-		upgrade_cost += 2
+		clicks_per_click += CLICKS_PER_CLICK_INCREASE
+		upgrade_cost += UPGRADE_COST_INCREASE
 		update_ui()
 		upgrade_modifier = clicks_per_click
 		print("Upgrade bought")
@@ -74,4 +72,9 @@ func _on_reset_button_pressed() -> void:
 	upgrade_modifier= STARTING_UPGRADE_LEVEL
 	message_label.text = "Game Reset."
 	update_ui()
-	
+
+func show_click_message() -> void:
+	if clicks_per_click == 1:
+		message_label.text = "+" + str(clicks_per_click) + " click!"
+	else:
+		message_label.text = "+" + str(clicks_per_click) + " clicks!"
