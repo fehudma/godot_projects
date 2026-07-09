@@ -22,7 +22,7 @@ layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Label" type="Label" parent="VBoxContainer"]
+[node name="StatsLabel" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 text = "Clicks: 0"
 

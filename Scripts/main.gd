@@ -6,7 +6,7 @@ var clicks_per_click: int = 1
 var upgrade_cost: int = 3
 var upgrade_modifier: int = 1
 #========================================
-@onready var clicks_label: Label = $VBoxContainer/Label
+@onready var clicks_label: Label = $VBoxContainer/StatsLabel
 @onready var click_button: Button = $VBoxContainer/ClickButton
 @onready var upgrade_button: Button = $VBoxContainer/UpgradeButton
 #========================================
