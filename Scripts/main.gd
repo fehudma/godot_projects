@@ -1,10 +1,15 @@
 #========================================
 extends Control
 #========================================
-var clicks: int = 0
-var clicks_per_click: int = 1
-var upgrade_cost: int = 3
-var upgrade_modifier: int = 1
+const STARTING_CLICKS: int = 0
+const STARTING_CLICKS_PER_CLICK: int = 1
+const STARTING_UPGRADE_COST: int = 3
+const STARTING_UPGRADE_LEVEL: int = 0
+#========================================
+var clicks: int = STARTING_CLICKS
+var clicks_per_click: int = STARTING_CLICKS_PER_CLICK
+var upgrade_cost: int = STARTING_UPGRADE_COST
+var upgrade_modifier: int = STARTING_UPGRADE_LEVEL
 #========================================
 @onready var stats_label: Label = $VBoxContainer/StatsLabel
 @onready var message_label: Label = $VBoxContainer/MessageLabel
@@ -63,10 +68,10 @@ func _on_upgrade_button_pressed() -> void:
 		message_label.text = "Not enough clicks!"
 
 func _on_reset_button_pressed() -> void:
-	clicks = 0
-	clicks_per_click = 1
-	upgrade_cost= 3
-	upgrade_modifier= 1
+	clicks = STARTING_CLICKS
+	clicks_per_click = STARTING_CLICKS_PER_CLICK
+	upgrade_cost= STARTING_UPGRADE_COST
+	upgrade_modifier= STARTING_UPGRADE_LEVEL
 	message_label.text = "Game Reset."
 	update_ui()
 	
