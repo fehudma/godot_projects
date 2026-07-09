@@ -7,6 +7,7 @@ var upgrade_cost: int = 3
 var upgrade_modifier: int = 1
 #========================================
 @onready var stats_label: Label = $VBoxContainer/StatsLabel
+@onready var message_label: Label = $VBoxContainer/MessageLabel
 @onready var click_button: Button = $VBoxContainer/ClickButton
 @onready var upgrade_button: Button = $VBoxContainer/UpgradeButton
 #========================================
@@ -46,7 +47,9 @@ func _on_upgrade_button_pressed() -> void:
 		update_ui()
 		upgrade_modifier = clicks_per_click
 		print("Upgrade bought")
+		message_label.text = "Upgrade bought!"
 		print("Upgrade modif: ",upgrade_modifier)
 	else:
 		print("can't buy upg")
+		message_label.text = "Not enough clicks!"
 	
