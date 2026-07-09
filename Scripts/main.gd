@@ -10,6 +10,8 @@ var upgrade_modifier: int = 1
 @onready var message_label: Label = $VBoxContainer/MessageLabel
 @onready var click_button: Button = $VBoxContainer/ClickButton
 @onready var upgrade_button: Button = $VBoxContainer/UpgradeButton
+@onready var reset_button: Button = $VBoxContainer/ResetButton
+
 #========================================
 func update_ui() -> void:
 	update_stats_label()
@@ -28,6 +30,7 @@ func update_upgrade_button() -> void:
 func _ready() -> void:
 	click_button.pressed.connect(_on_click_button_pressed)
 	upgrade_button.pressed.connect(_on_upgrade_button_pressed)
+	reset_button.pressed.connect(_on_reset_button_pressed)
 	update_ui()
 
 # on-click functionality
@@ -58,4 +61,12 @@ func _on_upgrade_button_pressed() -> void:
 	else:
 		print("can't buy upg")
 		message_label.text = "Not enough clicks!"
+
+func _on_reset_button_pressed() -> void:
+	clicks = 0
+	clicks_per_click = 1
+	upgrade_cost= 3
+	upgrade_modifier= 1
+	message_label.text = "Game Reset."
+	update_ui()
 	
