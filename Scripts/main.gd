@@ -53,14 +53,8 @@ func _on_click_button_pressed() -> void:
 func _on_upgrade_button_pressed() -> void:
 	print("Upgrade Button Clicked")
 	if clicks >= upgrade_cost:
-		clicks -= upgrade_cost
-		clicks_per_click += CLICKS_PER_CLICK_INCREASE
-		upgrade_cost += UPGRADE_COST_INCREASE
+		buy_upgrade()
 		update_ui()
-		upgrade_modifier = clicks_per_click
-		print("Upgrade bought")
-		message_label.text = "Upgrade bought!"
-		print("Upgrade modif: ",upgrade_modifier)
 	else:
 		print("can't buy upg")
 		message_label.text = "Not enough clicks!"
@@ -78,3 +72,12 @@ func show_click_message() -> void:
 		message_label.text = "+" + str(clicks_per_click) + " click!"
 	else:
 		message_label.text = "+" + str(clicks_per_click) + " clicks!"
+
+func buy_upgrade() -> void:
+	clicks -= upgrade_cost
+	clicks_per_click += CLICKS_PER_CLICK_INCREASE
+	upgrade_cost += UPGRADE_COST_INCREASE
+	upgrade_modifier = clicks_per_click
+	print("Upgrade bought")
+	message_label.text = "Upgrade bought!"
+	print("Upgrade modif: ",upgrade_modifier)
