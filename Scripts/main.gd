@@ -6,15 +6,15 @@ var clicks_per_click: int = 1
 var upgrade_cost: int = 3
 var upgrade_modifier: int = 1
 #========================================
-@onready var clicks_label: Label = $VBoxContainer/StatsLabel
+@onready var stats_label: Label = $VBoxContainer/StatsLabel
 @onready var click_button: Button = $VBoxContainer/ClickButton
 @onready var upgrade_button: Button = $VBoxContainer/UpgradeButton
 #========================================
 # on-click function definition
 func update_clicks_label() -> void:
 	print("Clicks: ", clicks)
-	#clicks_label.text = "Clicks: " + str(clicks)
-	clicks_label.text = "Clicks: " + str(clicks) + "\nPer Click: " + str(clicks_per_click)
+	#stats_label.text = "Clicks: " + str(clicks)
+	stats_label.text = "Clicks: " + str(clicks) + "\nPer Click: " + str(clicks_per_click)
 #
 func update_upgrade_button() -> void:
 	upgrade_button.text = "Upgrade Cost: " + str(upgrade_cost)
