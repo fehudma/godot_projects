@@ -10,6 +10,9 @@ var upgrade_modifier: int = 1
 @onready var click_button: Button = $VBoxContainer/ClickButton
 @onready var upgrade_button: Button = $VBoxContainer/UpgradeButton
 #========================================
+func update_ui() -> void:
+	update_stats_label()
+	update_upgrade_button()
 # on-click function definition
 func update_stats_label() -> void:
 	print("Clicks: ", clicks)
@@ -24,16 +27,14 @@ func update_upgrade_button() -> void:
 func _ready() -> void:
 	click_button.pressed.connect(_on_click_button_pressed)
 	upgrade_button.pressed.connect(_on_upgrade_button_pressed)
-	update_stats_label()
-	update_upgrade_button()
+	update_ui()
 
 # on-click functionality
 func _on_click_button_pressed() -> void:
 	print("Click Button Clicked")
 	print("Upgrade modif: ",upgrade_modifier)
 	clicks += clicks_per_click
-	update_stats_label()
-	update_upgrade_button()
+	update_ui()
 
 # on-upgrade functionality
 func _on_upgrade_button_pressed() -> void:
@@ -42,8 +43,7 @@ func _on_upgrade_button_pressed() -> void:
 		clicks -= upgrade_cost
 		clicks_per_click += 1
 		upgrade_cost += 2
-		update_stats_label()
-		update_upgrade_button()
+		update_ui()
 		upgrade_modifier = clicks_per_click
 		print("Upgrade bought")
 		print("Upgrade modif: ",upgrade_modifier)
