@@ -35,7 +35,12 @@ func _on_click_button_pressed() -> void:
 	print("Click Button Clicked")
 	print("Upgrade modif: ",upgrade_modifier)
 	clicks += clicks_per_click
-	message_label.text = "+" + str(clicks_per_click) + " clicks!"
+	# check grammar for 1 click and multiple clicks
+	if clicks_per_click == 1:
+		message_label.text = "+" + str(clicks_per_click) + " click!"
+	else:
+		message_label.text = "+" + str(clicks_per_click) + " clicks!"
+	
 	update_ui()
 
 # on-upgrade functionality
