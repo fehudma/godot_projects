@@ -1,0 +1,49 @@
+[gd_scene load_steps=2 format=3 uid="uid://cftc8y54apfyd"]
+
+[ext_resource type="Script" uid="uid://crb6ny8lhwk8b" path="res://Scripts/main.gd" id="1_jjgbg"]
+
+[node name="Node" type="Control"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_jjgbg")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="LabelTitle" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Welcome!"
+horizontal_alignment = 1
+
+[node name="LabelStatus" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Clicks:"
+horizontal_alignment = 1
+
+[node name="LabelMessage" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "text here"
+horizontal_alignment = 1
+
+[node name="ButtonClick" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Get clicks"
+
+[node name="ButtonUpgrade" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Upgrade clicks"
+
+[node name="ButtonRestart" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Restart"
+
+[connection signal="pressed" from="VBoxContainer/ButtonClick" to="." method="_on_button_click_pressed"]
+[connection signal="pressed" from="VBoxContainer/ButtonUpgrade" to="." method="_on_button_upgrade_pressed"]
+[connection signal="pressed" from="VBoxContainer/ButtonRestart" to="." method="_on_button_restart_pressed"]
