@@ -52,7 +52,7 @@ func _on_click_button_pressed() -> void:
 # on-upgrade functionality
 func _on_upgrade_button_pressed() -> void:
 	print("Upgrade Button Clicked")
-	if clicks >= upgrade_cost:
+	if can_afford_upgrade():
 		buy_upgrade()
 		update_ui()
 	else:
@@ -72,6 +72,9 @@ func show_click_message() -> void:
 		message_label.text = "+" + str(clicks_per_click) + " click!"
 	else:
 		message_label.text = "+" + str(clicks_per_click) + " clicks!"
+
+func can_afford_upgrade() -> bool:
+	return clicks >= upgrade_cost
 
 func buy_upgrade() -> void:
 	clicks -= upgrade_cost
