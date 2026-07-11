@@ -31,7 +31,7 @@ func update_stats_label() -> void:
 #
 func update_upgrade_button() -> void:
 	upgrade_button.text = "Upgrade Cost: " + str(upgrade_cost)
-	upgrade_button.disabled = clicks < upgrade_cost
+	upgrade_button.disabled = not can_afford_upgrade()
 #========================================
 # initialize custom signal and on-click functionality
 func _ready() -> void:
