@@ -33,7 +33,7 @@ func update_ui() -> void:
 	update_stats_label()
 	update_upgrade_button()
 	auto_clicker_button.text = "Buy Auto Clicker: " + str(auto_clicker_cost)
-	auto_clicker_button.disabled = clicks < auto_clicker_cost
+	auto_clicker_button.disabled = not can_afford_auto_clicker()
 #========================================on-click function definition
 # 
 func update_stats_label() -> void:
@@ -95,6 +95,9 @@ func show_click_message() -> void:
 func can_afford_upgrade() -> bool:
 	return clicks >= upgrade_cost
 
+func can_afford_auto_clicker() -> bool:
+	return clicks >= auto_clicker_cost
+
 func buy_upgrade() -> void:
 	clicks -= upgrade_cost
 	clicks_per_click += CLICKS_PER_CLICK_INCREASE
@@ -117,7 +120,7 @@ func _on_passive_income_timer_timeout() -> void:
 
 func _on_auto_clicker_button_pressed() -> void:
 	print("Autoclicker Button Pressed")
-	if clicks >= auto_clicker_cost:
+	if can_afford_auto_clicker():
 		clicks -= auto_clicker_cost
 		passive_clicks_per_tick += 1
 		if passive_income_timer.is_stopped():
