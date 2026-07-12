@@ -25,6 +25,7 @@ var auto_clicker_cost: int = AUTO_CLICKER_COST_START
 @onready var upgrade_button: Button = $VBoxContainer/UpgradeButton
 @onready var reset_button: Button = $VBoxContainer/ResetButton
 @onready var auto_clicker_button: Button = $VBoxContainer/AutoClickerButton
+@onready var passive_income_timer: Timer = $PassiveIncomeTimer
 
 #========================================
 func update_ui() -> void:
@@ -79,6 +80,8 @@ func _on_reset_button_pressed() -> void:
 	timeout_count = STARTING_TIMEOUT_COUNT
 	passive_clicks_per_tick = STARTING_PASSIVE_CLICKS_PER_TICK
 	auto_clicker_cost= AUTO_CLICKER_COST_START
+	passive_income_timer.stop()
+	print("Timer tick reset! Total counts: ", timeout_count)
 	message_label.text = "Game Reset."
 	update_ui()
 
@@ -104,7 +107,8 @@ func buy_upgrade() -> void:
 func _on_passive_income_timer_timeout() -> void:
 	# Tracks the number of timeouts
 	timeout_count += 1
-	print("Timer timed out! Total counts: ", timeout_count)
+	print("Timer tick! Total counts: ", timeout_count)
+	
 	# other timer functionality
 	clicks += passive_clicks_per_tick
 	update_ui()
@@ -115,6 +119,7 @@ func _on_auto_clicker_button_pressed() -> void:
 	if clicks >= auto_clicker_cost:
 		clicks -= auto_clicker_cost
 		passive_clicks_per_tick += 1
+		passive_income_timer.start()
 		auto_clicker_cost += 5
 		message_label.text = "Auto Clicker bought!"
 		update_ui()
