@@ -14,7 +14,7 @@ var clicks_per_click: int = STARTING_CLICKS_PER_CLICK
 var upgrade_cost: int = STARTING_UPGRADE_COST
 var upgrade_modifier: int = STARTING_UPGRADE_LEVEL
 var timeout_count: int = STARTING_TIMEOUT_COUNT
-var passive_clicks_per_tick: int = 2
+var passive_clicks_per_tick: int = 0
 #========================================
 @onready var stats_label: Label = $VBoxContainer/StatsLabel
 @onready var message_label: Label = $VBoxContainer/MessageLabel
