@@ -98,3 +98,7 @@ func _on_passive_income_timer_timeout() -> void:
 	update_ui()
 	
 	
+
+
+func _on_auto_clicker_button_pressed() -> void:
+	print("Autoclicker Button Pressed")
