@@ -49,3 +49,8 @@ text = "Upgrade"
 [node name="ResetButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 text = "Reset"
+
+[node name="PassiveIncomeTimer" type="Timer" parent="."]
+autostart = true
+
+[connection signal="timeout" from="PassiveIncomeTimer" to="." method="_on_passive_income_timer_timeout"]

@@ -84,3 +84,7 @@ func buy_upgrade() -> void:
 	print("Upgrade bought")
 	message_label.text = "Upgrade bought!"
 	print("Upgrade modif: ",upgrade_modifier)
+
+
+func _on_passive_income_timer_timeout() -> void:
+	print("Timeout tick")
