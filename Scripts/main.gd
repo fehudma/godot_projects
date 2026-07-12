@@ -36,7 +36,7 @@ func update_ui() -> void:
 	update_stats_label()
 	update_upgrade_button()
 	update_buy_auto_clicker_button()
-#========================================on-click function definition
+#========================================on-click function definition, helper function
 # 
 func update_stats_label() -> void:
 	print("Clicks: ", clicks)
@@ -50,7 +50,10 @@ func update_upgrade_button() -> void:
 func update_buy_auto_clicker_button() -> void:
 	auto_clicker_button.text = "Auto Clicker Lv. " + str(auto_clicker_level) + " — Cost: " + str(auto_clicker_cost)
 	auto_clicker_button.disabled = not can_afford_auto_clicker()
-	
+
+func start_passive_income_timer() -> void:
+	if passive_income_timer.is_stopped():
+		passive_income_timer.start()
 #========================================
 # initialize custom signal and on-click functionality
 func _ready() -> void:
@@ -134,8 +137,5 @@ func _on_auto_clicker_button_pressed() -> void:
 	
 	if can_afford_auto_clicker():
 		buy_auto_clicker()
-		
-		if passive_income_timer.is_stopped():
-			passive_income_timer.start()
-		
+		start_passive_income_timer()
 		update_ui()
