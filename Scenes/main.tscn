@@ -55,6 +55,7 @@ layout_mode = 2
 text = "Reset"
 
 [node name="PassiveIncomeTimer" type="Timer" parent="."]
+wait_time = 5.0
 
 [connection signal="pressed" from="VBoxContainer/AutoClickerButton" to="." method="_on_auto_clicker_button_pressed"]
 [connection signal="timeout" from="PassiveIncomeTimer" to="." method="_on_passive_income_timer_timeout"]

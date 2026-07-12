@@ -10,6 +10,7 @@ const CLICKS_PER_CLICK_INCREASE: int = 1
 const STARTING_TIMEOUT_COUNT: int = 0
 const AUTO_CLICKER_COST_START: int = 5
 const STARTING_PASSIVE_CLICKS_PER_TICK: int = 0
+const AUTO_CLICKER_COST_INCREASE: int = 5
 #========================================
 var clicks: int = STARTING_CLICKS
 var clicks_per_click: int = STARTING_CLICKS_PER_CLICK
@@ -119,7 +120,8 @@ func _on_auto_clicker_button_pressed() -> void:
 	if clicks >= auto_clicker_cost:
 		clicks -= auto_clicker_cost
 		passive_clicks_per_tick += 1
-		passive_income_timer.start()
-		auto_clicker_cost += 5
+		if passive_income_timer.is_stopped():
+			passive_income_timer.start()
+		auto_clicker_cost += AUTO_CLICKER_COST_INCREASE
 		message_label.text = "Auto Clicker bought!"
 		update_ui()
