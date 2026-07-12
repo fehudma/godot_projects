@@ -8,14 +8,15 @@ const STARTING_UPGRADE_LEVEL: int = 0
 const UPGRADE_COST_INCREASE: int = 2
 const CLICKS_PER_CLICK_INCREASE: int = 1
 const STARTING_TIMEOUT_COUNT: int = 0
-const AUTO_CLICKER_COST_START: int = 15
+const AUTO_CLICKER_COST_START: int = 5
+const STARTING_PASSIVE_CLICKS_PER_TICK: int = 0
 #========================================
 var clicks: int = STARTING_CLICKS
 var clicks_per_click: int = STARTING_CLICKS_PER_CLICK
 var upgrade_cost: int = STARTING_UPGRADE_COST
 var upgrade_modifier: int = STARTING_UPGRADE_LEVEL
 var timeout_count: int = STARTING_TIMEOUT_COUNT
-var passive_clicks_per_tick: int = 0
+var passive_clicks_per_tick: int = STARTING_PASSIVE_CLICKS_PER_TICK
 var auto_clicker_cost: int = AUTO_CLICKER_COST_START
 #========================================
 @onready var stats_label: Label = $VBoxContainer/StatsLabel
@@ -30,6 +31,7 @@ func update_ui() -> void:
 	update_stats_label()
 	update_upgrade_button()
 	auto_clicker_button.text = "Buy Auto Clicker: " + str(auto_clicker_cost)
+	auto_clicker_button.disabled = clicks < auto_clicker_cost
 #========================================on-click function definition
 # 
 func update_stats_label() -> void:
@@ -38,7 +40,7 @@ func update_stats_label() -> void:
 	stats_label.text = "Clicks: " + str(clicks) + "\nPer Click: " + str(clicks_per_click) + "\nPer Timer: " + str(passive_clicks_per_tick)
 #
 func update_upgrade_button() -> void:
-	upgrade_button.text = "Upgrade Cost: " + str(upgrade_cost)
+	upgrade_button.text = "Click Upgrade Cost: " + str(upgrade_cost)
 	upgrade_button.disabled = not can_afford_upgrade()
 #
 
@@ -74,6 +76,9 @@ func _on_reset_button_pressed() -> void:
 	clicks_per_click = STARTING_CLICKS_PER_CLICK
 	upgrade_cost= STARTING_UPGRADE_COST
 	upgrade_modifier= STARTING_UPGRADE_LEVEL
+	timeout_count = STARTING_TIMEOUT_COUNT
+	passive_clicks_per_tick = STARTING_PASSIVE_CLICKS_PER_TICK
+	auto_clicker_cost= AUTO_CLICKER_COST_START
 	message_label.text = "Game Reset."
 	update_ui()
 
@@ -103,9 +108,13 @@ func _on_passive_income_timer_timeout() -> void:
 	# other timer functionality
 	clicks += passive_clicks_per_tick
 	update_ui()
-	
-	
 
 
 func _on_auto_clicker_button_pressed() -> void:
 	print("Autoclicker Button Pressed")
+	if clicks >= auto_clicker_cost:
+		clicks -= auto_clicker_cost
+		passive_clicks_per_tick += 1
+		auto_clicker_cost += 5
+		message_label.text = "Auto Clicker bought!"
+		update_ui()
