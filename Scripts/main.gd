@@ -14,6 +14,7 @@ var clicks_per_click: int = STARTING_CLICKS_PER_CLICK
 var upgrade_cost: int = STARTING_UPGRADE_COST
 var upgrade_modifier: int = STARTING_UPGRADE_LEVEL
 var timeout_count: int = STARTING_TIMEOUT_COUNT
+var passive_clicks_per_tick: int = 2
 #========================================
 @onready var stats_label: Label = $VBoxContainer/StatsLabel
 @onready var message_label: Label = $VBoxContainer/MessageLabel
@@ -29,7 +30,7 @@ func update_ui() -> void:
 func update_stats_label() -> void:
 	print("Clicks: ", clicks)
 	#stats_label.text = "Clicks: " + str(clicks)
-	stats_label.text = "Clicks: " + str(clicks) + "\nPer Click: " + str(clicks_per_click)
+	stats_label.text = "Clicks: " + str(clicks) + "\nPer Click: " + str(clicks_per_click) + "\nPer Timer: " + str(passive_clicks_per_tick)
 #
 func update_upgrade_button() -> void:
 	upgrade_button.text = "Upgrade Cost: " + str(upgrade_cost)
@@ -93,7 +94,7 @@ func _on_passive_income_timer_timeout() -> void:
 	timeout_count += 1
 	print("Timer timed out! Total counts: ", timeout_count)
 	# other timer functionality
-	clicks += 1
+	clicks += passive_clicks_per_tick
 	update_ui()
 	
 	
