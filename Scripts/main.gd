@@ -12,6 +12,7 @@ const AUTO_CLICKER_COST_START: int = 5
 const STARTING_PASSIVE_CLICKS_PER_TICK: int = 0
 const AUTO_CLICKER_COST_INCREASE: int = 5
 const PASSIVE_CLICKS_INCREASE: int = 1
+const STARTING_AUTO_CLICKER_LEVEL: int = 0
 #========================================
 var clicks: int = STARTING_CLICKS
 var clicks_per_click: int = STARTING_CLICKS_PER_CLICK
@@ -20,6 +21,7 @@ var upgrade_modifier: int = STARTING_UPGRADE_LEVEL
 var timeout_count: int = STARTING_TIMEOUT_COUNT
 var passive_clicks_per_tick: int = STARTING_PASSIVE_CLICKS_PER_TICK
 var auto_clicker_cost: int = AUTO_CLICKER_COST_START
+var auto_clicker_level: int = STARTING_AUTO_CLICKER_LEVEL
 #========================================
 @onready var stats_label: Label = $VBoxContainer/StatsLabel
 @onready var message_label: Label = $VBoxContainer/MessageLabel
@@ -39,7 +41,7 @@ func update_ui() -> void:
 func update_stats_label() -> void:
 	print("Clicks: ", clicks)
 	#stats_label.text = "Clicks: " + str(clicks)
-	stats_label.text = "Clicks: " + str(clicks) + "\nPer Click: " + str(clicks_per_click) + "\nPer Timer: " + str(passive_clicks_per_tick)
+	stats_label.text = "Clicks: " + str(clicks) + "\nPer Click: " + str(clicks_per_click) + "\nPer Timer: " + str(passive_clicks_per_tick) + "\nAuto Clicker Level: " + str(auto_clicker_level)
 #
 func update_upgrade_button() -> void:
 	upgrade_button.text = "Click Upgrade Cost: " + str(upgrade_cost)
@@ -83,6 +85,7 @@ func _on_reset_button_pressed() -> void:
 	timeout_count = STARTING_TIMEOUT_COUNT
 	passive_clicks_per_tick = STARTING_PASSIVE_CLICKS_PER_TICK
 	auto_clicker_cost= AUTO_CLICKER_COST_START
+	auto_clicker_level = STARTING_AUTO_CLICKER_LEVEL
 	passive_income_timer.stop()
 	print("Timer tick reset! Total counts: ", timeout_count)
 	message_label.text = "Game Reset."
@@ -113,6 +116,7 @@ func buy_auto_clicker() -> void:
 	clicks -= auto_clicker_cost
 	passive_clicks_per_tick += PASSIVE_CLICKS_INCREASE
 	auto_clicker_cost += AUTO_CLICKER_COST_INCREASE
+	auto_clicker_level += 1
 	message_label.text = "Auto Clicker bought!"
 
 func _on_passive_income_timer_timeout() -> void:
