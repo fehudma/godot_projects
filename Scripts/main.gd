@@ -32,8 +32,7 @@ var auto_clicker_cost: int = AUTO_CLICKER_COST_START
 func update_ui() -> void:
 	update_stats_label()
 	update_upgrade_button()
-	auto_clicker_button.text = "Buy Auto Clicker: " + str(auto_clicker_cost)
-	auto_clicker_button.disabled = not can_afford_auto_clicker()
+	update_but_auto_clicker_button()
 #========================================on-click function definition
 # 
 func update_stats_label() -> void:
@@ -45,7 +44,9 @@ func update_upgrade_button() -> void:
 	upgrade_button.text = "Click Upgrade Cost: " + str(upgrade_cost)
 	upgrade_button.disabled = not can_afford_upgrade()
 #
-
+func update_but_auto_clicker_button() -> void:
+	auto_clicker_button.text = "Buy Auto Clicker: " + str(auto_clicker_cost)
+	auto_clicker_button.disabled = not can_afford_auto_clicker()
 #========================================
 # initialize custom signal and on-click functionality
 func _ready() -> void:
@@ -107,12 +108,16 @@ func buy_upgrade() -> void:
 	message_label.text = "Upgrade bought!"
 	print("Upgrade modif: ",upgrade_modifier)
 
+func buy_auto_clicker() -> void:
+	clicks -= auto_clicker_cost
+	passive_clicks_per_tick += 1
+	auto_clicker_cost += AUTO_CLICKER_COST_INCREASE
+	message_label.text = "Auto Clicker bought!"
 
 func _on_passive_income_timer_timeout() -> void:
 	# Tracks the number of timeouts
 	timeout_count += 1
 	print("Timer tick! Total counts: ", timeout_count)
-	
 	# other timer functionality
 	clicks += passive_clicks_per_tick
 	update_ui()
@@ -120,11 +125,11 @@ func _on_passive_income_timer_timeout() -> void:
 
 func _on_auto_clicker_button_pressed() -> void:
 	print("Autoclicker Button Pressed")
+	
 	if can_afford_auto_clicker():
-		clicks -= auto_clicker_cost
-		passive_clicks_per_tick += 1
+		buy_auto_clicker()
+		
 		if passive_income_timer.is_stopped():
 			passive_income_timer.start()
-		auto_clicker_cost += AUTO_CLICKER_COST_INCREASE
-		message_label.text = "Auto Clicker bought!"
+		
 		update_ui()
