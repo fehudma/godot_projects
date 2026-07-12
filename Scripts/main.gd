@@ -35,7 +35,7 @@ var auto_clicker_level: int = STARTING_AUTO_CLICKER_LEVEL
 func update_ui() -> void:
 	update_stats_label()
 	update_upgrade_button()
-	update_but_auto_clicker_button()
+	update_buy_auto_clicker_button()
 #========================================on-click function definition
 # 
 func update_stats_label() -> void:
@@ -47,9 +47,10 @@ func update_upgrade_button() -> void:
 	upgrade_button.text = "Click Upgrade Cost: " + str(upgrade_cost)
 	upgrade_button.disabled = not can_afford_upgrade()
 #
-func update_but_auto_clicker_button() -> void:
-	auto_clicker_button.text = "Buy Auto Clicker: " + str(auto_clicker_cost)
+func update_buy_auto_clicker_button() -> void:
+	auto_clicker_button.text = "Auto Clicker Lv. " + str(auto_clicker_level) + " — Cost: " + str(auto_clicker_cost)
 	auto_clicker_button.disabled = not can_afford_auto_clicker()
+	
 #========================================
 # initialize custom signal and on-click functionality
 func _ready() -> void:
