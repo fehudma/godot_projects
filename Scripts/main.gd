@@ -7,11 +7,13 @@ const STARTING_UPGRADE_COST: int = 3
 const STARTING_UPGRADE_LEVEL: int = 0
 const UPGRADE_COST_INCREASE: int = 2
 const CLICKS_PER_CLICK_INCREASE: int = 1
+const STARTING_TIMEOUT_COUNT: int = 0
 #========================================
 var clicks: int = STARTING_CLICKS
 var clicks_per_click: int = STARTING_CLICKS_PER_CLICK
 var upgrade_cost: int = STARTING_UPGRADE_COST
 var upgrade_modifier: int = STARTING_UPGRADE_LEVEL
+var timeout_count: int = STARTING_TIMEOUT_COUNT
 #========================================
 @onready var stats_label: Label = $VBoxContainer/StatsLabel
 @onready var message_label: Label = $VBoxContainer/MessageLabel
@@ -87,4 +89,11 @@ func buy_upgrade() -> void:
 
 
 func _on_passive_income_timer_timeout() -> void:
-	print("Timeout tick")
+	# Tracks the number of timeouts
+	timeout_count += 1
+	print("Timer timed out! Total counts: ", timeout_count)
+	# other timer functionality
+	clicks += 1
+	update_ui()
+	
+	
