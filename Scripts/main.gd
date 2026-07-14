@@ -36,7 +36,7 @@ func update_ui() -> void:
 	update_stats_label()
 	update_upgrade_button()
 	update_buy_auto_clicker_button()
-#========================================on-click function definition, helper function
+#========================================helper functions
 # 
 func update_stats_label() -> void:
 	print("Clicks: ", clicks)
@@ -50,10 +50,13 @@ func update_upgrade_button() -> void:
 func update_buy_auto_clicker_button() -> void:
 	auto_clicker_button.text = "Auto Clicker Lv. " + str(auto_clicker_level) + " — Cost: " + str(auto_clicker_cost)
 	auto_clicker_button.disabled = not can_afford_auto_clicker()
-
+#
 func start_passive_income_timer() -> void:
 	if passive_income_timer.is_stopped():
 		passive_income_timer.start()
+#
+func stop_passive_income_timer() -> void:
+	passive_income_timer.stop()
 #========================================
 # initialize custom signal and on-click functionality
 func _ready() -> void:
@@ -90,7 +93,7 @@ func _on_reset_button_pressed() -> void:
 	passive_clicks_per_tick = STARTING_PASSIVE_CLICKS_PER_TICK
 	auto_clicker_cost= AUTO_CLICKER_COST_START
 	auto_clicker_level = STARTING_AUTO_CLICKER_LEVEL
-	passive_income_timer.stop()
+	stop_passive_income_timer()
 	print("Timer tick reset! Total counts: ", timeout_count)
 	message_label.text = "Game Reset."
 	update_ui()
