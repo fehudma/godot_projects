@@ -57,6 +57,9 @@ func start_passive_income_timer() -> void:
 #
 func stop_passive_income_timer() -> void:
 	passive_income_timer.stop()
+
+func earn_passive_clicks() -> void:
+	clicks += passive_clicks_per_tick
 #========================================
 # initialize custom signal and on-click functionality
 func _ready() -> void:
@@ -130,8 +133,8 @@ func _on_passive_income_timer_timeout() -> void:
 	# Tracks the number of timeouts
 	timeout_count += 1
 	print("Timer tick! Total counts: ", timeout_count)
-	# other timer functionality
-	clicks += passive_clicks_per_tick
+	# passive-income logic
+	earn_passive_clicks()
 	update_ui()
 
 
