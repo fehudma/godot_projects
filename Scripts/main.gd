@@ -13,6 +13,7 @@ const STARTING_PASSIVE_CLICKS_PER_TICK: int = 0
 const AUTO_CLICKER_COST_INCREASE: int = 5
 const PASSIVE_CLICKS_INCREASE: int = 1
 const STARTING_AUTO_CLICKER_LEVEL: int = 0
+const PASSIVE_INCOME_INTERVAL: float = 1.0
 #========================================
 var clicks: int = STARTING_CLICKS
 var clicks_per_click: int = STARTING_CLICKS_PER_CLICK
@@ -66,6 +67,7 @@ func _ready() -> void:
 	click_button.pressed.connect(_on_click_button_pressed)
 	upgrade_button.pressed.connect(_on_upgrade_button_pressed)
 	reset_button.pressed.connect(_on_reset_button_pressed)
+	passive_income_timer.wait_time = PASSIVE_INCOME_INTERVAL
 	update_ui()
 
 # on-click functionality
