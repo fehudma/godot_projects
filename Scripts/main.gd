@@ -72,6 +72,12 @@ func reset_game_values() -> void:
 	auto_clicker_cost= AUTO_CLICKER_COST_START
 	auto_clicker_level = STARTING_AUTO_CLICKER_LEVEL
 	#print("Timer tick reset! Total counts: ", timeout_count)
+
+func reset_game() -> void:
+	reset_game_values()
+	stop_passive_income_timer()
+	message_label.text = "Game Reset."
+	update_ui()
 #========================================
 # initialize custom signal and on-click functionality
 func _ready() -> void:
@@ -101,10 +107,7 @@ func _on_upgrade_button_pressed() -> void:
 		message_label.text = "Not enough clicks!"
 
 func _on_reset_button_pressed() -> void:
-	reset_game_values()
-	stop_passive_income_timer()
-	message_label.text = "Game Reset."
-	update_ui()
+	reset_game()
 
 func show_click_message() -> void:
 	if clicks_per_click == 1:
