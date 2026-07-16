@@ -6,12 +6,14 @@ const CLICKS_EARNED_START = 1
 const UPGRADE_LEVEL_START = 1
 const UPGRADE_COST_START = 5
 const STARTING_PASSIVE_CLICKS_PER_TICK = 0
+const STARTING_AUTOCLICKER_COST = 2
 #===================Vars
 var clicks: int = 0
 var clicks_earned: int = 1
 var upgrade_level: int = 1
 var upgrade_cost: int = 5
 var passive_clicks_per_tick: int = STARTING_PASSIVE_CLICKS_PER_TICK
+var autoclicker_cost: int = STARTING_AUTOCLICKER_COST
 #===================Node References
 @onready var label_title: Label = $VBoxContainer/LabelTitle
 @onready var label_status: Label = $VBoxContainer/LabelStatus
@@ -19,10 +21,20 @@ var passive_clicks_per_tick: int = STARTING_PASSIVE_CLICKS_PER_TICK
 @onready var button_click: Button = $VBoxContainer/ButtonClick
 @onready var button_upgrade: Button = $VBoxContainer/ButtonUpgrade
 @onready var button_restart: Button = $VBoxContainer/ButtonRestart
+@onready var button_auto_clicker: Button = $VBoxContainer/ButtonAutoClicker
+
 #===================Helpers
 func update_ui():
 	status_update()
 	upgrade_button_text()
+	autoclicker_refresh()
+
+func autoclicker_refresh():
+	if clicks >= autoclicker_cost:
+		button_auto_clicker.disabled = false
+	else:
+		button_auto_clicker.disabled = true
+	
 #===================Functions
 func status_update():
 	#update label_status.text
