@@ -8,6 +8,7 @@ const UPGRADE_COST_START = 5
 const STARTING_PASSIVE_CLICKS_PER_TICK = 0
 const STARTING_AUTOCLICKER_COST = 5
 const STARTING_AUTOCLICKER_LEVEL = 0
+const STARTING_AUTOCLICKER_POWER = 0
 const AUTO_CLICKER_LEVEL_INCREASE = 1
 const PASSIVE_CLICKS_PER_TICK_INCREASE = 1
 const AUTOCLICKER_COST_INCREASE = 5
@@ -19,6 +20,7 @@ var upgrade_cost: int = 5
 var passive_clicks_per_tick: int = STARTING_PASSIVE_CLICKS_PER_TICK
 var autoclicker_cost: int = STARTING_AUTOCLICKER_COST
 var autoclicker_level: int = STARTING_AUTOCLICKER_LEVEL
+var autoclicker_power: int = STARTING_AUTOCLICKER_POWER
 #===================Node References
 @onready var label_title: Label = $VBoxContainer/LabelTitle
 @onready var label_status: Label = $VBoxContainer/LabelStatus
@@ -34,8 +36,10 @@ func update_ui():
 	status_update()
 	upgrade_button_text()
 	autoclicker_refresh()
+	
 
 func autoclicker_refresh():
+	
 	if clicks >= autoclicker_cost:
 		button_auto_clicker.disabled = false
 	else:
@@ -44,7 +48,13 @@ func autoclicker_refresh():
 #===================Functions
 func status_update():
 	#update label_status.text
-	label_status.text = "Clicks: " + str(clicks) + " " + "\nClicks Power: " + str(clicks_earned) + " " + "\nUpgrade Level: "+ str(upgrade_level) + "\nAutoclicker Level: "+ str(autoclicker_level) 
+	label_status.text = (
+	"Clicks: " + str(clicks)
+	+ "\nClicks Power: " + str(clicks_earned)
+	+ "\nUpgrade Level: " + str(upgrade_level)
+	+ "\nAutoclicker Level: " + str(autoclicker_level)
+	+ "\nAutoclicker Power: " + str(autoclicker_power)
+)
 
 func upgrade_button_text():
 	button_upgrade.text = "Upgrade cost: " + str(upgrade_cost)
@@ -93,13 +103,23 @@ func _on_button_auto_clicker_pressed() -> void:
 	autoclicker_level += AUTO_CLICKER_LEVEL_INCREASE
 	passive_clicks_per_tick += PASSIVE_CLICKS_PER_TICK_INCREASE
 	autoclicker_cost += AUTOCLICKER_COST_INCREASE
+	autoclicker_power += autoclicker_power
 	button_auto_clicker.text = "Autoclicker cost: " + str(autoclicker_cost)
 	update_ui()
 
 func _on_button_restart_pressed() -> void:
+	#clicks
 	clicks = CLICKS_START
 	clicks_earned = CLICKS_EARNED_START
+	#clicks upgrade
 	upgrade_level = UPGRADE_LEVEL_START
 	upgrade_cost = UPGRADE_COST_START 
+	#autoclicker
+	passive_income_timer.stop()
+	passive_clicks_per_tick = STARTING_PASSIVE_CLICKS_PER_TICK
+	autoclicker_cost = STARTING_AUTOCLICKER_COST
+	autoclicker_level = STARTING_AUTOCLICKER_LEVEL
+	autoclicker_power = STARTING_AUTOCLICKER_POWER
+	
 	label_message.text = "Reset!"
 	update_ui()
