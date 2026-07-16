@@ -5,11 +5,13 @@ const CLICKS_START = 0
 const CLICKS_EARNED_START = 1
 const UPGRADE_LEVEL_START = 1
 const UPGRADE_COST_START = 5
+const STARTING_PASSIVE_CLICKS_PER_TICK = 0
 #===================Vars
 var clicks: int = 0
 var clicks_earned: int = 1
 var upgrade_level: int = 1
 var upgrade_cost: int = 5
+var passive_clicks_per_tick: int = STARTING_PASSIVE_CLICKS_PER_TICK
 #===================Node References
 @onready var label_title: Label = $VBoxContainer/LabelTitle
 @onready var label_status: Label = $VBoxContainer/LabelStatus
@@ -24,7 +26,7 @@ func update_ui():
 #===================Functions
 func status_update():
 	#update label_status.text
-	label_status.text = "Clicks: " + str(clicks) + " " + "Clicks Power: " + str(clicks_earned) + " "+ "Upgrade Level: "+ str(upgrade_level)
+	label_status.text = "Clicks: " + str(clicks) + " " + "\nClicks Power: " + str(clicks_earned) + " "+ "\nUpgrade Level: "+ str(upgrade_level)
 
 func upgrade_button_text():
 	button_upgrade.text = "Upgrade cost: " + str(upgrade_cost)
@@ -60,6 +62,12 @@ func _on_button_upgrade_pressed() -> void:
 		label_message.text = "Upgrade bought!"
 	else:
 		label_message.text = "Unaffordable"
+	update_ui()
+
+func _on_timer_timeout() -> void:
+	print("passive_clicks_per_tick")
+	passive_clicks_per_tick = 1
+	clicks += passive_clicks_per_tick
 	update_ui()
 
 func _on_button_restart_pressed() -> void:
