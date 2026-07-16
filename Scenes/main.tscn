@@ -52,9 +52,9 @@ layout_mode = 2
 text = "Restart"
 
 [node name="PassiveIncomeTimer" type="Timer" parent="."]
-autostart = true
 
 [connection signal="pressed" from="VBoxContainer/ButtonClick" to="." method="_on_button_click_pressed"]
 [connection signal="pressed" from="VBoxContainer/ButtonUpgrade" to="." method="_on_button_upgrade_pressed"]
+[connection signal="pressed" from="VBoxContainer/ButtonAutoClicker" to="." method="_on_button_auto_clicker_pressed"]
 [connection signal="pressed" from="VBoxContainer/ButtonRestart" to="." method="_on_button_restart_pressed"]
 [connection signal="timeout" from="PassiveIncomeTimer" to="." method="_on_timer_timeout"]

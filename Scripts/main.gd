@@ -6,7 +6,11 @@ const CLICKS_EARNED_START = 1
 const UPGRADE_LEVEL_START = 1
 const UPGRADE_COST_START = 5
 const STARTING_PASSIVE_CLICKS_PER_TICK = 0
-const STARTING_AUTOCLICKER_COST = 2
+const STARTING_AUTOCLICKER_COST = 3
+const STARTING_AUTOCLICKER_LEVEL = 0
+const AUTO_CLICKER_LEVEL_INCREASE = 1
+const PASSIVE_CLICKS_PER_TICK_INCREASE = 1
+const AUTOCLICKER_COST_INCREASE = 5
 #===================Vars
 var clicks: int = 0
 var clicks_earned: int = 1
@@ -14,6 +18,7 @@ var upgrade_level: int = 1
 var upgrade_cost: int = 5
 var passive_clicks_per_tick: int = STARTING_PASSIVE_CLICKS_PER_TICK
 var autoclicker_cost: int = STARTING_AUTOCLICKER_COST
+var autoclicker_level: int = STARTING_AUTOCLICKER_LEVEL
 #===================Node References
 @onready var label_title: Label = $VBoxContainer/LabelTitle
 @onready var label_status: Label = $VBoxContainer/LabelStatus
@@ -22,6 +27,7 @@ var autoclicker_cost: int = STARTING_AUTOCLICKER_COST
 @onready var button_upgrade: Button = $VBoxContainer/ButtonUpgrade
 @onready var button_restart: Button = $VBoxContainer/ButtonRestart
 @onready var button_auto_clicker: Button = $VBoxContainer/ButtonAutoClicker
+@onready var passive_income_timer: Timer = $PassiveIncomeTimer
 
 #===================Helpers
 func update_ui():
@@ -60,13 +66,13 @@ func _process(delta: float) -> void:
 
 func _on_button_click_pressed() -> void:
 	clicks += clicks_earned
+	label_message.text = "$Kaching$"
 	update_ui()
 
 
 
 func _on_button_upgrade_pressed() -> void:
 	if clicks >= upgrade_cost:
-		
 		clicks -= upgrade_cost
 		clicks_earned += 1
 		upgrade_level += 1
@@ -78,8 +84,15 @@ func _on_button_upgrade_pressed() -> void:
 
 func _on_timer_timeout() -> void:
 	print("passive_clicks_per_tick")
-	passive_clicks_per_tick = 1
 	clicks += passive_clicks_per_tick
+	update_ui()
+
+func _on_button_auto_clicker_pressed() -> void:
+	passive_income_timer.start()
+	clicks -= autoclicker_cost
+	autoclicker_level += AUTO_CLICKER_LEVEL_INCREASE
+	passive_clicks_per_tick += PASSIVE_CLICKS_PER_TICK_INCREASE
+	autoclicker_cost += AUTOCLICKER_COST_INCREASE
 	update_ui()
 
 func _on_button_restart_pressed() -> void:
