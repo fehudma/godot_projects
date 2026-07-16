@@ -42,7 +42,7 @@ func update_ui() -> void:
 func update_stats_label() -> void:
 	print("Clicks: ", clicks)
 	#stats_label.text = "Clicks: " + str(clicks)
-	stats_label.text = "Clicks: " + str(clicks) + "\nPer Click: " + str(clicks_per_click) + "\nPer Timer: " + str(passive_clicks_per_tick) + "\nAuto Clicker Level: " + str(auto_clicker_level)
+	stats_label.text = "Clicks: " + str(clicks) + "\nClick Power: " + str(clicks_per_click) + "\nAuto Click Power: " + str(passive_clicks_per_tick) + "\nAuto Clicker Level: " + str(auto_clicker_level)
 #
 func update_upgrade_button() -> void:
 	upgrade_button.text = "Click Upgrade Cost: " + str(upgrade_cost)
@@ -61,6 +61,17 @@ func stop_passive_income_timer() -> void:
 
 func earn_passive_clicks() -> void:
 	clicks += passive_clicks_per_tick
+
+func reset_game_values() -> void:
+	clicks = STARTING_CLICKS
+	clicks_per_click = STARTING_CLICKS_PER_CLICK
+	upgrade_cost= STARTING_UPGRADE_COST
+	upgrade_modifier= STARTING_UPGRADE_LEVEL
+	#timeout_count = STARTING_TIMEOUT_COUNT
+	passive_clicks_per_tick = STARTING_PASSIVE_CLICKS_PER_TICK
+	auto_clicker_cost= AUTO_CLICKER_COST_START
+	auto_clicker_level = STARTING_AUTO_CLICKER_LEVEL
+	#print("Timer tick reset! Total counts: ", timeout_count)
 #========================================
 # initialize custom signal and on-click functionality
 func _ready() -> void:
@@ -90,16 +101,8 @@ func _on_upgrade_button_pressed() -> void:
 		message_label.text = "Not enough clicks!"
 
 func _on_reset_button_pressed() -> void:
-	clicks = STARTING_CLICKS
-	clicks_per_click = STARTING_CLICKS_PER_CLICK
-	upgrade_cost= STARTING_UPGRADE_COST
-	upgrade_modifier= STARTING_UPGRADE_LEVEL
-	#timeout_count = STARTING_TIMEOUT_COUNT
-	passive_clicks_per_tick = STARTING_PASSIVE_CLICKS_PER_TICK
-	auto_clicker_cost= AUTO_CLICKER_COST_START
-	auto_clicker_level = STARTING_AUTO_CLICKER_LEVEL
+	reset_game_values()
 	stop_passive_income_timer()
-	#print("Timer tick reset! Total counts: ", timeout_count)
 	message_label.text = "Game Reset."
 	update_ui()
 
