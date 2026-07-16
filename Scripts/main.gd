@@ -7,7 +7,7 @@ const STARTING_UPGRADE_COST: int = 3
 const STARTING_UPGRADE_LEVEL: int = 0
 const UPGRADE_COST_INCREASE: int = 2
 const CLICKS_PER_CLICK_INCREASE: int = 1
-const STARTING_TIMEOUT_COUNT: int = 0
+#const STARTING_TIMEOUT_COUNT: int = 0
 const AUTO_CLICKER_COST_START: int = 5
 const STARTING_PASSIVE_CLICKS_PER_TICK: int = 0
 const AUTO_CLICKER_COST_INCREASE: int = 5
@@ -18,7 +18,7 @@ var clicks: int = STARTING_CLICKS
 var clicks_per_click: int = STARTING_CLICKS_PER_CLICK
 var upgrade_cost: int = STARTING_UPGRADE_COST
 var upgrade_modifier: int = STARTING_UPGRADE_LEVEL
-var timeout_count: int = STARTING_TIMEOUT_COUNT
+#var timeout_count: int = STARTING_TIMEOUT_COUNT
 var passive_clicks_per_tick: int = STARTING_PASSIVE_CLICKS_PER_TICK
 var auto_clicker_cost: int = AUTO_CLICKER_COST_START
 var auto_clicker_level: int = STARTING_AUTO_CLICKER_LEVEL
@@ -92,12 +92,12 @@ func _on_reset_button_pressed() -> void:
 	clicks_per_click = STARTING_CLICKS_PER_CLICK
 	upgrade_cost= STARTING_UPGRADE_COST
 	upgrade_modifier= STARTING_UPGRADE_LEVEL
-	timeout_count = STARTING_TIMEOUT_COUNT
+	#timeout_count = STARTING_TIMEOUT_COUNT
 	passive_clicks_per_tick = STARTING_PASSIVE_CLICKS_PER_TICK
 	auto_clicker_cost= AUTO_CLICKER_COST_START
 	auto_clicker_level = STARTING_AUTO_CLICKER_LEVEL
 	stop_passive_income_timer()
-	print("Timer tick reset! Total counts: ", timeout_count)
+	#print("Timer tick reset! Total counts: ", timeout_count)
 	message_label.text = "Game Reset."
 	update_ui()
 
@@ -131,8 +131,8 @@ func buy_auto_clicker() -> void:
 
 func _on_passive_income_timer_timeout() -> void:
 	# Tracks the number of timeouts
-	timeout_count += 1
-	print("Timer tick! Total counts: ", timeout_count)
+	#timeout_count += 1
+	#print("Timer tick! Total counts: ", timeout_count)
 	# passive-income logic
 	earn_passive_clicks()
 	update_ui()
