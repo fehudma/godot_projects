@@ -6,7 +6,7 @@ const CLICKS_EARNED_START = 1
 const UPGRADE_LEVEL_START = 1
 const UPGRADE_COST_START = 5
 const STARTING_PASSIVE_CLICKS_PER_TICK = 0
-const STARTING_AUTOCLICKER_COST = 3
+const STARTING_AUTOCLICKER_COST = 5
 const STARTING_AUTOCLICKER_LEVEL = 0
 const AUTO_CLICKER_LEVEL_INCREASE = 1
 const PASSIVE_CLICKS_PER_TICK_INCREASE = 1
@@ -44,7 +44,7 @@ func autoclicker_refresh():
 #===================Functions
 func status_update():
 	#update label_status.text
-	label_status.text = "Clicks: " + str(clicks) + " " + "\nClicks Power: " + str(clicks_earned) + " "+ "\nUpgrade Level: "+ str(upgrade_level)
+	label_status.text = "Clicks: " + str(clicks) + " " + "\nClicks Power: " + str(clicks_earned) + " " + "\nUpgrade Level: "+ str(upgrade_level) + "\nAutoclicker Level: "+ str(autoclicker_level) 
 
 func upgrade_button_text():
 	button_upgrade.text = "Upgrade cost: " + str(upgrade_cost)
@@ -76,7 +76,7 @@ func _on_button_upgrade_pressed() -> void:
 		clicks -= upgrade_cost
 		clicks_earned += 1
 		upgrade_level += 1
-		upgrade_cost = upgrade_cost + UPGRADE_COST_INCREASE
+		upgrade_cost += UPGRADE_COST_INCREASE
 		label_message.text = "Upgrade bought!"
 	else:
 		label_message.text = "Unaffordable"
@@ -93,6 +93,7 @@ func _on_button_auto_clicker_pressed() -> void:
 	autoclicker_level += AUTO_CLICKER_LEVEL_INCREASE
 	passive_clicks_per_tick += PASSIVE_CLICKS_PER_TICK_INCREASE
 	autoclicker_cost += AUTOCLICKER_COST_INCREASE
+	button_auto_clicker.text = "Autoclicker cost: " + str(autoclicker_cost)
 	update_ui()
 
 func _on_button_restart_pressed() -> void:
