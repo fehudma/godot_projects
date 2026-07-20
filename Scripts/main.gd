@@ -63,6 +63,17 @@ func stop_passive_income_timer() -> void:
 func earn_passive_clicks() -> void:
 	clicks += passive_clicks_per_tick
 
+func collect_save_data() -> Dictionary:
+	var save_data: Dictionary = {}
+	save_data["clicks"] = clicks
+	save_data["clicks_per_click"] = clicks_per_click
+	save_data["upgrade_cost"] = upgrade_cost
+	save_data["upgrade_modifier"] = upgrade_modifier
+	save_data["passive_clicks_per_tick"] = passive_clicks_per_tick
+	save_data["auto_clicker_cost"] = auto_clicker_cost
+	save_data["auto_clicker_level"] = auto_clicker_level
+	return save_data
+
 func reset_game_values() -> void:
 	clicks = STARTING_CLICKS
 	clicks_per_click = STARTING_CLICKS_PER_CLICK
@@ -106,12 +117,8 @@ func _on_upgrade_button_pressed() -> void:
 		message_label.text = "Not enough clicks!"
 
 func _on_save_button_pressed() -> void:
-	var test_data: Dictionary = {
-		"clicks": clicks,
-		"clicks_per_click": clicks_per_click,
-		"upgrade_cost": upgrade_cost
-	}
-	print(test_data)
+	var save_data: Dictionary = collect_save_data()
+	print(save_data)
 
 func _on_load_button_pressed() -> void:
 	pass # Replace with function body.
