@@ -122,11 +122,11 @@ func _on_save_button_pressed() -> void:
 	var save_file: FileAccess = FileAccess.open(SAVE_FILE_PATH, FileAccess.WRITE)
 	save_file.store_string(json_text)
 	message_label.text = "Game Saved!"
-	print("save_data: " + str(save_data))
-	print("json_text: " + str(json_text))
 	
 
 func _on_load_button_pressed() -> void:
+	print("Load button pressed")
+	
 	if not FileAccess.file_exists(SAVE_FILE_PATH):
 		message_label.text = "No Savefile exists"
 		return
@@ -134,10 +134,8 @@ func _on_load_button_pressed() -> void:
 	print("Savefile exists")
 	var save_file: FileAccess = FileAccess.open(SAVE_FILE_PATH, FileAccess.READ)
 	var json_text: String = save_file.get_as_text()
-	print("json_text: " + str(json_text))
 	
 	var loaded_data: Variant = JSON.parse_string(json_text)
-	print("loaded_data: " + str(loaded_data))
 	
 	if typeof(loaded_data) != TYPE_DICTIONARY:
 		message_label.text = "Save file is invalid!"
@@ -147,7 +145,7 @@ func _on_load_button_pressed() -> void:
 	#check (validate) dictionary for presence of keys
 	if not save_data.has("clicks"):
 		message_label.text = "Save file is missing data."
-	return
+		return
 
 	if not save_data.has("clicks_per_click"):
 		message_label.text = "Save file is missing data."
@@ -177,7 +175,6 @@ func _on_load_button_pressed() -> void:
 	if typeof(loaded_clicks) != TYPE_INT and typeof(loaded_clicks) != TYPE_FLOAT:
 		message_label.text = "Save file contains invalid values."
 		return
-	clicks = int(loaded_clicks)
 	#loaded_clicks_per_click
 	var loaded_clicks_per_click: Variant = save_data["clicks_per_click"]
 
@@ -185,7 +182,6 @@ func _on_load_button_pressed() -> void:
 		message_label.text = "Save file contains invalid values."
 		return
 
-	clicks_per_click = int(loaded_clicks_per_click)
 	#the rest
 	var loaded_upgrade_cost: Variant = save_data["upgrade_cost"]
 	var loaded_upgrade_modifier: Variant = save_data["upgrade_modifier"]
@@ -195,7 +191,7 @@ func _on_load_button_pressed() -> void:
 	
 	if typeof(loaded_upgrade_cost) != TYPE_INT and typeof(loaded_upgrade_cost) != TYPE_FLOAT:
 		message_label.text = "Save file contains invalid values."
-	return
+		return
 
 	if typeof(loaded_upgrade_modifier) != TYPE_INT and typeof(loaded_upgrade_modifier) != TYPE_FLOAT:
 		message_label.text = "Save file contains invalid values."
@@ -213,15 +209,18 @@ func _on_load_button_pressed() -> void:
 		message_label.text = "Save file contains invalid values."
 		return
 	
+	clicks = int(loaded_clicks)
+	clicks_per_click = int(loaded_clicks_per_click)
 	upgrade_cost = int(loaded_upgrade_cost)
 	upgrade_modifier = int(loaded_upgrade_modifier)
 	passive_clicks_per_tick = int(loaded_passive_clicks_per_tick)
 	auto_clicker_cost = int(loaded_auto_clicker_cost)
 	auto_clicker_level = int(loaded_auto_clicker_level)
-	
-	print(save_data)
-	print("save_data: " + str(save_data))
 
+	update_ui()
+	message_label.text = "Game loaded!"
+	
+	
 func _on_reset_button_pressed() -> void:
 	reset_game()
 
