@@ -65,4 +65,6 @@ text = "Reset"
 [node name="PassiveIncomeTimer" type="Timer" parent="."]
 
 [connection signal="pressed" from="VBoxContainer/AutoClickerButton" to="." method="_on_auto_clicker_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/SaveButton" to="." method="_on_save_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/LoadButton" to="." method="_on_load_button_pressed"]
 [connection signal="timeout" from="PassiveIncomeTimer" to="." method="_on_passive_income_timer_timeout"]

@@ -13,6 +13,7 @@ const AUTO_CLICKER_COST_INCREASE: int = 5
 const PASSIVE_CLICKS_INCREASE: int = 1
 const STARTING_AUTO_CLICKER_LEVEL: int = 0
 const PASSIVE_INCOME_INTERVAL: float = 1.0
+
 #========================================
 var clicks: int = STARTING_CLICKS
 var clicks_per_click: int = STARTING_CLICKS_PER_CLICK
@@ -21,6 +22,7 @@ var upgrade_modifier: int = STARTING_UPGRADE_LEVEL
 var passive_clicks_per_tick: int = STARTING_PASSIVE_CLICKS_PER_TICK
 var auto_clicker_cost: int = AUTO_CLICKER_COST_START
 var auto_clicker_level: int = STARTING_AUTO_CLICKER_LEVEL
+
 #========================================
 @onready var stats_label: Label = $VBoxContainer/StatsLabel
 @onready var message_label: Label = $VBoxContainer/MessageLabel
@@ -35,6 +37,7 @@ func update_ui() -> void:
 	update_stats_label()
 	update_upgrade_button()
 	update_buy_auto_clicker_button()
+
 #========================================helper functions
 # 
 func update_stats_label() -> void:
@@ -101,6 +104,12 @@ func _on_upgrade_button_pressed() -> void:
 	else:
 		print("can't buy upg")
 		message_label.text = "Not enough clicks!"
+
+func _on_save_button_pressed() -> void:
+	pass # Replace with function body.
+
+func _on_load_button_pressed() -> void:
+	pass # Replace with function body.
 
 func _on_reset_button_pressed() -> void:
 	reset_game()
