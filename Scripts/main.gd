@@ -127,7 +127,16 @@ func _on_save_button_pressed() -> void:
 	
 
 func _on_load_button_pressed() -> void:
-	pass # Replace with function body.
+	if not FileAccess.file_exists(SAVE_FILE_PATH):
+		message_label.text = "No Savefile exists"
+		return
+	
+	print("Savefile exists")
+	var save_file: FileAccess = FileAccess.open(SAVE_FILE_PATH, FileAccess.READ)
+	var json_text: String = save_file.get_as_text()
+	print("json_text: " + str(json_text))
+	var loaded_data: Variant = JSON.parse_string(json_text)
+	print(loaded_data)
 
 func _on_reset_button_pressed() -> void:
 	reset_game()
