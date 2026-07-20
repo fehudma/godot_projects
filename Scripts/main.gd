@@ -121,8 +121,10 @@ func _on_save_button_pressed() -> void:
 	var json_text: String = JSON.stringify(save_data)
 	var save_file: FileAccess = FileAccess.open(SAVE_FILE_PATH, FileAccess.WRITE)
 	save_file.store_string(json_text)
+	message_label.text = "Game Saved!"
 	print("save_data: " + str(save_data))
 	print("json_text: " + str(json_text))
+	
 
 func _on_load_button_pressed() -> void:
 	pass # Replace with function body.
