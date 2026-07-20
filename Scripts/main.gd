@@ -13,7 +13,7 @@ const AUTO_CLICKER_COST_INCREASE: int = 5
 const PASSIVE_CLICKS_INCREASE: int = 1
 const STARTING_AUTO_CLICKER_LEVEL: int = 0
 const PASSIVE_INCOME_INTERVAL: float = 1.0
-
+const SAVE_FILE_PATH: String = "user://savegame.json"
 #========================================
 var clicks: int = STARTING_CLICKS
 var clicks_per_click: int = STARTING_CLICKS_PER_CLICK
@@ -106,7 +106,12 @@ func _on_upgrade_button_pressed() -> void:
 		message_label.text = "Not enough clicks!"
 
 func _on_save_button_pressed() -> void:
-	pass # Replace with function body.
+	var test_data: Dictionary = {
+		"clicks": clicks,
+		"clicks_per_click": clicks_per_click,
+		"upgrade_cost": upgrade_cost
+	}
+	print(test_data)
 
 func _on_load_button_pressed() -> void:
 	pass # Replace with function body.
