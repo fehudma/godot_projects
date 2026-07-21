@@ -41,8 +41,6 @@ func update_ui() -> void:
 #========================================helper functions
 # 
 func update_stats_label() -> void:
-	print("Clicks: ", clicks)
-	#stats_label.text = "Clicks: " + str(clicks)
 	stats_label.text = "Clicks: " + str(clicks) + "\nClick Power: " + str(clicks_per_click) + "\nAuto Click Power: " + str(passive_clicks_per_tick) + "\nAuto Clicker Level: " + str(auto_clicker_level)
 #
 func update_upgrade_button() -> void:
@@ -105,8 +103,6 @@ func _ready() -> void:
 
 # on-click functionality
 func _on_click_button_pressed() -> void:
-	print("Click Button Clicked")
-	print("Upgrade modif: ",upgrade_modifier)
 	clicks += clicks_per_click
 	# check grammar for 1 click and multiple clicks
 	show_click_message()
@@ -114,13 +110,9 @@ func _on_click_button_pressed() -> void:
 
 # on-upgrade functionality
 func _on_upgrade_button_pressed() -> void:
-	print("Upgrade Button Clicked")
 	if can_afford_upgrade():
 		buy_upgrade()
 		update_ui()
-	else:
-		print("can't buy upg")
-		message_label.text = "Not enough clicks!"
 
 func _on_save_button_pressed() -> void:
 	var save_data: Dictionary = collect_save_data()
@@ -135,14 +127,10 @@ func _on_save_button_pressed() -> void:
 	message_label.text = "Game saved."
 	
 
-func _on_load_button_pressed() -> void:
-	print("Load button pressed")
-	
+func _on_load_button_pressed() -> void:	
 	if not FileAccess.file_exists(SAVE_FILE_PATH):
 		message_label.text = "No Savefile exists"
 		return
-	
-	print("Savefile exists")
 	
 	var save_file: FileAccess = FileAccess.open(SAVE_FILE_PATH, FileAccess.READ)
 	
@@ -262,7 +250,6 @@ func buy_upgrade() -> void:
 	upgrade_modifier = clicks_per_click
 	print("Upgrade bought")
 	message_label.text = "Upgrade bought!"
-	print("Upgrade modif: ",upgrade_modifier)
 
 func buy_auto_clicker() -> void:
 	clicks -= auto_clicker_cost
@@ -277,9 +264,7 @@ func _on_passive_income_timer_timeout() -> void:
 	update_ui()
 
 
-func _on_auto_clicker_button_pressed() -> void:
-	print("Autoclicker Button Pressed")
-	
+func _on_auto_clicker_button_pressed() -> void:	
 	if can_afford_auto_clicker():
 		buy_auto_clicker()
 		start_passive_income_timer()
