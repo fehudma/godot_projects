@@ -13,7 +13,8 @@ const AUTO_CLICKER_COST_INCREASE: int = 5
 const PASSIVE_CLICKS_INCREASE: int = 1
 const STARTING_AUTO_CLICKER_LEVEL: int = 0
 const PASSIVE_INCOME_INTERVAL: float = 1.0
-const SAVE_FILE_PATH: String = "user://savegame.json"
+#const SAVE_FILE_PATH: String = "user://savegame.json"
+const SAVE_FILE_PATH: String = "zalupa://savegame.json"
 #========================================
 var clicks: int = STARTING_CLICKS
 var clicks_per_click: int = STARTING_CLICKS_PER_CLICK
@@ -126,8 +127,13 @@ func _on_save_button_pressed() -> void:
 	var save_data: Dictionary = collect_save_data()
 	var json_text: String = JSON.stringify(save_data)
 	var save_file: FileAccess = FileAccess.open(SAVE_FILE_PATH, FileAccess.WRITE)
+
+	if save_file == null:
+		message_label.text = "Could not save game."
+		return
+
 	save_file.store_string(json_text)
-	message_label.text = "Game Saved!"
+	message_label.text = "Game saved."
 	
 
 func _on_load_button_pressed() -> void:
