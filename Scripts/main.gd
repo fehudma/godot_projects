@@ -160,52 +160,21 @@ func _on_load_button_pressed() -> void:
 	if not save_data.has_all(REQUIRED_SAVE_KEYS):
 		message_label.text = "Save file is missing data."
 		return
-	#check (validate) dictionary for correct data type inside of a specific key "clicks"
-	var loaded_clicks: Variant = save_data["clicks"]
-	if typeof(loaded_clicks) != TYPE_INT and typeof(loaded_clicks) != TYPE_FLOAT:
-		message_label.text = "Save file contains invalid values."
-		return
-	#loaded_clicks_per_click
-	var loaded_clicks_per_click: Variant = save_data["clicks_per_click"]
-
-	if typeof(loaded_clicks_per_click) != TYPE_INT and typeof(loaded_clicks_per_click) != TYPE_FLOAT:
-		message_label.text = "Save file contains invalid values."
-		return
-
-	#the rest
-	var loaded_upgrade_cost: Variant = save_data["upgrade_cost"]
-	var loaded_upgrade_modifier: Variant = save_data["upgrade_modifier"]
-	var loaded_passive_clicks_per_tick: Variant = save_data["passive_clicks_per_tick"]
-	var loaded_auto_clicker_cost: Variant = save_data["auto_clicker_cost"]
-	var loaded_auto_clicker_level: Variant = save_data["auto_clicker_level"]
+	#check (validate) dictionary for correct data type inside of keys
+	for key: String in REQUIRED_SAVE_KEYS:
+		var value: Variant = save_data[key]
+		
+		if typeof(value) != TYPE_INT and typeof(value) != TYPE_FLOAT:
+			message_label.text = "Save file contains invalid values."
+			return
 	
-	if typeof(loaded_upgrade_cost) != TYPE_INT and typeof(loaded_upgrade_cost) != TYPE_FLOAT:
-		message_label.text = "Save file contains invalid values."
-		return
-
-	if typeof(loaded_upgrade_modifier) != TYPE_INT and typeof(loaded_upgrade_modifier) != TYPE_FLOAT:
-		message_label.text = "Save file contains invalid values."
-		return
-
-	if typeof(loaded_passive_clicks_per_tick) != TYPE_INT and typeof(loaded_passive_clicks_per_tick) != TYPE_FLOAT:
-		message_label.text = "Save file contains invalid values."
-		return
-
-	if typeof(loaded_auto_clicker_cost) != TYPE_INT and typeof(loaded_auto_clicker_cost) != TYPE_FLOAT:
-		message_label.text = "Save file contains invalid values."
-		return
-
-	if typeof(loaded_auto_clicker_level) != TYPE_INT and typeof(loaded_auto_clicker_level) != TYPE_FLOAT:
-		message_label.text = "Save file contains invalid values."
-		return
-	
-	clicks = int(loaded_clicks)
-	clicks_per_click = int(loaded_clicks_per_click)
-	upgrade_cost = int(loaded_upgrade_cost)
-	upgrade_modifier = int(loaded_upgrade_modifier)
-	passive_clicks_per_tick = int(loaded_passive_clicks_per_tick)
-	auto_clicker_cost = int(loaded_auto_clicker_cost)
-	auto_clicker_level = int(loaded_auto_clicker_level)
+	clicks = int(save_data["clicks"])
+	clicks_per_click = int(save_data["clicks_per_click"])
+	upgrade_cost = int(save_data["upgrade_cost"])
+	upgrade_modifier = int(save_data["upgrade_modifier"])
+	passive_clicks_per_tick = int(save_data["passive_clicks_per_tick"])
+	auto_clicker_cost = int(save_data["auto_clicker_cost"])
+	auto_clicker_level = int(save_data["auto_clicker_level"])
 	
 	restore_passive_income_timer()
 
