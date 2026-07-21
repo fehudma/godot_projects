@@ -63,6 +63,12 @@ func stop_passive_income_timer() -> void:
 func earn_passive_clicks() -> void:
 	clicks += passive_clicks_per_tick
 
+func restore_passive_income_timer() -> void:
+	if auto_clicker_level > 0 and passive_clicks_per_tick > 0:
+		start_passive_income_timer()
+	else:
+		stop_passive_income_timer()
+
 func collect_save_data() -> Dictionary:
 	var save_data: Dictionary = {}
 	save_data["clicks"] = clicks
@@ -216,6 +222,8 @@ func _on_load_button_pressed() -> void:
 	passive_clicks_per_tick = int(loaded_passive_clicks_per_tick)
 	auto_clicker_cost = int(loaded_auto_clicker_cost)
 	auto_clicker_level = int(loaded_auto_clicker_level)
+	
+	restore_passive_income_timer()
 
 	update_ui()
 	message_label.text = "Game loaded!"
