@@ -14,6 +14,15 @@ const PASSIVE_CLICKS_INCREASE: int = 1
 const STARTING_AUTO_CLICKER_LEVEL: int = 0
 const PASSIVE_INCOME_INTERVAL: float = 1.0
 const SAVE_FILE_PATH: String = "user://savegame.json"
+const REQUIRED_SAVE_KEYS: Array[String] = [
+	"clicks",
+	"clicks_per_click",
+	"upgrade_cost",
+	"upgrade_modifier",
+	"passive_clicks_per_tick",
+	"auto_clicker_cost",
+	"auto_clicker_level"
+]
 #========================================
 var clicks: int = STARTING_CLICKS
 var clicks_per_click: int = STARTING_CLICKS_PER_CLICK
@@ -148,31 +157,7 @@ func _on_load_button_pressed() -> void:
 	
 	var save_data: Dictionary = loaded_data
 	#check (validate) dictionary for presence of keys
-	if not save_data.has("clicks"):
-		message_label.text = "Save file is missing data."
-		return
-
-	if not save_data.has("clicks_per_click"):
-		message_label.text = "Save file is missing data."
-		return
-
-	if not save_data.has("upgrade_cost"):
-		message_label.text = "Save file is missing data."
-		return
-
-	if not save_data.has("upgrade_modifier"):
-		message_label.text = "Save file is missing data."
-		return
-
-	if not save_data.has("passive_clicks_per_tick"):
-		message_label.text = "Save file is missing data."
-		return
-
-	if not save_data.has("auto_clicker_cost"):
-		message_label.text = "Save file is missing data."
-		return
-
-	if not save_data.has("auto_clicker_level"):
+	if not save_data.has_all(REQUIRED_SAVE_KEYS):
 		message_label.text = "Save file is missing data."
 		return
 	#check (validate) dictionary for correct data type inside of a specific key "clicks"
@@ -248,7 +233,6 @@ func buy_upgrade() -> void:
 	clicks_per_click += CLICKS_PER_CLICK_INCREASE
 	upgrade_cost += UPGRADE_COST_INCREASE
 	upgrade_modifier = clicks_per_click
-	print("Upgrade bought")
 	message_label.text = "Upgrade bought!"
 
 func buy_auto_clicker() -> void:
