@@ -5,7 +5,7 @@ const STARTING_CLICKS: int = 0
 const STARTING_CLICKS_PER_CLICK: int = 1
 const STARTING_UPGRADE_COST: int = 3
 const STARTING_UPGRADE_LEVEL: int = 0
-const UPGRADE_MODIFIER: int = 1
+const MANUAL_UPGRADE_LEVEL: int = 1
 const UPGRADE_COST_INCREASE: int = 2
 const CLICKS_PER_CLICK_INCREASE: int = 1
 const AUTO_CLICKER_UNLOCK_LEVEL: int = 3
@@ -20,7 +20,7 @@ const REQUIRED_SAVE_KEYS: Array[String] = [
 	"clicks",
 	"clicks_per_click",
 	"upgrade_cost",
-	"upgrade_modifier",
+	"manual_upgrade_level",
 	"passive_clicks_per_tick",
 	"auto_clicker_cost",
 	"auto_clicker_level"
@@ -29,7 +29,7 @@ const REQUIRED_SAVE_KEYS: Array[String] = [
 var clicks: int = STARTING_CLICKS
 var clicks_per_click: int = STARTING_CLICKS_PER_CLICK
 var upgrade_cost: int = STARTING_UPGRADE_COST
-var upgrade_modifier: int = STARTING_UPGRADE_LEVEL
+var manual_upgrade_level: int = STARTING_UPGRADE_LEVEL
 var passive_clicks_per_tick: int = STARTING_PASSIVE_CLICKS_PER_TICK
 var auto_clicker_cost: int = AUTO_CLICKER_COST_START
 var auto_clicker_level: int = STARTING_AUTO_CLICKER_LEVEL
@@ -59,7 +59,7 @@ func update_upgrade_button() -> void:
 	upgrade_button.disabled = not can_afford_upgrade()
 #
 func is_auto_clicker_unlocked() -> bool:
-	if upgrade_modifier >= AUTO_CLICKER_UNLOCK_LEVEL:
+	if manual_upgrade_level >= AUTO_CLICKER_UNLOCK_LEVEL:
 		return true
 	else:
 		return false
@@ -94,7 +94,7 @@ func collect_save_data() -> Dictionary:
 	save_data["clicks"] = clicks
 	save_data["clicks_per_click"] = clicks_per_click
 	save_data["upgrade_cost"] = upgrade_cost
-	save_data["upgrade_modifier"] = upgrade_modifier
+	save_data["manual_upgrade_level"] = manual_upgrade_level
 	save_data["passive_clicks_per_tick"] = passive_clicks_per_tick
 	save_data["auto_clicker_cost"] = auto_clicker_cost
 	save_data["auto_clicker_level"] = auto_clicker_level
@@ -104,7 +104,7 @@ func reset_game_values() -> void:
 	clicks = STARTING_CLICKS
 	clicks_per_click = STARTING_CLICKS_PER_CLICK
 	upgrade_cost= STARTING_UPGRADE_COST
-	upgrade_modifier= STARTING_UPGRADE_LEVEL
+	manual_upgrade_level= STARTING_UPGRADE_LEVEL
 	passive_clicks_per_tick = STARTING_PASSIVE_CLICKS_PER_TICK
 	auto_clicker_cost= AUTO_CLICKER_COST_START
 	auto_clicker_level = STARTING_AUTO_CLICKER_LEVEL
@@ -136,7 +136,7 @@ func _on_upgrade_button_pressed() -> void:
 		var was_unlocked: bool = is_auto_clicker_unlocked()
 		buy_upgrade()
 		if not was_unlocked and is_auto_clicker_unlocked():
-			message_label.text = "Upgrade Bought and Auto Clicker Unlocked"
+			message_label.text = "Manual Upgrade Bought and Auto Clicker Unlocked"
 		update_ui()
 
 func _on_save_button_pressed() -> void:
@@ -187,7 +187,7 @@ func _on_load_button_pressed() -> void:
 	clicks = int(save_data["clicks"])
 	clicks_per_click = int(save_data["clicks_per_click"])
 	upgrade_cost = int(save_data["upgrade_cost"])
-	upgrade_modifier = int(save_data["upgrade_modifier"])
+	manual_upgrade_level = int(save_data["manual_upgrade_level"])
 	passive_clicks_per_tick = int(save_data["passive_clicks_per_tick"])
 	auto_clicker_cost = int(save_data["auto_clicker_cost"])
 	auto_clicker_level = int(save_data["auto_clicker_level"])
@@ -217,8 +217,8 @@ func buy_upgrade() -> void:
 	clicks -= upgrade_cost
 	clicks_per_click += CLICKS_PER_CLICK_INCREASE
 	upgrade_cost += UPGRADE_COST_INCREASE
-	upgrade_modifier += UPGRADE_MODIFIER
-	message_label.text = "Upgrade bought!"
+	manual_upgrade_level += MANUAL_UPGRADE_LEVEL
+	message_label.text = "Manual Upgrade bought!"
 
 func buy_auto_clicker() -> void:
 	clicks -= auto_clicker_cost
