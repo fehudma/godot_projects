@@ -66,8 +66,12 @@ func is_auto_clicker_unlocked() -> bool:
 
 #
 func update_buy_auto_clicker_button() -> void:
-	auto_clicker_button.text = "Auto Clicker Lv. " + str(auto_clicker_level) + " — Cost: " + str(auto_clicker_cost)
-	auto_clicker_button.disabled = not can_afford_auto_clicker()
+	if not is_auto_clicker_unlocked(): #same as "if is_auto_clicker_unlocked() == false:"
+		auto_clicker_button.text = "Auto Clicker Unlock at Click Upgrade Level: " + str(AUTO_CLICKER_UNLOCK_LEVEL)
+		auto_clicker_button.disabled = true
+	else:
+		auto_clicker_button.text = "Auto Clicker Lv. " + str(auto_clicker_level) + " — Cost: " + str(auto_clicker_cost)
+		auto_clicker_button.disabled = not can_afford_auto_clicker()
 #
 func start_passive_income_timer() -> void:
 	if passive_income_timer.is_stopped():
@@ -228,7 +232,10 @@ func _on_passive_income_timer_timeout() -> void:
 	update_ui()
 
 
-func _on_auto_clicker_button_pressed() -> void:	
+func _on_auto_clicker_button_pressed() -> void:
+	if not is_auto_clicker_unlocked():
+		return
+
 	if can_afford_auto_clicker():
 		buy_auto_clicker()
 		start_passive_income_timer()
