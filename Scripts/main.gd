@@ -126,8 +126,6 @@ func _ready() -> void:
 # on-click functionality
 func _on_click_button_pressed() -> void:
 	clicks += clicks_per_click
-	print("Clicks: "+str(clicks) + "\nUpgrade: "+ str(upgrade_modifier))
-	print(is_auto_clicker_unlocked())
 	# check grammar for 1 click and multiple clicks
 	show_click_message()
 	update_ui()
@@ -135,7 +133,10 @@ func _on_click_button_pressed() -> void:
 # on-upgrade functionality
 func _on_upgrade_button_pressed() -> void:
 	if can_afford_upgrade():
+		var was_unlocked: bool = is_auto_clicker_unlocked()
 		buy_upgrade()
+		if not was_unlocked and is_auto_clicker_unlocked():
+			message_label.text = "Upgrade Bought and Auto Clicker Unlocked"
 		update_ui()
 
 func _on_save_button_pressed() -> void:
