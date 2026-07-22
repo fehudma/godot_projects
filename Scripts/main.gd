@@ -5,8 +5,10 @@ const STARTING_CLICKS: int = 0
 const STARTING_CLICKS_PER_CLICK: int = 1
 const STARTING_UPGRADE_COST: int = 3
 const STARTING_UPGRADE_LEVEL: int = 0
+const UPGRADE_MODIFIER: int = 1
 const UPGRADE_COST_INCREASE: int = 2
 const CLICKS_PER_CLICK_INCREASE: int = 1
+const AUTO_CLICKER_UNLOCK_LEVEL: int = 3
 const AUTO_CLICKER_COST_START: int = 5
 const STARTING_PASSIVE_CLICKS_PER_TICK: int = 0
 const AUTO_CLICKER_COST_INCREASE: int = 5
@@ -55,6 +57,13 @@ func update_stats_label() -> void:
 func update_upgrade_button() -> void:
 	upgrade_button.text = "Click Upgrade Cost: " + str(upgrade_cost)
 	upgrade_button.disabled = not can_afford_upgrade()
+#
+func is_auto_clicker_unlocked() -> bool:
+	if upgrade_modifier >= AUTO_CLICKER_UNLOCK_LEVEL:
+		return true
+	else:
+		return false
+
 #
 func update_buy_auto_clicker_button() -> void:
 	auto_clicker_button.text = "Auto Clicker Lv. " + str(auto_clicker_level) + " — Cost: " + str(auto_clicker_cost)
@@ -113,6 +122,8 @@ func _ready() -> void:
 # on-click functionality
 func _on_click_button_pressed() -> void:
 	clicks += clicks_per_click
+	print("Clicks: "+str(clicks) + "\nUpgrade: "+ str(upgrade_modifier))
+	print(is_auto_clicker_unlocked())
 	# check grammar for 1 click and multiple clicks
 	show_click_message()
 	update_ui()
@@ -201,7 +212,7 @@ func buy_upgrade() -> void:
 	clicks -= upgrade_cost
 	clicks_per_click += CLICKS_PER_CLICK_INCREASE
 	upgrade_cost += UPGRADE_COST_INCREASE
-	upgrade_modifier = clicks_per_click
+	upgrade_modifier += UPGRADE_MODIFIER
 	message_label.text = "Upgrade bought!"
 
 func buy_auto_clicker() -> void:
