@@ -33,7 +33,7 @@ var manual_upgrade_level: int = STARTING_UPGRADE_LEVEL
 var passive_clicks_per_tick: int = STARTING_PASSIVE_CLICKS_PER_TICK
 var auto_clicker_cost: int = AUTO_CLICKER_COST_START
 var auto_clicker_level: int = STARTING_AUTO_CLICKER_LEVEL
-
+var click_button_tween: Tween
 #========================================
 @onready var stats_label: Label = $VBoxContainer/StatsLabel
 @onready var message_label: Label = $VBoxContainer/MessageLabel
@@ -156,6 +156,27 @@ func format_number(value: int) -> String:
 		return str(rounded_value) + "B"
 
 	return str(value)
+#
+func play_click_button_feedback() -> void:
+	if click_button_tween:
+		click_button_tween.kill()
+
+	click_button.pivot_offset = click_button.size / 2.0
+	click_button.scale = Vector2.ONE
+
+	click_button_tween = create_tween()
+	click_button_tween.tween_property(
+		click_button,
+		"scale",
+		Vector2(0.9, 0.9),
+		0.05
+	)
+	click_button_tween.tween_property(
+		click_button,
+		"scale",
+		Vector2.ONE,
+		0.08
+	)
 #========================================
 # initialize custom signal and on-click functionality
 func _ready() -> void:
@@ -169,8 +190,8 @@ func _ready() -> void:
 # on-click functionality
 func _on_click_button_pressed() -> void:
 	clicks += clicks_per_click
-	# check grammar for 1 click and multiple clicks
 	show_click_message()
+	play_click_button_feedback()
 	update_ui()
 
 # on-upgrade functionality
@@ -284,10 +305,3 @@ func _on_auto_clicker_button_pressed() -> void:
 		buy_auto_clicker()
 		start_passive_income_timer()
 		update_ui()
-
-
-func _on_test_button_pressed() -> void:
-	clicks = 1_250
-	clicks_per_click = 999
-	update_ui()
-	
