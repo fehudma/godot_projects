@@ -49,10 +49,13 @@ func update_ui() -> void:
 	update_upgrade_button()
 	update_buy_auto_clicker_button()
 
-#========================================helper functions
+#========================================HELPERs functions
+#
+func show_message(message: String) -> void:
+	message_label.text = message
 # 
 func update_stats_label() -> void:
-	stats_label.text = "Clicks: " + str(clicks) + "\nClick Power: " + str(clicks_per_click) + "\nAuto Click Power: " + str(passive_clicks_per_tick) + "\nAuto Clicker Level: " + str(auto_clicker_level)
+	stats_label.text = "Clicks: " + format_number(clicks) + "\nClick Power: " + format_number(clicks_per_click) + "\nAuto Click Power: " + format_number(passive_clicks_per_tick) + "\nAuto Clicker Level: " + format_number(auto_clicker_level)
 #
 func update_upgrade_button() -> void:
 	upgrade_button.text = "Click Upgrade Cost: " + format_number(upgrade_cost)
@@ -70,7 +73,7 @@ func update_buy_auto_clicker_button() -> void:
 		auto_clicker_button.text = "Auto Clicker Unlock at Click Upgrade Level: " + str(AUTO_CLICKER_UNLOCK_LEVEL)
 		auto_clicker_button.disabled = true
 	else:
-		auto_clicker_button.text = "Auto Clicker Lv. " + str(auto_clicker_level) + " — Cost: " + str(auto_clicker_cost)
+		auto_clicker_button.text = "Auto Clicker Lv. " + format_number(auto_clicker_level) + " — Cost: " + format_number(auto_clicker_cost)
 		auto_clicker_button.disabled = not can_afford_auto_clicker()
 #
 func start_passive_income_timer() -> void:
@@ -112,7 +115,7 @@ func reset_game_values() -> void:
 func reset_game() -> void:
 	reset_game_values()
 	stop_passive_income_timer()
-	message_label.text = "Game Reset."
+	message_label.text = "Game reset."
 	update_ui()
 
 func format_number(value: int) -> String:
@@ -186,6 +189,11 @@ func _ready() -> void:
 	print(format_number(999_950_000))
 	print(format_number(999_999_999))
 	print("=============")
+	clicks = 1_250
+	print(clicks)
+	print(typeof(clicks))
+	print(format_number(clicks))
+	
 
 # on-click functionality
 func _on_click_button_pressed() -> void:
@@ -200,7 +208,7 @@ func _on_upgrade_button_pressed() -> void:
 		var was_unlocked: bool = is_auto_clicker_unlocked()
 		buy_upgrade()
 		if not was_unlocked and is_auto_clicker_unlocked():
-			message_label.text = "Manual Upgrade Bought and Auto Clicker Unlocked"
+			message_label.text = "Manual upgrade bought and auto clicker unlocked."
 		update_ui()
 
 func _on_save_button_pressed() -> void:
@@ -213,12 +221,12 @@ func _on_save_button_pressed() -> void:
 		return
 
 	save_file.store_string(json_text)
-	message_label.text = "Game saved."
+	show_message("Game saved.")
 	
 
 func _on_load_button_pressed() -> void:
 	if not FileAccess.file_exists(SAVE_FILE_PATH):
-		message_label.text = "No Savefile exists"
+		message_label.text = "No Savefile exists."
 		return
 	
 	var save_file: FileAccess = FileAccess.open(SAVE_FILE_PATH, FileAccess.READ)
@@ -232,7 +240,7 @@ func _on_load_button_pressed() -> void:
 	var loaded_data: Variant = JSON.parse_string(json_text)
 	
 	if typeof(loaded_data) != TYPE_DICTIONARY:
-		message_label.text = "Save file is invalid!"
+		message_label.text = "Save file is invalid."
 		return
 	
 	var save_data: Dictionary = loaded_data
@@ -259,7 +267,7 @@ func _on_load_button_pressed() -> void:
 	restore_passive_income_timer()
 
 	update_ui()
-	message_label.text = "Game loaded!"
+	message_label.text = "Game loaded."
 	
 	
 func _on_reset_button_pressed() -> void:
@@ -267,9 +275,9 @@ func _on_reset_button_pressed() -> void:
 
 func show_click_message() -> void:
 	if clicks_per_click == 1:
-		message_label.text = "+" + str(clicks_per_click) + " click!"
+		message_label.text = "+" + format_number(clicks_per_click) + " click!"
 	else:
-		message_label.text = "+" + str(clicks_per_click) + " clicks!"
+		message_label.text = "+" + format_number(clicks_per_click) + " clicks!"
 
 func can_afford_upgrade() -> bool:
 	return clicks >= upgrade_cost
@@ -282,14 +290,14 @@ func buy_upgrade() -> void:
 	clicks_per_click += CLICKS_PER_CLICK_INCREASE
 	upgrade_cost += UPGRADE_COST_INCREASE
 	manual_upgrade_level += MANUAL_UPGRADE_LEVEL
-	message_label.text = "Manual Upgrade bought!"
+	message_label.text = "Manual upgrade bought."
 
 func buy_auto_clicker() -> void:
 	clicks -= auto_clicker_cost
 	passive_clicks_per_tick += PASSIVE_CLICKS_INCREASE
 	auto_clicker_cost += AUTO_CLICKER_COST_INCREASE
 	auto_clicker_level += 1
-	message_label.text = "Auto Clicker bought!"
+	message_label.text = "Auto clicker bought."
 
 func _on_passive_income_timer_timeout() -> void:
 	# passive-income logic
@@ -305,3 +313,10 @@ func _on_auto_clicker_button_pressed() -> void:
 		buy_auto_clicker()
 		start_passive_income_timer()
 		update_ui()
+
+
+func _on_test_button_pressed() -> void:
+	clicks = 1_250
+	clicks_per_click = 999
+	update_ui()
+	
