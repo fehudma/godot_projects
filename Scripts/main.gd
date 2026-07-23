@@ -34,14 +34,22 @@ var passive_clicks_per_tick: int = STARTING_PASSIVE_CLICKS_PER_TICK
 var auto_clicker_cost: int = AUTO_CLICKER_COST_START
 var auto_clicker_level: int = STARTING_AUTO_CLICKER_LEVEL
 var click_button_tween: Tween
+var upgrade_button_tween: Tween
+var auto_clicker_button_tween: Tween
+var save_button_tween: Tween
+var load_button_tween: Tween
+var reset_button_tween: Tween
 #========================================
 @onready var stats_label: Label = $VBoxContainer/StatsLabel
 @onready var message_label: Label = $VBoxContainer/MessageLabel
 @onready var click_button: Button = $VBoxContainer/ClickButton
 @onready var upgrade_button: Button = $VBoxContainer/UpgradeButton
-@onready var reset_button: Button = $VBoxContainer/ResetButton
 @onready var auto_clicker_button: Button = $VBoxContainer/AutoClickerButton
+@onready var save_button: Button = $VBoxContainer/SaveButton
+@onready var load_button: Button = $VBoxContainer/LoadButton
+@onready var reset_button: Button = $VBoxContainer/ResetButton
 @onready var passive_income_timer: Timer = $PassiveIncomeTimer
+
 
 #========================================
 func update_ui() -> void:
@@ -177,6 +185,27 @@ func play_click_button_feedback() -> void:
 		Vector2.ONE,
 		0.08
 	)
+
+func play_save_button_feedback() -> void:
+	if save_button_tween:
+		save_button_tween.kill()
+
+	save_button.pivot_offset = save_button.size / 2.0
+	save_button.scale = Vector2.ONE
+
+	save_button_tween = create_tween()
+	save_button_tween.tween_property(
+		save_button,
+		"scale",
+		Vector2(0.9, 0.9),
+		0.05
+	)
+	save_button_tween.tween_property(
+		save_button,
+		"scale",
+		Vector2.ONE,
+		0.08
+	)
 #========================================
 # initialize custom signal and on-click functionality
 func _ready() -> void:
@@ -203,6 +232,8 @@ func _on_upgrade_button_pressed() -> void:
 		update_ui()
 
 func _on_save_button_pressed() -> void:
+	play_save_button_feedback()
+	
 	var save_data: Dictionary = collect_save_data()
 	var json_text: String = JSON.stringify(save_data)
 	var save_file: FileAccess = FileAccess.open(SAVE_FILE_PATH, FileAccess.WRITE)
@@ -213,6 +244,7 @@ func _on_save_button_pressed() -> void:
 
 	save_file.store_string(json_text)
 	show_message("Game saved.")
+	
 	
 
 func _on_load_button_pressed() -> void:
