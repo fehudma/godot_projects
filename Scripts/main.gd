@@ -127,6 +127,15 @@ func format_number(value: int) -> String:
 			return str(int(rounded_value)) + "K"
 
 		return str(rounded_value) + "K"
+		
+	if value < 1_000_000_000:
+		var shortened_value: float = value / 1_000_000.0
+		var rounded_value: float = round(shortened_value * 10.0) / 10
+		
+		if rounded_value == int(rounded_value):
+			return str(int(rounded_value)) + "M"
+		
+		return str(rounded_value) + "M"
 
 	return str(value)
 #========================================
@@ -137,11 +146,19 @@ func _ready() -> void:
 	reset_button.pressed.connect(_on_reset_button_pressed)
 	passive_income_timer.wait_time = PASSIVE_INCOME_INTERVAL
 	update_ui()
+	print("=============")
 	print(format_number(1000))
 	print(format_number(1250))
 	print(format_number(15000))
 	print(format_number(15500))
 	print(format_number(999999))
+	print("=============")
+	print(format_number(999_999))
+	print(format_number(1_000_000))
+	print(format_number(1_250_000))
+	print(format_number(15_000_000))
+	print(format_number(999_999_999))
+	print("=============")
 
 # on-click functionality
 func _on_click_button_pressed() -> void:
