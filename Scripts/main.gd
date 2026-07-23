@@ -122,6 +122,9 @@ func format_number(value: int) -> String:
 	if value < 1_000_000:
 		var shortened_value: float = value / 1000.0
 		var rounded_value: float = round(shortened_value * 10.0) / 10.0
+		
+		if rounded_value >= 1000.0:
+			return "1M"
 
 		if rounded_value == int(rounded_value):
 			return str(int(rounded_value)) + "K"
@@ -131,6 +134,9 @@ func format_number(value: int) -> String:
 	if value < 1_000_000_000:
 		var shortened_value: float = value / 1_000_000.0
 		var rounded_value: float = round(shortened_value * 10.0) / 10
+		
+		if rounded_value >= 1000.0:
+			return "1B"
 		
 		if rounded_value == int(rounded_value):
 			return str(int(rounded_value)) + "M"
@@ -172,6 +178,13 @@ func _ready() -> void:
 	print(format_number(1_250_000_000))
 	print(format_number(15_000_000_000))
 	print(format_number(999_999_999_999))
+	print("=============")
+	print(format_number(999_949))
+	print(format_number(999_950))
+	print(format_number(999_999))
+	print(format_number(999_949_999))
+	print(format_number(999_950_000))
+	print(format_number(999_999_999))
 	print("=============")
 
 # on-click functionality
