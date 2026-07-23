@@ -55,7 +55,7 @@ func update_stats_label() -> void:
 	stats_label.text = "Clicks: " + str(clicks) + "\nClick Power: " + str(clicks_per_click) + "\nAuto Click Power: " + str(passive_clicks_per_tick) + "\nAuto Clicker Level: " + str(auto_clicker_level)
 #
 func update_upgrade_button() -> void:
-	upgrade_button.text = "Click Upgrade Cost: " + str(upgrade_cost)
+	upgrade_button.text = "Click Upgrade Cost: " + format_number(upgrade_cost)
 	upgrade_button.disabled = not can_afford_upgrade()
 #
 func is_auto_clicker_unlocked() -> bool:
@@ -114,6 +114,21 @@ func reset_game() -> void:
 	stop_passive_income_timer()
 	message_label.text = "Game Reset."
 	update_ui()
+
+func format_number(value: int) -> String:
+	if value < 1000:
+		return str(value)
+
+	if value < 1_000_000:
+		var shortened_value: float = value / 1000.0
+		var rounded_value: float = round(shortened_value * 10.0) / 10.0
+
+		if rounded_value == int(rounded_value):
+			return str(int(rounded_value)) + "K"
+
+		return str(rounded_value) + "K"
+
+	return str(value)
 #========================================
 # initialize custom signal and on-click functionality
 func _ready() -> void:
@@ -122,6 +137,11 @@ func _ready() -> void:
 	reset_button.pressed.connect(_on_reset_button_pressed)
 	passive_income_timer.wait_time = PASSIVE_INCOME_INTERVAL
 	update_ui()
+	print(format_number(1000))
+	print(format_number(1250))
+	print(format_number(15000))
+	print(format_number(15500))
+	print(format_number(999999))
 
 # on-click functionality
 func _on_click_button_pressed() -> void:
@@ -152,7 +172,7 @@ func _on_save_button_pressed() -> void:
 	message_label.text = "Game saved."
 	
 
-func _on_load_button_pressed() -> void:	
+func _on_load_button_pressed() -> void:
 	if not FileAccess.file_exists(SAVE_FILE_PATH):
 		message_label.text = "No Savefile exists"
 		return
