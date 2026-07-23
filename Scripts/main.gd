@@ -186,26 +186,28 @@ func play_click_button_feedback() -> void:
 		0.08
 	)
 
-func play_save_button_feedback() -> void:
-	if save_button_tween:
-		save_button_tween.kill()
+func play_button_feedback(button: Button, current_tween: Tween) -> Tween:
+	if current_tween:
+		current_tween.kill()
 
-	save_button.pivot_offset = save_button.size / 2.0
-	save_button.scale = Vector2.ONE
+	button.pivot_offset = button.size / 2.0
+	button.scale = Vector2.ONE
 
-	save_button_tween = create_tween()
-	save_button_tween.tween_property(
-		save_button,
+	var new_tween: Tween = create_tween()
+	new_tween.tween_property(
+		button,
 		"scale",
 		Vector2(0.9, 0.9),
 		0.05
 	)
-	save_button_tween.tween_property(
-		save_button,
+	new_tween.tween_property(
+		button,
 		"scale",
 		Vector2.ONE,
 		0.08
 	)
+
+	return new_tween
 #========================================
 # initialize custom signal and on-click functionality
 func _ready() -> void:
@@ -225,14 +227,24 @@ func _on_click_button_pressed() -> void:
 # on-upgrade functionality
 func _on_upgrade_button_pressed() -> void:
 	if can_afford_upgrade():
+		upgrade_button_tween = play_button_feedback(
+			upgrade_button,
+			upgrade_button_tween
+		)
+		
 		var was_unlocked: bool = is_auto_clicker_unlocked()
 		buy_upgrade()
+		
 		if not was_unlocked and is_auto_clicker_unlocked():
 			show_message("Manual upgrade bought and auto clicker unlocked.")
+		
 		update_ui()
 
 func _on_save_button_pressed() -> void:
-	play_save_button_feedback()
+	save_button_tween = play_button_feedback(
+	save_button,
+	save_button_tween
+	)
 	
 	var save_data: Dictionary = collect_save_data()
 	var json_text: String = JSON.stringify(save_data)
@@ -248,6 +260,11 @@ func _on_save_button_pressed() -> void:
 	
 
 func _on_load_button_pressed() -> void:
+	load_button_tween = play_button_feedback(
+	load_button,
+	load_button_tween
+	)
+	
 	if not FileAccess.file_exists(SAVE_FILE_PATH):
 		show_message("No Savefile exists.")
 		return
@@ -294,6 +311,11 @@ func _on_load_button_pressed() -> void:
 	
 	
 func _on_reset_button_pressed() -> void:
+	reset_button_tween = play_button_feedback(
+	reset_button,
+	reset_button_tween
+	)
+	
 	reset_game()
 
 func show_click_message() -> void:
@@ -333,6 +355,11 @@ func _on_auto_clicker_button_pressed() -> void:
 		return
 
 	if can_afford_auto_clicker():
+		auto_clicker_button_tween = play_button_feedback(
+			auto_clicker_button,
+			auto_clicker_button_tween
+		)
+		
 		buy_auto_clicker()
 		start_passive_income_timer()
 		update_ui()
