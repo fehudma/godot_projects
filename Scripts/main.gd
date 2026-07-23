@@ -136,7 +136,7 @@ func format_number(value: int) -> String:
 		
 	if value < 1_000_000_000:
 		var shortened_value: float = value / 1_000_000.0
-		var rounded_value: float = round(shortened_value * 10.0) / 10
+		var rounded_value: float = round(shortened_value * 10.0) / 10.0
 		
 		if rounded_value >= 1000.0:
 			return "1B"
@@ -185,7 +185,6 @@ func _ready() -> void:
 	reset_button.pressed.connect(_on_reset_button_pressed)
 	passive_income_timer.wait_time = PASSIVE_INCOME_INTERVAL
 	update_ui()
-	
 
 # on-click functionality
 func _on_click_button_pressed() -> void:
