@@ -51,9 +51,6 @@ var worker_2_clicks_per_click: int = STARTING_WORKER_2_CLICKS_PER_CLICK
 @onready var load_button: Button = $VBoxContainer/LoadButton
 @onready var reset_button: Button = $VBoxContainer/ResetButton
 @onready var passive_income_timer: Timer = $PassiveIncomeTimer
-#===========WORKER-2===========
-@onready var worker_2_stats_label: Label = $VBoxContainer/TabContainer/Worker2/StatsLabel
-@onready var worker_2_click_button: Button = $VBoxContainer/TabContainer/Worker2/ClickButton
 
 #========================================
 func update_ui() -> void:
@@ -215,10 +212,6 @@ func play_button_feedback(button: Button, current_tween: Tween) -> Tween:
 #========================================
 # initialize custom signal and on-click functionality
 func _ready() -> void:
-	click_button.pressed.connect(_on_click_button_pressed)
-	upgrade_button.pressed.connect(_on_upgrade_button_pressed)
-	reset_button.pressed.connect(_on_reset_button_pressed)
-	passive_income_timer.wait_time = PASSIVE_INCOME_INTERVAL
 	update_ui()
 
 # on-click functionality
@@ -367,3 +360,7 @@ func _on_auto_clicker_button_pressed() -> void:
 		buy_auto_clicker()
 		start_passive_income_timer()
 		update_ui()
+
+#================================================Worker 2 buttons
+func _on_worker_2_click_button_pressed() -> void:
+	print("Worker 2 clciked")

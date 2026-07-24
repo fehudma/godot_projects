@@ -68,7 +68,7 @@ layout_mode = 2
 
 [node name="ClickButton" type="Button" parent="VBoxContainer/TabContainer/Worker2"]
 layout_mode = 2
-text = "Worker 2 Click"
+text = "Worker 2 "
 
 [node name="SaveButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2
@@ -84,7 +84,10 @@ text = "Reset"
 
 [node name="PassiveIncomeTimer" type="Timer" parent="."]
 
+[connection signal="pressed" from="VBoxContainer/TabContainer/Worker1/ClickButton" to="." method="_on_click_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/TabContainer/Worker1/UpgradeButton" to="." method="_on_upgrade_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/TabContainer/Worker1/AutoClickerButton" to="." method="_on_auto_clicker_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/TabContainer/Worker2/ClickButton" to="." method="_on_worker_2_click_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/SaveButton" to="." method="_on_save_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/LoadButton" to="." method="_on_load_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/ResetButton" to="." method="_on_reset_button_pressed"]
