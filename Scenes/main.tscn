@@ -38,6 +38,9 @@ layout_mode = 2
 text = "Welcome!"
 horizontal_alignment = 1
 
+[node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
+layout_mode = 2
+
 [node name="ClickButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 text = "Earn Clicks"
