@@ -363,4 +363,6 @@ func _on_auto_clicker_button_pressed() -> void:
 
 #================================================Worker 2 buttons
 func _on_worker_2_click_button_pressed() -> void:
-	print("Worker 2 clciked")
+	print("Worker 2 clicked")
+	clicks += worker_2_clicks_per_click
+	update_ui()
