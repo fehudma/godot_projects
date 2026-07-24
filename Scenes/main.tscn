@@ -28,11 +28,6 @@ layout_mode = 2
 text = "Clicker Upgrade Game"
 horizontal_alignment = 1
 
-[node name="StatsLabel" type="Label" parent="VBoxContainer"]
-layout_mode = 2
-text = "Clicks: 0"
-horizontal_alignment = 1
-
 [node name="MessageLabel" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 text = "Welcome!"
@@ -46,17 +41,27 @@ current_tab = 0
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="ClickButton" type="Button" parent="VBoxContainer"]
+[node name="StatsLabel" type="Label" parent="VBoxContainer/TabContainer/Worker1"]
+layout_mode = 2
+text = "Clicks: 0"
+horizontal_alignment = 1
+
+[node name="ClickButton" type="Button" parent="VBoxContainer/TabContainer/Worker1"]
 layout_mode = 2
 text = "Earn Clicks"
 
-[node name="UpgradeButton" type="Button" parent="VBoxContainer"]
+[node name="UpgradeButton" type="Button" parent="VBoxContainer/TabContainer/Worker1"]
 layout_mode = 2
 text = "Upgrade"
 
-[node name="AutoClickerButton" type="Button" parent="VBoxContainer"]
+[node name="AutoClickerButton" type="Button" parent="VBoxContainer/TabContainer/Worker1"]
 layout_mode = 2
 text = "Buy Auto Clicker"
+
+[node name="Worker2" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
 
 [node name="SaveButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2
@@ -72,7 +77,7 @@ text = "Reset"
 
 [node name="PassiveIncomeTimer" type="Timer" parent="."]
 
-[connection signal="pressed" from="VBoxContainer/AutoClickerButton" to="." method="_on_auto_clicker_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/TabContainer/Worker1/AutoClickerButton" to="." method="_on_auto_clicker_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/SaveButton" to="." method="_on_save_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/LoadButton" to="." method="_on_load_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/ResetButton" to="." method="_on_reset_button_pressed"]

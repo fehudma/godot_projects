@@ -40,17 +40,15 @@ var save_button_tween: Tween
 var load_button_tween: Tween
 var reset_button_tween: Tween
 #========================================
-@onready var stats_label: Label = $VBoxContainer/StatsLabel
+@onready var stats_label: Label = $VBoxContainer/TabContainer/Worker1/StatsLabel
 @onready var message_label: Label = $VBoxContainer/MessageLabel
-@onready var click_button: Button = $VBoxContainer/ClickButton
-@onready var upgrade_button: Button = $VBoxContainer/UpgradeButton
-@onready var auto_clicker_button: Button = $VBoxContainer/AutoClickerButton
+@onready var click_button: Button = $VBoxContainer/TabContainer/Worker1/ClickButton
+@onready var upgrade_button: Button = $VBoxContainer/TabContainer/Worker1/UpgradeButton
+@onready var auto_clicker_button: Button = $VBoxContainer/TabContainer/Worker1/AutoClickerButton
 @onready var save_button: Button = $VBoxContainer/SaveButton
 @onready var load_button: Button = $VBoxContainer/LoadButton
 @onready var reset_button: Button = $VBoxContainer/ResetButton
 @onready var passive_income_timer: Timer = $PassiveIncomeTimer
-
-
 #========================================
 func update_ui() -> void:
 	update_stats_label()
