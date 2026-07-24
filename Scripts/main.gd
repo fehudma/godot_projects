@@ -42,30 +42,43 @@ var load_button_tween: Tween
 var reset_button_tween: Tween
 var worker_2_clicks_per_click: int = STARTING_WORKER_2_CLICKS_PER_CLICK
 #========================================
-@onready var stats_label: Label = $VBoxContainer/TabContainer/Worker1/StatsLabel
+#global
 @onready var message_label: Label = $VBoxContainer/MessageLabel
-@onready var click_button: Button = $VBoxContainer/TabContainer/Worker1/ClickButton
-@onready var upgrade_button: Button = $VBoxContainer/TabContainer/Worker1/UpgradeButton
-@onready var auto_clicker_button: Button = $VBoxContainer/TabContainer/Worker1/AutoClickerButton
 @onready var save_button: Button = $VBoxContainer/SaveButton
 @onready var load_button: Button = $VBoxContainer/LoadButton
 @onready var reset_button: Button = $VBoxContainer/ResetButton
+#worker 1
+@onready var stats_label: Label = $VBoxContainer/TabContainer/Worker1/StatsLabel
+@onready var click_button: Button = $VBoxContainer/TabContainer/Worker1/ClickButton
+@onready var upgrade_button: Button = $VBoxContainer/TabContainer/Worker1/UpgradeButton
+@onready var auto_clicker_button: Button = $VBoxContainer/TabContainer/Worker1/AutoClickerButton
 @onready var passive_income_timer: Timer = $PassiveIncomeTimer
+#worker 2
+@onready var worker_2_stats_label: Label = $VBoxContainer/TabContainer/Worker2/StatsLabel
 
 #========================================
 func update_ui() -> void:
 	update_stats_label()
 	update_upgrade_button()
 	update_buy_auto_clicker_button()
+	update_worker_2_stats_label()
 
 #========================================HELPERs functions
 #
 func show_message(message: String) -> void:
 	message_label.text = message
-# 
+#
+# worker 1
 func update_stats_label() -> void:
 	stats_label.text = "Clicks: " + format_number(clicks) + "\nClick Power: " + format_number(clicks_per_click) + "\nAuto Click Power: " + format_number(passive_clicks_per_tick) + "\nAuto Clicker Level: " + format_number(auto_clicker_level)
 #
+#worker 2
+func update_worker_2_stats_label() -> void:
+	worker_2_stats_label.text = (
+		"Worker 2\n"
+		+ "Click Power: "
+		+ format_number(worker_2_clicks_per_click)
+	)
 func update_upgrade_button() -> void:
 	upgrade_button.text = "Click Upgrade Cost: " + format_number(upgrade_cost)
 	upgrade_button.disabled = not can_afford_upgrade()
