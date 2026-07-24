@@ -40,6 +40,11 @@ horizontal_alignment = 1
 
 [node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
 layout_mode = 2
+current_tab = 0
+
+[node name="Worker1" type="VBoxContainer" parent="VBoxContainer/TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 0
 
 [node name="ClickButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2
