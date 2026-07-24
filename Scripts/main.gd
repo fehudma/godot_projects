@@ -25,6 +25,7 @@ const REQUIRED_SAVE_KEYS: Array[String] = [
 	"auto_clicker_cost",
 	"auto_clicker_level"
 ]
+const STARTING_WORKER_2_CLICKS_PER_CLICK: int = 1
 #========================================
 var clicks: int = STARTING_CLICKS
 var clicks_per_click: int = STARTING_CLICKS_PER_CLICK
@@ -39,6 +40,7 @@ var auto_clicker_button_tween: Tween
 var save_button_tween: Tween
 var load_button_tween: Tween
 var reset_button_tween: Tween
+var worker_2_clicks_per_click: int = STARTING_WORKER_2_CLICKS_PER_CLICK
 #========================================
 @onready var stats_label: Label = $VBoxContainer/TabContainer/Worker1/StatsLabel
 @onready var message_label: Label = $VBoxContainer/MessageLabel
@@ -49,6 +51,10 @@ var reset_button_tween: Tween
 @onready var load_button: Button = $VBoxContainer/LoadButton
 @onready var reset_button: Button = $VBoxContainer/ResetButton
 @onready var passive_income_timer: Timer = $PassiveIncomeTimer
+#===========WORKER-2===========
+@onready var worker_2_stats_label: Label = $VBoxContainer/TabContainer/Worker2/StatsLabel
+@onready var worker_2_click_button: Button = $VBoxContainer/TabContainer/Worker2/ClickButton
+
 #========================================
 func update_ui() -> void:
 	update_stats_label()
