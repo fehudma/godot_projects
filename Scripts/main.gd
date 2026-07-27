@@ -68,6 +68,7 @@ var worker_2_auto_clicker_level: int = STARTING_WORKER_2_AUTO_CLICKER_LEVEL
 @onready var worker_2_stats_label: Label = $VBoxContainer/TabContainer/Worker2/StatsLabel
 @onready var worker_2_upgrade_button: Button = $VBoxContainer/TabContainer/Worker2/UpgradeButton
 @onready var worker_2_auto_clicker_button: Button = $VBoxContainer/TabContainer/Worker2/AutoClickerButton
+@onready var worker_2_passive_income_timer: Timer = $Worker2PassiveIncomeTimer
 
 #========================================
 func update_ui() -> void:
@@ -151,12 +152,23 @@ func update_worker_2_auto_clicker_button() -> void:
 func start_passive_income_timer() -> void:
 	if passive_income_timer.is_stopped():
 		passive_income_timer.start()
-#
+
+#worker 2
+func start_worker_2_passive_income_timer() -> void:
+	if worker_2_passive_income_timer.is_stopped():
+		worker_2_passive_income_timer.start()
+
+
 func stop_passive_income_timer() -> void:
 	passive_income_timer.stop()
 
 func earn_passive_clicks() -> void:
 	clicks += passive_clicks_per_tick
+
+#worker 2
+func earn_worker_2_passive_clicks() -> void:
+	clicks += worker_2_passive_clicks_per_tick
+
 
 func restore_passive_income_timer() -> void:
 	if auto_clicker_level > 0 and passive_clicks_per_tick > 0:
@@ -432,6 +444,9 @@ func _on_passive_income_timer_timeout() -> void:
 	earn_passive_clicks()
 	update_ui()
 
+func _on_worker_2_passive_income_timer_timeout() -> void:
+	earn_worker_2_passive_clicks()
+	update_ui()
 
 func _on_auto_clicker_button_pressed() -> void:
 	if not is_auto_clicker_unlocked():
@@ -464,4 +479,5 @@ func _on_worker_2_auto_clicker_button_pressed() -> void:
 
 	if can_afford_worker_2_auto_clicker():
 		buy_worker_2_auto_clicker()
+		start_worker_2_passive_income_timer()
 		update_ui()
