@@ -31,6 +31,7 @@ const STARTING_WORKER_2_UPGRADE_LEVEL: int = 0
 const STARTING_WORKER_2_PASSIVE_CLICKS_PER_TICK: int = 0
 const STARTING_WORKER_2_AUTO_CLICKER_COST: int = 5
 const STARTING_WORKER_2_AUTO_CLICKER_LEVEL: int = 0
+const WORKER_2_SAVE_FILE_PATH: String = "user://worker2_savegame.json"
 #========================================
 var clicks: int = STARTING_CLICKS
 var clicks_per_click: int = STARTING_CLICKS_PER_CLICK
@@ -200,7 +201,18 @@ func collect_save_data() -> Dictionary:
 	save_data["auto_clicker_cost"] = auto_clicker_cost
 	save_data["auto_clicker_level"] = auto_clicker_level
 	return save_data
-
+#
+#worker 2
+func collect_worker_2_save_data() -> Dictionary:
+	var save_data: Dictionary = {}
+	save_data["clicks_per_click"] = worker_2_clicks_per_click
+	save_data["upgrade_cost"] = worker_2_upgrade_cost
+	save_data["manual_upgrade_level"] = worker_2_manual_upgrade_level
+	save_data["passive_clicks_per_tick"] = worker_2_passive_clicks_per_tick
+	save_data["auto_clicker_cost"] = worker_2_auto_clicker_cost
+	save_data["auto_clicker_level"] = worker_2_auto_clicker_level
+	return save_data
+#
 func reset_game_values() -> void:
 	#worker 1
 	clicks = STARTING_CLICKS
@@ -350,6 +362,18 @@ func _on_save_button_pressed() -> void:
 		return
 
 	save_file.store_string(json_text)
+	var worker_2_save_data: Dictionary = collect_worker_2_save_data()
+	var worker_2_json_text: String = JSON.stringify(worker_2_save_data)
+	var worker_2_save_file: FileAccess = FileAccess.open(
+		WORKER_2_SAVE_FILE_PATH,
+		FileAccess.WRITE
+	)
+
+	if worker_2_save_file == null:
+		show_message("Could not save Worker 2.")
+		return
+
+	worker_2_save_file.store_string(worker_2_json_text)
 	show_message("Game saved.")
 	
 	
