@@ -176,6 +176,20 @@ func restore_passive_income_timer() -> void:
 	else:
 		stop_passive_income_timer()
 
+#worker 2
+func stop_worker_2_passive_income_timer() -> void:
+	worker_2_passive_income_timer.stop()
+#worker 2
+func restore_worker_2_passive_income_timer() -> void:
+	if (
+		worker_2_auto_clicker_level > 0
+		and worker_2_passive_clicks_per_tick > 0
+	):
+		start_worker_2_passive_income_timer()
+	else:
+		stop_worker_2_passive_income_timer()
+
+
 func collect_save_data() -> Dictionary:
 	var save_data: Dictionary = {}
 	save_data["clicks"] = clicks
@@ -188,6 +202,7 @@ func collect_save_data() -> Dictionary:
 	return save_data
 
 func reset_game_values() -> void:
+	#worker 1
 	clicks = STARTING_CLICKS
 	clicks_per_click = STARTING_CLICKS_PER_CLICK
 	upgrade_cost= STARTING_UPGRADE_COST
@@ -195,10 +210,18 @@ func reset_game_values() -> void:
 	passive_clicks_per_tick = STARTING_PASSIVE_CLICKS_PER_TICK
 	auto_clicker_cost= AUTO_CLICKER_COST_START
 	auto_clicker_level = STARTING_AUTO_CLICKER_LEVEL
+	#worker 1
+	worker_2_clicks_per_click = STARTING_WORKER_2_CLICKS_PER_CLICK
+	worker_2_upgrade_cost = STARTING_WORKER_2_UPGRADE_COST
+	worker_2_manual_upgrade_level = STARTING_WORKER_2_UPGRADE_LEVEL
+	worker_2_passive_clicks_per_tick = STARTING_WORKER_2_PASSIVE_CLICKS_PER_TICK
+	worker_2_auto_clicker_cost = STARTING_WORKER_2_AUTO_CLICKER_COST
+	worker_2_auto_clicker_level = STARTING_WORKER_2_AUTO_CLICKER_LEVEL
 
 func reset_game() -> void:
 	reset_game_values()
 	stop_passive_income_timer()
+	stop_worker_2_passive_income_timer()
 	show_message("Game reset.")
 	update_ui()
 
