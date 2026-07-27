@@ -423,7 +423,28 @@ func _on_load_button_pressed() -> void:
 	auto_clicker_cost = int(save_data["auto_clicker_cost"])
 	auto_clicker_level = int(save_data["auto_clicker_level"])
 	
+	if FileAccess.file_exists(WORKER_2_SAVE_FILE_PATH):
+		var worker_2_save_file: FileAccess = FileAccess.open(
+			WORKER_2_SAVE_FILE_PATH,
+			FileAccess.READ
+		)
+
+		if worker_2_save_file != null:
+			var worker_2_json_text: String = worker_2_save_file.get_as_text()
+			var worker_2_loaded_data: Variant = JSON.parse_string(worker_2_json_text)
+
+			if typeof(worker_2_loaded_data) == TYPE_DICTIONARY:
+				var worker_2_save_data: Dictionary = worker_2_loaded_data
+
+				worker_2_clicks_per_click = int(worker_2_save_data["clicks_per_click"])
+				worker_2_upgrade_cost = int(worker_2_save_data["upgrade_cost"])
+				worker_2_manual_upgrade_level = int(worker_2_save_data["manual_upgrade_level"])
+				worker_2_passive_clicks_per_tick = int(worker_2_save_data["passive_clicks_per_tick"])
+				worker_2_auto_clicker_cost = int(worker_2_save_data["auto_clicker_cost"])
+				worker_2_auto_clicker_level = int(worker_2_save_data["auto_clicker_level"])
+	
 	restore_passive_income_timer()
+	restore_worker_2_passive_income_timer()
 
 	update_ui()
 	show_message("Game loaded.")
