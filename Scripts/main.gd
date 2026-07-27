@@ -55,6 +55,7 @@ var worker_2_clicks_per_click: int = STARTING_WORKER_2_CLICKS_PER_CLICK
 @onready var passive_income_timer: Timer = $PassiveIncomeTimer
 #worker 2
 @onready var worker_2_stats_label: Label = $VBoxContainer/TabContainer/Worker2/StatsLabel
+@onready var worker_2_upgrade_button: Button = $VBoxContainer/TabContainer/Worker2/UpgradeButton
 
 #========================================
 func update_ui() -> void:
