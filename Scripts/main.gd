@@ -53,6 +53,9 @@ var worker_2_manual_upgrade_level: int = STARTING_WORKER_2_UPGRADE_LEVEL
 var worker_2_passive_clicks_per_tick: int = STARTING_WORKER_2_PASSIVE_CLICKS_PER_TICK
 var worker_2_auto_clicker_cost: int = STARTING_WORKER_2_AUTO_CLICKER_COST
 var worker_2_auto_clicker_level: int = STARTING_WORKER_2_AUTO_CLICKER_LEVEL
+var worker_2_click_button_tween: Tween
+var worker_2_upgrade_button_tween: Tween
+var worker_2_auto_clicker_button_tween: Tween
 #========================================
 #global
 @onready var message_label: Label = $VBoxContainer/MessageLabel
@@ -66,6 +69,7 @@ var worker_2_auto_clicker_level: int = STARTING_WORKER_2_AUTO_CLICKER_LEVEL
 @onready var auto_clicker_button: Button = $VBoxContainer/TabContainer/Worker1/AutoClickerButton
 @onready var passive_income_timer: Timer = $PassiveIncomeTimer
 #worker 2
+@onready var worker_2_click_button: Button = $VBoxContainer/TabContainer/Worker2/ClickButton
 @onready var worker_2_stats_label: Label = $VBoxContainer/TabContainer/Worker2/StatsLabel
 @onready var worker_2_upgrade_button: Button = $VBoxContainer/TabContainer/Worker2/UpgradeButton
 @onready var worker_2_auto_clicker_button: Button = $VBoxContainer/TabContainer/Worker2/AutoClickerButton
@@ -532,12 +536,20 @@ func _on_auto_clicker_button_pressed() -> void:
 
 #================================================Worker 2 buttons
 func _on_worker_2_click_button_pressed() -> void:
-	print("Worker 2 clicked")
 	clicks += worker_2_clicks_per_click
+	
+	worker_2_click_button_tween = play_button_feedback(
+		worker_2_click_button,
+		worker_2_click_button_tween
+	)
 	update_ui()
 
 func _on_worker_2_upgrade_button_pressed() -> void:
 	if can_afford_worker_2_upgrade():
+		worker_2_upgrade_button_tween = play_button_feedback(
+			worker_2_upgrade_button,
+			worker_2_upgrade_button_tween
+		)
 		buy_worker_2_upgrade()
 		update_ui()
 
@@ -546,6 +558,10 @@ func _on_worker_2_auto_clicker_button_pressed() -> void:
 		return
 
 	if can_afford_worker_2_auto_clicker():
+		worker_2_auto_clicker_button_tween = play_button_feedback(
+			worker_2_auto_clicker_button,
+			worker_2_auto_clicker_button_tween
+		)
 		buy_worker_2_auto_clicker()
 		start_worker_2_passive_income_timer()
 		update_ui()
