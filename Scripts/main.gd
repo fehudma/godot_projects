@@ -26,6 +26,8 @@ const REQUIRED_SAVE_KEYS: Array[String] = [
 	"auto_clicker_level"
 ]
 const STARTING_WORKER_2_CLICKS_PER_CLICK: int = 1
+const STARTING_WORKER_2_UPGRADE_COST: int = 3
+const STARTING_WORKER_2_UPGRADE_LEVEL: int = 0
 #========================================
 var clicks: int = STARTING_CLICKS
 var clicks_per_click: int = STARTING_CLICKS_PER_CLICK
@@ -40,7 +42,10 @@ var auto_clicker_button_tween: Tween
 var save_button_tween: Tween
 var load_button_tween: Tween
 var reset_button_tween: Tween
+##########
 var worker_2_clicks_per_click: int = STARTING_WORKER_2_CLICKS_PER_CLICK
+var worker_2_upgrade_cost: int = STARTING_WORKER_2_UPGRADE_COST
+var worker_2_manual_upgrade_level: int = STARTING_WORKER_2_UPGRADE_LEVEL
 #========================================
 #global
 @onready var message_label: Label = $VBoxContainer/MessageLabel
@@ -76,8 +81,9 @@ func update_stats_label() -> void:
 #worker 2
 func update_worker_2_stats_label() -> void:
 	worker_2_stats_label.text = (
-		"Worker 2\n"
-		+ "Click Power: "
+		"Worker 2\n" 
+		+ "Clicks: " + format_number(clicks) 
+		+ "\nClick Power: "
 		+ format_number(worker_2_clicks_per_click)
 	)
 func update_upgrade_button() -> void:
@@ -338,6 +344,11 @@ func show_click_message() -> void:
 func can_afford_upgrade() -> bool:
 	return clicks >= upgrade_cost
 
+func can_afford_worker_2_upgrade() -> bool:
+	return clicks >= worker_2_upgrade_cost
+	print()
+
+
 func can_afford_auto_clicker() -> bool:
 	return clicks >= auto_clicker_cost
 
@@ -347,6 +358,13 @@ func buy_upgrade() -> void:
 	upgrade_cost += UPGRADE_COST_INCREASE
 	manual_upgrade_level += MANUAL_UPGRADE_LEVEL
 	show_message("Manual upgrade bought.")
+
+func buy_worker_2_upgrade() -> void:
+	clicks -= worker_2_upgrade_cost
+	worker_2_clicks_per_click += CLICKS_PER_CLICK_INCREASE
+	worker_2_upgrade_cost += UPGRADE_COST_INCREASE
+	worker_2_manual_upgrade_level += MANUAL_UPGRADE_LEVEL
+	show_message("Worker 2 manual upgrade bought.")
 
 func buy_auto_clicker() -> void:
 	clicks -= auto_clicker_cost
@@ -380,3 +398,8 @@ func _on_worker_2_click_button_pressed() -> void:
 	print("Worker 2 clicked")
 	clicks += worker_2_clicks_per_click
 	update_ui()
+
+func _on_worker_2_upgrade_button_pressed() -> void:
+	if can_afford_worker_2_upgrade():
+		buy_worker_2_upgrade()
+		update_ui()
