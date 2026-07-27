@@ -68,6 +68,7 @@ func update_ui() -> void:
 	update_upgrade_button()
 	update_buy_auto_clicker_button()
 	update_worker_2_stats_label()
+	update_worker_2_upgrade_button()
 
 #========================================HELPERs functions
 #
@@ -85,10 +86,21 @@ func update_worker_2_stats_label() -> void:
 		+ "Clicks: " + format_number(clicks) 
 		+ "\nClick Power: "
 		+ format_number(worker_2_clicks_per_click)
+		+ "\nClick Upgrade Level: "
+		+ format_number(worker_2_manual_upgrade_level)
 	)
+#
 func update_upgrade_button() -> void:
 	upgrade_button.text = "Click Upgrade Cost: " + format_number(upgrade_cost)
 	upgrade_button.disabled = not can_afford_upgrade()
+#
+#worker 2
+func update_worker_2_upgrade_button() -> void:
+	worker_2_upgrade_button.text = (
+		"Click Upgrade Cost: "
+		+ format_number(worker_2_upgrade_cost)
+	)
+	worker_2_upgrade_button.disabled = not can_afford_worker_2_upgrade()
 #
 func is_auto_clicker_unlocked() -> bool:
 	if manual_upgrade_level >= AUTO_CLICKER_UNLOCK_LEVEL:
