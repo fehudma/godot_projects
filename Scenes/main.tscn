@@ -65,6 +65,7 @@ metadata/_tab_index = 1
 
 [node name="StatsLabel" type="Label" parent="VBoxContainer/TabContainer/Worker2"]
 layout_mode = 2
+horizontal_alignment = 1
 
 [node name="ClickButton" type="Button" parent="VBoxContainer/TabContainer/Worker2"]
 layout_mode = 2
@@ -73,6 +74,10 @@ text = "Worker 2 Click"
 [node name="UpgradeButton" type="Button" parent="VBoxContainer/TabContainer/Worker2"]
 layout_mode = 2
 text = "Worker 2 Upgrade"
+
+[node name="AutoClickerButton" type="Button" parent="VBoxContainer/TabContainer/Worker2"]
+layout_mode = 2
+text = "Worker 2 Auto Clicker"
 
 [node name="SaveButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2
@@ -93,6 +98,7 @@ text = "Reset"
 [connection signal="pressed" from="VBoxContainer/TabContainer/Worker1/AutoClickerButton" to="." method="_on_auto_clicker_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/TabContainer/Worker2/ClickButton" to="." method="_on_worker_2_click_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/TabContainer/Worker2/UpgradeButton" to="." method="_on_worker_2_upgrade_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/TabContainer/Worker2/AutoClickerButton" to="." method="_on_worker_2_auto_clicker_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/SaveButton" to="." method="_on_save_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/LoadButton" to="." method="_on_load_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/ResetButton" to="." method="_on_reset_button_pressed"]

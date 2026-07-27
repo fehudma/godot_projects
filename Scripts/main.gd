@@ -28,6 +28,9 @@ const REQUIRED_SAVE_KEYS: Array[String] = [
 const STARTING_WORKER_2_CLICKS_PER_CLICK: int = 1
 const STARTING_WORKER_2_UPGRADE_COST: int = 3
 const STARTING_WORKER_2_UPGRADE_LEVEL: int = 0
+const STARTING_WORKER_2_PASSIVE_CLICKS_PER_TICK: int = 0
+const STARTING_WORKER_2_AUTO_CLICKER_COST: int = 5
+const STARTING_WORKER_2_AUTO_CLICKER_LEVEL: int = 0
 #========================================
 var clicks: int = STARTING_CLICKS
 var clicks_per_click: int = STARTING_CLICKS_PER_CLICK
@@ -46,6 +49,9 @@ var reset_button_tween: Tween
 var worker_2_clicks_per_click: int = STARTING_WORKER_2_CLICKS_PER_CLICK
 var worker_2_upgrade_cost: int = STARTING_WORKER_2_UPGRADE_COST
 var worker_2_manual_upgrade_level: int = STARTING_WORKER_2_UPGRADE_LEVEL
+var worker_2_passive_clicks_per_tick: int = STARTING_WORKER_2_PASSIVE_CLICKS_PER_TICK
+var worker_2_auto_clicker_cost: int = STARTING_WORKER_2_AUTO_CLICKER_COST
+var worker_2_auto_clicker_level: int = STARTING_WORKER_2_AUTO_CLICKER_LEVEL
 #========================================
 #global
 @onready var message_label: Label = $VBoxContainer/MessageLabel
@@ -61,6 +67,7 @@ var worker_2_manual_upgrade_level: int = STARTING_WORKER_2_UPGRADE_LEVEL
 #worker 2
 @onready var worker_2_stats_label: Label = $VBoxContainer/TabContainer/Worker2/StatsLabel
 @onready var worker_2_upgrade_button: Button = $VBoxContainer/TabContainer/Worker2/UpgradeButton
+@onready var worker_2_auto_clicker_button: Button = $VBoxContainer/TabContainer/Worker2/AutoClickerButton
 
 #========================================
 func update_ui() -> void:
@@ -69,6 +76,7 @@ func update_ui() -> void:
 	update_buy_auto_clicker_button()
 	update_worker_2_stats_label()
 	update_worker_2_upgrade_button()
+	update_worker_2_auto_clicker_button()
 
 #========================================HELPERs functions
 #
@@ -77,17 +85,20 @@ func show_message(message: String) -> void:
 #
 # worker 1
 func update_stats_label() -> void:
-	stats_label.text = "Clicks: " + format_number(clicks) + "\nClick Power: " + format_number(clicks_per_click) + "\nAuto Click Power: " + format_number(passive_clicks_per_tick) + "\nAuto Clicker Level: " + format_number(auto_clicker_level)
+	stats_label.text = "Clicks: " + format_number(clicks) + "\nClick Power: " + format_number(clicks_per_click) + "\nClick Upgrade Level: " + format_number(manual_upgrade_level) + "\nAuto Click Power: " + format_number(passive_clicks_per_tick) + "\nAuto Clicker Level: " + format_number(auto_clicker_level)
 #
 #worker 2
 func update_worker_2_stats_label() -> void:
-	worker_2_stats_label.text = (
-		"Worker 2\n" 
-		+ "Clicks: " + format_number(clicks) 
+	worker_2_stats_label.text = ( 
+		"Clicks: " + format_number(clicks) 
 		+ "\nClick Power: "
 		+ format_number(worker_2_clicks_per_click)
 		+ "\nClick Upgrade Level: "
 		+ format_number(worker_2_manual_upgrade_level)
+		+ "\nAuto Click Power: "
+		+ format_number(worker_2_passive_clicks_per_tick)
+		+ "\nAuto Clicker Level: "
+		+ format_number(worker_2_auto_clicker_level)
 	)
 #
 func update_upgrade_button() -> void:
@@ -107,7 +118,10 @@ func is_auto_clicker_unlocked() -> bool:
 		return true
 	else:
 		return false
-
+#
+#worker 2
+func is_worker_2_auto_clicker_unlocked() -> bool:
+	return worker_2_manual_upgrade_level >= AUTO_CLICKER_UNLOCK_LEVEL
 #
 func update_buy_auto_clicker_button() -> void:
 	if not is_auto_clicker_unlocked(): #same as "if is_auto_clicker_unlocked() == false:"
@@ -117,6 +131,23 @@ func update_buy_auto_clicker_button() -> void:
 		auto_clicker_button.text = "Auto Clicker Lv. " + format_number(auto_clicker_level) + " — Cost: " + format_number(auto_clicker_cost)
 		auto_clicker_button.disabled = not can_afford_auto_clicker()
 #
+func update_worker_2_auto_clicker_button() -> void:
+	if not is_worker_2_auto_clicker_unlocked():
+		worker_2_auto_clicker_button.text = (
+			"Auto Clicker Unlock at Click Upgrade Level: "
+			+ str(AUTO_CLICKER_UNLOCK_LEVEL)
+		)
+		worker_2_auto_clicker_button.disabled = true
+	else:
+		worker_2_auto_clicker_button.text = (
+			"Auto Clicker Lv. "
+			+ format_number(worker_2_auto_clicker_level)
+			+ " — Cost: "
+			+ format_number(worker_2_auto_clicker_cost)
+		)
+		worker_2_auto_clicker_button.disabled = not can_afford_worker_2_auto_clicker()
+#
+
 func start_passive_income_timer() -> void:
 	if passive_income_timer.is_stopped():
 		passive_income_timer.start()
@@ -352,9 +383,12 @@ func show_click_message() -> void:
 		message_label.text = "+" + format_number(clicks_per_click) + " click!"
 	else:
 		message_label.text = "+" + format_number(clicks_per_click) + " clicks!"
-
+# worker 1
 func can_afford_upgrade() -> bool:
 	return clicks >= upgrade_cost
+# worker 2
+func can_afford_worker_2_auto_clicker() -> bool:
+	return clicks >= worker_2_auto_clicker_cost
 
 func can_afford_worker_2_upgrade() -> bool:
 	return clicks >= worker_2_upgrade_cost
@@ -377,13 +411,21 @@ func buy_worker_2_upgrade() -> void:
 	worker_2_upgrade_cost += UPGRADE_COST_INCREASE
 	worker_2_manual_upgrade_level += MANUAL_UPGRADE_LEVEL
 	show_message("Worker 2 manual upgrade bought.")
-
+#worker 1
 func buy_auto_clicker() -> void:
 	clicks -= auto_clicker_cost
 	passive_clicks_per_tick += PASSIVE_CLICKS_INCREASE
 	auto_clicker_cost += AUTO_CLICKER_COST_INCREASE
 	auto_clicker_level += 1
 	show_message("Auto clicker bought.")
+#worker 2
+func buy_worker_2_auto_clicker() -> void:
+	clicks -= worker_2_auto_clicker_cost
+	worker_2_passive_clicks_per_tick += PASSIVE_CLICKS_INCREASE
+	worker_2_auto_clicker_cost += AUTO_CLICKER_COST_INCREASE
+	worker_2_auto_clicker_level += 1
+	show_message("Worker 2 auto clicker bought.")
+
 
 func _on_passive_income_timer_timeout() -> void:
 	# passive-income logic
@@ -414,4 +456,12 @@ func _on_worker_2_click_button_pressed() -> void:
 func _on_worker_2_upgrade_button_pressed() -> void:
 	if can_afford_worker_2_upgrade():
 		buy_worker_2_upgrade()
+		update_ui()
+
+func _on_worker_2_auto_clicker_button_pressed() -> void:
+	if not is_worker_2_auto_clicker_unlocked():
+		return
+
+	if can_afford_worker_2_auto_clicker():
+		buy_worker_2_auto_clicker()
 		update_ui()
