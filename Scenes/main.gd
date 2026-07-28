@@ -3,11 +3,12 @@ extends Control
 @onready var status_label: Label = $StatusLabel
 @onready var action_button: Button = $ActionButton
 @onready var score_label: Label = $ScoreLabel
+@onready var bite_timer: Timer = $BiteTimer
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
+	randomize()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -18,6 +19,14 @@ func _process(delta: float) -> void:
 
 func _on_action_button_pressed() -> void:
 	print("Action button pressed")
-	action_button.text = "..."
-	#TODO Temporarily disable the button after the hook is dropped.
-	# action_button.disabled = true
+	action_button.text = "Waiting for a fish..."
+	action_button.disabled = true
+
+	var wait_time := randf_range(2.0, 6.0) 
+	bite_timer.start(wait_time)
+
+
+func _on_bite_timer_timeout() -> void:
+	action_button.disabled = false
+	status_label.text = "A fish is biting! Raise the hook!"
+	action_button.text = "Raise the hook!"

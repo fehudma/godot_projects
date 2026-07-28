@@ -17,14 +17,23 @@ text = "Press the button to start fishing."
 
 [node name="ActionButton" type="Button" parent="." unique_id=270715807]
 layout_mode = 0
-offset_right = 8.0
-offset_bottom = 8.0
+offset_left = 11.0
+offset_top = 23.0
+offset_right = 103.0
+offset_bottom = 54.0
 text = "Drop Hook"
 
 [node name="ScoreLabel" type="Label" parent="." unique_id=1125970195]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
+offset_top = 54.0
+offset_right = 97.0
+offset_bottom = 77.0
 text = "Fish caught: "
 
+[node name="BiteTimer" type="Timer" parent="." unique_id=879209207]
+one_shot = true
+
+[node name="CatchTimer" type="Timer" parent="." unique_id=426701782]
+
 [connection signal="pressed" from="ActionButton" to="." method="_on_action_button_pressed"]
+[connection signal="timeout" from="BiteTimer" to="." method="_on_bite_timer_timeout"]
