@@ -8,8 +8,6 @@ extends Control
 
 const STARTING_SCORE: int = 0
 
-var fish_is_biting := false
-
 enum FishingState {
 	READY,
 	WAITING_FOR_BITE,
@@ -25,6 +23,7 @@ func _ready() -> void:
 
 func _on_action_button_pressed() -> void:
 	print("Action button pressed")
+	fishing_state = FishingState.WAITING_FOR_BITE
 	action_button.text = "Waiting for a fish..."
 	action_button.disabled = true
 
@@ -33,7 +32,8 @@ func _on_action_button_pressed() -> void:
 
 
 func _on_bite_timer_timeout() -> void:
-	fish_is_biting = true
+	print("Biting timer started")
+	fishing_state = FishingState.FISH_BITING
 	
 	action_button.disabled = false
 	status_label.text = "A fish is biting! Raise the hook!"
@@ -44,7 +44,8 @@ func _on_bite_timer_timeout() -> void:
 
 
 func _on_catch_timer_timeout() -> void:
-	fish_is_biting = false
+	print("Escape timer ended")
+	fishing_state = FishingState.READY
 	
 	status_label.text = "The fish escaped!"
 	action_button.text = "Drop Hook" 
