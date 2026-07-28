@@ -34,6 +34,8 @@ text = "Fish caught: "
 one_shot = true
 
 [node name="CatchTimer" type="Timer" parent="." unique_id=426701782]
+one_shot = true
 
 [connection signal="pressed" from="ActionButton" to="." method="_on_action_button_pressed"]
 [connection signal="timeout" from="BiteTimer" to="." method="_on_bite_timer_timeout"]
+[connection signal="timeout" from="CatchTimer" to="." method="_on_catch_timer_timeout"]

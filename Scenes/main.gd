@@ -4,18 +4,24 @@ extends Control
 @onready var action_button: Button = $ActionButton
 @onready var score_label: Label = $ScoreLabel
 @onready var bite_timer: Timer = $BiteTimer
+@onready var catch_timer: Timer = $CatchTimer
+
+const STARTING_SCORE: int = 0
+
+var fish_is_biting := false
+
+enum FishingState {
+	READY,
+	WAITING_FOR_BITE,
+	FISH_BITING
+}
+
+var fishing_state: FishingState = FishingState.READY
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	randomize()
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-
-
 
 func _on_action_button_pressed() -> void:
 	print("Action button pressed")
@@ -27,11 +33,19 @@ func _on_action_button_pressed() -> void:
 
 
 func _on_bite_timer_timeout() -> void:
+	fish_is_biting = true
+	
 	action_button.disabled = false
 	status_label.text = "A fish is biting! Raise the hook!"
 	action_button.text = "Raise the hook!"
+	
+	catch_timer.start(2.0)
 
 
 
 func _on_catch_timer_timeout() -> void:
-	pass # Replace with function body.
+	fish_is_biting = false
+	
+	status_label.text = "The fish escaped!"
+	action_button.text = "Drop Hook" 
+	action_button.disabled = false
