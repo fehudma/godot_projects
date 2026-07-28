@@ -22,6 +22,14 @@ func _ready() -> void:
 	randomize()
 
 func _on_action_button_pressed() -> void:
+	if fishing_state == FishingState.FISH_BITING:
+		catch_timer.stop()
+		fishing_state = FishingState.READY
+		
+		status_label.text = "You caught a fish!"
+		action_button.text = "Drop Hook"
+		return
+		
 	print("Action button pressed")
 	fishing_state = FishingState.WAITING_FOR_BITE
 	action_button.text = "Waiting for a fish..."
