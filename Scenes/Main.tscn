@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://k402455fm0ya"]
+
+[ext_resource type="Script" uid="uid://bn4h8c7eklpmm" path="res://Scenes/main.gd" id="1_r150o"]
+
+[node name="Control" type="Control" unique_id=1253770012]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_r150o")
+
+[node name="StatusLabel" type="Label" parent="." unique_id=8678457]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Press the button to start fishing."
+
+[node name="ActionButton" type="Button" parent="." unique_id=270715807]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+text = "Drop Hook"
+
+[node name="ScoreLabel" type="Label" parent="." unique_id=1125970195]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Fish caught: "
+
+[connection signal="pressed" from="ActionButton" to="." method="_on_action_button_pressed"]

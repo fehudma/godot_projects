@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="Fishing"
+run/main_scene="uid://k402455fm0ya"
 config/features=PackedStringArray("4.6", "Mobile")
 config/icon="res://icon.svg"
 
