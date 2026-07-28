@@ -30,3 +30,8 @@ func _on_bite_timer_timeout() -> void:
 	action_button.disabled = false
 	status_label.text = "A fish is biting! Raise the hook!"
 	action_button.text = "Raise the hook!"
+
+
+
+func _on_catch_timer_timeout() -> void:
+	pass # Replace with function body.
