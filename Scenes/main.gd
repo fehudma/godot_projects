@@ -18,7 +18,7 @@ enum FishingState {
 #Starting State
 var fishing_state: FishingState = FishingState.READY
 
-#List of all possible fishes
+#List of all possible fishes as an Array. An array stores multiple values in order. Here, each value is a fish dictionary.
 var fish_list: Array[Dictionary] = [
 	{
 		"name": "Raw Brilliant Smallfish",
@@ -41,9 +41,36 @@ var fish_list: Array[Dictionary] = [
 func _ready() -> void:
 	randomize()
 	
+	#That returns the first fish dictionary.
 	print(fish_list[0])
 	print(fish_list[1])
 	print(fish_list[2])
+	#That returns the first fish name:
+	print(fish_list[0]["name"])
+	print(fish_list[0]["points"])
+	print(fish_list[0]["weight"])
+	print("+++")
+	print(fish_list[0]["name"])
+	print(fish_list[1]["name"])
+	print(fish_list[2]["name"])
+	print("+++")
+	
+	var selected_fish: Dictionary = fish_list.pick_random()
+	print("Selected: " + selected_fish["name"])
+	
+	var total_weight: int = 0
+	
+	for fish: Dictionary in fish_list:
+		total_weight += fish["weight"]
+	
+	print("Total weight: " + str(total_weight))
+	
+	var roll: int = randi_range(1, total_weight)
+	print("Roll: " + str(roll))
+	
+	print("+++")
+	
+	
 
 func _on_action_button_pressed() -> void:
 	if fishing_state == FishingState.FISH_BITING:
