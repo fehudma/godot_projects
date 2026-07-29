@@ -38,7 +38,7 @@ var fish_list: Array[Dictionary] = [
 	}
 ]
 
-
+var last_caught_fish: Dictionary = {}
 
 #helpers
 func choose_random_fish() -> Dictionary:
@@ -61,21 +61,15 @@ func choose_random_fish() -> Dictionary:
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	randomize()
-	
-	
-	
-
-	
-	
 
 func _on_action_button_pressed() -> void:
 	if fishing_state == FishingState.FISH_BITING:
 		catch_timer.stop()
 		fishing_state = FishingState.READY
 		
-		var caught_fish: Dictionary = choose_random_fish()
-		print("User caught a " + caught_fish["name"])
-		status_label.text = "You caught a " + caught_fish["name"] + "!"
+		last_caught_fish = choose_random_fish()
+		print("User caught a " + last_caught_fish["name"])
+		status_label.text = "You caught a " + last_caught_fish["name"] + "!"
 		action_button.text = "Drop Hook"
 		return
 	
@@ -117,5 +111,5 @@ func _on_catch_timer_timeout() -> void:
 
 
 func _on_test_button_pressed() -> void:
-	var caught_fish: Dictionary = choose_random_fish()
-	print(caught_fish["name"])
+	choose_random_fish()
+	print(choose_random_fish())
