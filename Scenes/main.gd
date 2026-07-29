@@ -37,10 +37,8 @@ var fish_list: Array[Dictionary] = [
 		"weight": 10
 	}
 ]
-var roll: int = randi_range(1, total_weight)
-var current_weight: int = 0
-var total_weight: int = 0
-	
+
+
 
 #helpers
 func choose_random_fish() -> Dictionary:
