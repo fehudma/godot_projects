@@ -29,12 +29,17 @@ func _on_action_button_pressed() -> void:
 		status_label.text = "You caught a fish!"
 		action_button.text = "Drop Hook"
 		return
-		
-	print("Action button pressed")
+	
+	if fishing_state == FishingState.WAITING_FOR_BITE:		
+		bite_timer.stop()
+		fishing_state = FishingState.READY
+		status_label.text = "Too early! The fish was scared away."
+		action_button.text = "Drop Hook"
+		return
+	
 	fishing_state = FishingState.WAITING_FOR_BITE
 	action_button.text = "Waiting for a fish..."
 	
-
 	var wait_time := randf_range(2.0, 6.0) 
 	bite_timer.start(wait_time)
 
