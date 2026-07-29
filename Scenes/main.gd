@@ -33,7 +33,7 @@ func _on_action_button_pressed() -> void:
 	print("Action button pressed")
 	fishing_state = FishingState.WAITING_FOR_BITE
 	action_button.text = "Waiting for a fish..."
-	action_button.disabled = true
+	
 
 	var wait_time := randf_range(2.0, 6.0) 
 	bite_timer.start(wait_time)
