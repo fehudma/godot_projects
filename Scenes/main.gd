@@ -19,19 +19,31 @@ enum FishingState {
 var fishing_state: FishingState = FishingState.READY
 
 #List of all possible fishes
-var fish: Dictionary = {
-	"name": "Raw Brilliant Smallfish",
-	"points": 1,
-	"weight": 60
-}
+var fish_list: Array[Dictionary] = [
+	{
+		"name": "Raw Brilliant Smallfish",
+		"points": 1,
+		"weight": 60
+	},
+	{
+		"name": "Raw Longjaw Mud Snapper",
+		"points": 2,
+		"weight": 30
+	},
+	{
+		"name": "Raw Slitherskin Mackerel",
+		"points": 5,
+		"weight": 10
+	}
+]
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	randomize()
 	
-	print(fish["name"])
-	print(fish["points"])
-	print(fish["weight"])
+	print(fish_list[0])
+	print(fish_list[1])
+	print(fish_list[2])
 
 func _on_action_button_pressed() -> void:
 	if fishing_state == FishingState.FISH_BITING:
