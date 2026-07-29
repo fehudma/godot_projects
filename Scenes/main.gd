@@ -5,6 +5,7 @@ extends Control
 @onready var score_label: Label = $ScoreLabel
 @onready var bite_timer: Timer = $BiteTimer
 @onready var catch_timer: Timer = $CatchTimer
+@onready var test_button: Button = $TestButton
 
 const STARTING_SCORE: int = 0
 
@@ -36,39 +37,36 @@ var fish_list: Array[Dictionary] = [
 		"weight": 10
 	}
 ]
+var roll: int = randi_range(1, total_weight)
+var current_weight: int = 0
+var total_weight: int = 0
+	
+
+#helpers
+func choose_random_fish() -> Dictionary:
+	var total_weight: int = 0
+
+	for fish: Dictionary in fish_list:
+		total_weight += fish["weight"]
+
+	var roll: int = randi_range(1, total_weight)
+	var current_weight: int = 0
+
+	for fish: Dictionary in fish_list:
+		current_weight += fish["weight"]
+
+		if roll <= current_weight:
+			return fish
+
+	return {}
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	randomize()
 	
-	#That returns the first fish dictionary.
-	print(fish_list[0])
-	print(fish_list[1])
-	print(fish_list[2])
-	#That returns the first fish name:
-	print(fish_list[0]["name"])
-	print(fish_list[0]["points"])
-	print(fish_list[0]["weight"])
-	print("+++")
-	print(fish_list[0]["name"])
-	print(fish_list[1]["name"])
-	print(fish_list[2]["name"])
-	print("+++")
 	
-	var selected_fish: Dictionary = fish_list.pick_random()
-	print("Selected: " + selected_fish["name"])
 	
-	var total_weight: int = 0
-	
-	for fish: Dictionary in fish_list:
-		total_weight += fish["weight"]
-	
-	print("Total weight: " + str(total_weight))
-	
-	var roll: int = randi_range(1, total_weight)
-	print("Roll: " + str(roll))
-	
-	print("+++")
+
 	
 	
 
@@ -77,7 +75,9 @@ func _on_action_button_pressed() -> void:
 		catch_timer.stop()
 		fishing_state = FishingState.READY
 		
-		status_label.text = "You caught a fish!"
+		var caught_fish: Dictionary = choose_random_fish()
+		print("User caught a " + caught_fish["name"])
+		status_label.text = "You caught a " + caught_fish["name"] + "!"
 		action_button.text = "Drop Hook"
 		return
 	
@@ -114,3 +114,10 @@ func _on_catch_timer_timeout() -> void:
 	status_label.text = "The fish escaped!"
 	action_button.text = "Drop Hook" 
 	action_button.disabled = false
+
+
+
+
+func _on_test_button_pressed() -> void:
+	var caught_fish: Dictionary = choose_random_fish()
+	print(caught_fish["name"])

@@ -36,6 +36,15 @@ one_shot = true
 [node name="CatchTimer" type="Timer" parent="." unique_id=426701782]
 one_shot = true
 
+[node name="TestButton" type="Button" parent="." unique_id=938500006]
+layout_mode = 0
+offset_left = 11.0
+offset_top = 77.0
+offset_right = 19.0
+offset_bottom = 85.0
+text = "TEST"
+
 [connection signal="pressed" from="ActionButton" to="." method="_on_action_button_pressed"]
 [connection signal="timeout" from="BiteTimer" to="." method="_on_bite_timer_timeout"]
 [connection signal="timeout" from="CatchTimer" to="." method="_on_catch_timer_timeout"]
+[connection signal="pressed" from="TestButton" to="." method="_on_test_button_pressed"]
