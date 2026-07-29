@@ -113,3 +113,6 @@ func _on_catch_timer_timeout() -> void:
 func _on_test_button_pressed() -> void:
 	choose_random_fish()
 	print(choose_random_fish())
+	print("+++")
+	print(last_caught_fish["name"])
+	print(last_caught_fish["points"])
