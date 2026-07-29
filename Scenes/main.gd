@@ -8,18 +8,30 @@ extends Control
 
 const STARTING_SCORE: int = 0
 
+#States
 enum FishingState {
 	READY,
 	WAITING_FOR_BITE,
 	FISH_BITING
 }
 
+#Starting State
 var fishing_state: FishingState = FishingState.READY
 
+#List of all possible fishes
+var fish: Dictionary = {
+	"name": "Raw Brilliant Smallfish",
+	"points": 1,
+	"weight": 60
+}
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	randomize()
+	
+	print(fish["name"])
+	print(fish["points"])
+	print(fish["weight"])
 
 func _on_action_button_pressed() -> void:
 	if fishing_state == FishingState.FISH_BITING:
