@@ -1,11 +1,15 @@
 extends Control
 
-@onready var status_label: Label = $StatusLabel
-@onready var action_button: Button = $ActionButton
-@onready var score_label: Label = $ScoreLabel
+@onready var points_label: Label = $VBoxContainer/PointsLabel
+@onready var status_label: Label = $VBoxContainer/StatusLabel
+@onready var action_button: Button = $VBoxContainer/ActionButton
+@onready var score_label: Label = $VBoxContainer/ScoreLabel
+@onready var test_button: Button = $VBoxContainer/TestButton
 @onready var bite_timer: Timer = $BiteTimer
 @onready var catch_timer: Timer = $CatchTimer
-@onready var test_button: Button = $TestButton
+
+
+
 
 const STARTING_SCORE: int = 0
 
@@ -58,6 +62,8 @@ func choose_random_fish() -> Dictionary:
 
 	return {}
 
+var total_points: int = 0
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	randomize()
@@ -68,7 +74,13 @@ func _on_action_button_pressed() -> void:
 		fishing_state = FishingState.READY
 		
 		last_caught_fish = choose_random_fish()
+		total_points = total_points + int(last_caught_fish["points"])
 		print("User caught a " + last_caught_fish["name"])
+		print("===")
+		print(last_caught_fish["name"])
+		print(last_caught_fish["points"])
+		print("===")
+		print("total points: " + str(total_points))
 		status_label.text = "You caught a " + last_caught_fish["name"] + "!"
 		action_button.text = "Drop Hook"
 		return
@@ -83,7 +95,7 @@ func _on_action_button_pressed() -> void:
 	fishing_state = FishingState.WAITING_FOR_BITE
 	action_button.text = "Waiting for a fish..."
 	
-	var wait_time := randf_range(2.0, 6.0) 
+	var wait_time := randf_range(0.0, 2.0) 
 	bite_timer.start(wait_time)
 
 
@@ -111,8 +123,6 @@ func _on_catch_timer_timeout() -> void:
 
 
 func _on_test_button_pressed() -> void:
-	choose_random_fish()
-	print(choose_random_fish())
 	print("+++")
 	print(last_caught_fish["name"])
 	print(last_caught_fish["points"])
