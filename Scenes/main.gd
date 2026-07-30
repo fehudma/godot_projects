@@ -6,6 +6,7 @@ extends Control
 @onready var test_button: Button = $VBoxContainer/TestButton
 @onready var bite_timer: Timer = $BiteTimer
 @onready var catch_timer: Timer = $CatchTimer
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
 
 
 
@@ -92,6 +93,7 @@ func _on_action_button_pressed() -> void:
 	
 	fishing_state = FishingState.WAITING_FOR_BITE
 	action_button.text = "Waiting for a fish..."
+	animation_player.play("hook_down")
 	
 	var wait_time := randf_range(0.0, 2.0) 
 	bite_timer.start(wait_time)
