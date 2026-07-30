@@ -1,33 +1,7 @@
 [gd_scene format=3 uid="uid://k402455fm0ya"]
 
 [ext_resource type="Script" uid="uid://bn4h8c7eklpmm" path="res://Scenes/main.gd" id="1_r150o"]
-
-[sub_resource type="Animation" id="Animation_idj7w"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Hook:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(161, 136)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("VBoxContainer/StatusLabel:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
+[ext_resource type="AudioStream" uid="uid://b5pc886cxjbgu" path="res://Audio/universfield-water-splash-229315 (edited).mp3" id="2_idj7w"]
 
 [sub_resource type="Animation" id="Animation_rgh2o"]
 resource_name = "fish_bite"
@@ -97,7 +71,6 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_idj7w"]
 _data = {
-&"RESET": SubResource("Animation_idj7w"),
 &"fish_bite": SubResource("Animation_rgh2o"),
 &"hook_down": SubResource("Animation_r150o"),
 &"hook_sides": SubResource("Animation_pbw6q"),
@@ -155,6 +128,12 @@ one_shot = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1432682181]
 libraries/ = SubResource("AnimationLibrary_idj7w")
+
+[node name="AnimationPlayer2" type="AnimationPlayer" parent="." unique_id=447619777]
+libraries/ = SubResource("AnimationLibrary_idj7w")
+
+[node name="HookDropSound" type="AudioStreamPlayer" parent="." unique_id=573116810]
+stream = ExtResource("2_idj7w")
 
 [connection signal="pressed" from="VBoxContainer/ActionButton" to="." method="_on_action_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/TestButton" to="." method="_on_test_button_pressed"]

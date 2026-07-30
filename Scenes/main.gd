@@ -7,6 +7,10 @@ extends Control
 @onready var bite_timer: Timer = $BiteTimer
 @onready var catch_timer: Timer = $CatchTimer
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var animation_player_2: AnimationPlayer = $AnimationPlayer2
+@onready var hook_drop_sound: AudioStreamPlayer = $HookDropSound
+
+
 
 const STARTING_SCORE: int = 0
 
@@ -70,6 +74,7 @@ func _on_action_button_pressed() -> void:
 		catch_timer.stop()
 		animation_player.stop()
 		animation_player.play("hook_up")
+		
 		fishing_state = FishingState.READY
 		
 		last_caught_fish = choose_random_fish()
@@ -95,6 +100,7 @@ func _on_action_button_pressed() -> void:
 	fishing_state = FishingState.WAITING_FOR_BITE
 	action_button.text = "Waiting for a fish..."
 	animation_player.play("hook_down")
+	hook_drop_sound.play()
 	
 	var wait_time := randf_range(0.5, 2.0) 
 	bite_timer.start(wait_time)
@@ -103,7 +109,7 @@ func _on_bite_timer_timeout() -> void:
 	fishing_state = FishingState.FISH_BITING
 	print("Biting timer started")
 	animation_player.play("fish_bite")
-	
+	animation_player_2.play("hook_sides")
 	
 	status_label.text = "A fish is biting! Raise the hook!"
 	action_button.text = "Raise the hook!"
@@ -112,6 +118,7 @@ func _on_bite_timer_timeout() -> void:
 
 func _on_catch_timer_timeout() -> void:
 	animation_player.stop()
+	animation_player_2.stop()
 	print("Escape timer ended")
 	
 	animation_player.play("hook_up")
