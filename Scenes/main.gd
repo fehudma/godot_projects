@@ -1,5 +1,8 @@
 extends Control
+#============================EXPORTS
+@export var fish_caught_sounds: Array[AudioStream] = []
 
+#============================ONREADYs
 @onready var points_label: Label = $VBoxContainer/PointsLabel
 @onready var status_label: Label = $VBoxContainer/StatusLabel
 @onready var action_button: Button = $VBoxContainer/ActionButton
@@ -10,11 +13,12 @@ extends Control
 @onready var animation_player_2: AnimationPlayer = $AnimationPlayer2
 @onready var hook_drop_sound: AudioStreamPlayer = $HookDropSound
 @onready var fish_bite_state_sound: AudioStreamPlayer = $FishBiteStateSound
+@onready var fish_caught_state_sound: AudioStreamPlayer = $FishCaughtStateSound
 
-
-
+#============================CONSTs
 const STARTING_SCORE: int = 0
 
+#============================VARs
 #States
 enum FishingState {
 	READY,
@@ -46,7 +50,7 @@ var fish_list: Array[Dictionary] = [
 
 var last_caught_fish: Dictionary = {}
 
-#helpers
+#============================HELPERS
 func choose_random_fish() -> Dictionary:
 	var total_weight: int = 0
 
@@ -66,6 +70,17 @@ func choose_random_fish() -> Dictionary:
 
 var total_points: int = 0
 
+#tween func for sound fade, instead of harsh stop
+func fade_out_fish_bite_sound() -> void:
+	var tween: Tween = create_tween()
+	tween.tween_property(fish_bite_state_sound, "volume_db", -40.0, 0.9)
+
+	await tween.finished
+
+	fish_bite_state_sound.stop()
+	fish_bite_state_sound.volume_db = 0.0
+
+#============================INIT
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	randomize()
@@ -75,6 +90,8 @@ func _on_action_button_pressed() -> void:
 		catch_timer.stop()
 		animation_player.stop()
 		animation_player_2.stop()
+		###fish_bite_state_sound.stop()
+		fade_out_fish_bite_sound()
 		animation_player.play("hook_up")
 		
 		fishing_state = FishingState.READY
@@ -89,11 +106,16 @@ func _on_action_button_pressed() -> void:
 		status_label.text = ("You caught a " + last_caught_fish["name"] + "!" 
 		+ " +" + str(last_caught_fish["points"]) + " points")
 		action_button.text = "Drop Hook"
+		
+		var random_sound: AudioStream = fish_caught_sounds.pick_random()
+		fish_caught_state_sound.stream = random_sound
+		fish_caught_state_sound.play()
 		return
 	
 	if fishing_state == FishingState.WAITING_FOR_BITE:
 		bite_timer.stop()
 		animation_player.play("hook_up")
+		#TODO sound bug possible when hook up before fish bites
 		fishing_state = FishingState.READY
 		status_label.text = "Too early! The fish was scared away."
 		action_button.text = "Drop Hook"
@@ -107,6 +129,7 @@ func _on_action_button_pressed() -> void:
 	var wait_time := randf_range(0.5, 2.0) 
 	bite_timer.start(wait_time)
 
+#============================SIGNALS
 func _on_bite_timer_timeout() -> void:
 	fishing_state = FishingState.FISH_BITING
 	print("Biting timer started")
@@ -121,6 +144,8 @@ func _on_bite_timer_timeout() -> void:
 
 func _on_catch_timer_timeout() -> void:
 	animation_player.stop()
+	###fish_bite_state_sound.stop()
+	fade_out_fish_bite_sound()
 	print("Escape timer ended")
 	animation_player_2.stop()
 	animation_player.play("hook_up")
@@ -131,6 +156,6 @@ func _on_catch_timer_timeout() -> void:
 	
 
 func _on_test_button_pressed() -> void:
-	print("+++")
-	print(last_caught_fish["name"])
-	print(last_caught_fish["points"])
+	var random_sound: AudioStream = fish_caught_sounds.pick_random()
+	fish_caught_state_sound.stream = random_sound
+	fish_caught_state_sound.play()

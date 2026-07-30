@@ -2,7 +2,9 @@
 
 [ext_resource type="Script" uid="uid://bn4h8c7eklpmm" path="res://Scenes/main.gd" id="1_r150o"]
 [ext_resource type="AudioStream" uid="uid://b5pc886cxjbgu" path="res://Audio/universfield-water-splash-229315 (edited).mp3" id="2_idj7w"]
+[ext_resource type="AudioStream" uid="uid://dgixqyg7c3pee" path="res://Audio/Ding-01.mp3" id="2_pbw6q"]
 [ext_resource type="AudioStream" uid="uid://c6ajmjqep4uvr" path="res://Audio/freesound_community-bells-75654 (mp3cut.net).mp3" id="3_kln2b"]
+[ext_resource type="AudioStream" uid="uid://baoq087w87y4h" path="res://Audio/Ding-02.mp3" id="3_v1gob"]
 
 [sub_resource type="Animation" id="Animation_rgh2o"]
 resource_name = "fish_bite"
@@ -84,6 +86,7 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("1_r150o")
+fish_caught_sounds = Array[AudioStream]([ExtResource("2_pbw6q"), ExtResource("3_v1gob")])
 
 [node name="Water" type="ColorRect" parent="." unique_id=1345827181]
 layout_mode = 0
@@ -117,7 +120,6 @@ layout_mode = 2
 text = "Drop Hook"
 
 [node name="TestButton" type="Button" parent="VBoxContainer" unique_id=938500006]
-visible = false
 layout_mode = 2
 text = "TEST"
 
@@ -138,6 +140,8 @@ stream = ExtResource("2_idj7w")
 
 [node name="FishBiteStateSound" type="AudioStreamPlayer" parent="." unique_id=955236453]
 stream = ExtResource("3_kln2b")
+
+[node name="FishCaughtStateSound" type="AudioStreamPlayer" parent="." unique_id=450070937]
 
 [connection signal="pressed" from="VBoxContainer/ActionButton" to="." method="_on_action_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/TestButton" to="." method="_on_test_button_pressed"]
