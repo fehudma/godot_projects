@@ -16,6 +16,35 @@ tracks/0/keys = {
 "update": 0,
 "values": [Vector2(161, 136)]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("VBoxContainer/StatusLabel:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_rgh2o"]
+resource_name = "fish_bite"
+length = 0.3
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("VBoxContainer/StatusLabel:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(0, 0.98366565, 0, 1), Color(1, 1, 1, 1)]
+}
 
 [sub_resource type="Animation" id="Animation_r150o"]
 resource_name = "hook_down"
@@ -30,13 +59,49 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.5),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(161, 136), Vector2(160, 183)]
+"values": [Vector2(161, 136), Vector2(161, 183)]
+}
+
+[sub_resource type="Animation" id="Animation_pbw6q"]
+resource_name = "hook_sides"
+length = 0.75
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Hook:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.26666668, 0.5, 0.75),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(161, 183), Vector2(165, 183), Vector2(149, 183), Vector2(161, 183)]
+}
+
+[sub_resource type="Animation" id="Animation_kln2b"]
+resource_name = "hook_up"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Hook:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(161, 183), Vector2(161, 136)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_idj7w"]
 _data = {
 &"RESET": SubResource("Animation_idj7w"),
-&"hook_down": SubResource("Animation_r150o")
+&"fish_bite": SubResource("Animation_rgh2o"),
+&"hook_down": SubResource("Animation_r150o"),
+&"hook_sides": SubResource("Animation_pbw6q"),
+&"hook_up": SubResource("Animation_kln2b")
 }
 
 [node name="Control" type="Control" unique_id=1253770012]
