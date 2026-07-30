@@ -3,7 +3,6 @@ extends Control
 @onready var points_label: Label = $VBoxContainer/PointsLabel
 @onready var status_label: Label = $VBoxContainer/StatusLabel
 @onready var action_button: Button = $VBoxContainer/ActionButton
-@onready var score_label: Label = $VBoxContainer/ScoreLabel
 @onready var test_button: Button = $VBoxContainer/TestButton
 @onready var bite_timer: Timer = $BiteTimer
 @onready var catch_timer: Timer = $CatchTimer
@@ -75,13 +74,12 @@ func _on_action_button_pressed() -> void:
 		
 		last_caught_fish = choose_random_fish()
 		total_points = total_points + int(last_caught_fish["points"])
-		print("User caught a " + last_caught_fish["name"])
-		print("===")
-		print(last_caught_fish["name"])
-		print(last_caught_fish["points"])
-		print("===")
+		print("User caught a " + last_caught_fish["name"] 
+		+ "," + " reward points: " + str(last_caught_fish["points"]))
 		print("total points: " + str(total_points))
-		status_label.text = "You caught a " + last_caught_fish["name"] + "!"
+		points_label.text = "Points: " + str(total_points)
+		status_label.text = ("You caught a " + last_caught_fish["name"] + "!" 
+		+ " +" + str(last_caught_fish["points"]) + " points")
 		action_button.text = "Drop Hook"
 		return
 	
@@ -98,7 +96,6 @@ func _on_action_button_pressed() -> void:
 	var wait_time := randf_range(0.0, 2.0) 
 	bite_timer.start(wait_time)
 
-
 func _on_bite_timer_timeout() -> void:
 	print("Biting timer started")
 	fishing_state = FishingState.FISH_BITING
@@ -109,8 +106,6 @@ func _on_bite_timer_timeout() -> void:
 	
 	catch_timer.start(2.0)
 
-
-
 func _on_catch_timer_timeout() -> void:
 	print("Escape timer ended")
 	fishing_state = FishingState.READY
@@ -118,9 +113,6 @@ func _on_catch_timer_timeout() -> void:
 	status_label.text = "The fish escaped!"
 	action_button.text = "Drop Hook" 
 	action_button.disabled = false
-
-
-
 
 func _on_test_button_pressed() -> void:
 	print("+++")

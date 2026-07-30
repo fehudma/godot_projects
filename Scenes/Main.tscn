@@ -26,10 +26,6 @@ text = "Press the button to start fishing."
 layout_mode = 2
 text = "Drop Hook"
 
-[node name="ScoreLabel" type="Label" parent="VBoxContainer" unique_id=1125970195]
-layout_mode = 2
-text = "Fish caught: "
-
 [node name="TestButton" type="Button" parent="VBoxContainer" unique_id=938500006]
 layout_mode = 2
 text = "TEST"
