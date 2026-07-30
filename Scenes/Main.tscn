@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bn4h8c7eklpmm" path="res://Scenes/main.gd" id="1_r150o"]
 [ext_resource type="AudioStream" uid="uid://b5pc886cxjbgu" path="res://Audio/universfield-water-splash-229315 (edited).mp3" id="2_idj7w"]
+[ext_resource type="AudioStream" uid="uid://c6ajmjqep4uvr" path="res://Audio/freesound_community-bells-75654 (mp3cut.net).mp3" id="3_kln2b"]
 
 [sub_resource type="Animation" id="Animation_rgh2o"]
 resource_name = "fish_bite"
@@ -134,6 +135,9 @@ libraries/ = SubResource("AnimationLibrary_idj7w")
 
 [node name="HookDropSound" type="AudioStreamPlayer" parent="." unique_id=573116810]
 stream = ExtResource("2_idj7w")
+
+[node name="FishBiteStateSound" type="AudioStreamPlayer" parent="." unique_id=955236453]
+stream = ExtResource("3_kln2b")
 
 [connection signal="pressed" from="VBoxContainer/ActionButton" to="." method="_on_action_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/TestButton" to="." method="_on_test_button_pressed"]

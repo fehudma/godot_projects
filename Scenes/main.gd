@@ -9,6 +9,7 @@ extends Control
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var animation_player_2: AnimationPlayer = $AnimationPlayer2
 @onready var hook_drop_sound: AudioStreamPlayer = $HookDropSound
+@onready var fish_bite_state_sound: AudioStreamPlayer = $FishBiteStateSound
 
 
 
@@ -111,6 +112,7 @@ func _on_bite_timer_timeout() -> void:
 	print("Biting timer started")
 	animation_player.play("fish_bite")
 	animation_player_2.play("hook_sides")
+	fish_bite_state_sound.play()
 	
 	status_label.text = "A fish is biting! Raise the hook!"
 	action_button.text = "Raise the hook!"

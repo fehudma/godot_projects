@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://c6ajmjqep4uvr"
+path="res://.godot/imported/freesound_community-bells-75654 (mp3cut.net).mp3-53ffd964cb18a4c3134443dcd66559ce.mp3str"
+
+[deps]
+
+source_file="res://Audio/freesound_community-bells-75654 (mp3cut.net).mp3"
+dest_files=["res://.godot/imported/freesound_community-bells-75654 (mp3cut.net).mp3-53ffd964cb18a4c3134443dcd66559ce.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
