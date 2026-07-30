@@ -120,6 +120,7 @@ layout_mode = 2
 text = "Drop Hook"
 
 [node name="TestButton" type="Button" parent="VBoxContainer" unique_id=938500006]
+visible = false
 layout_mode = 2
 text = "TEST"
 
@@ -142,6 +143,7 @@ stream = ExtResource("2_idj7w")
 stream = ExtResource("3_kln2b")
 
 [node name="FishCaughtStateSound" type="AudioStreamPlayer" parent="." unique_id=450070937]
+volume_db = -20.0
 
 [connection signal="pressed" from="VBoxContainer/ActionButton" to="." method="_on_action_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/TestButton" to="." method="_on_test_button_pressed"]
