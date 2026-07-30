@@ -8,9 +8,6 @@ extends Control
 @onready var catch_timer: Timer = $CatchTimer
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 
-
-
-
 const STARTING_SCORE: int = 0
 
 #States
