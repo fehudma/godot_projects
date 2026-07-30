@@ -73,6 +73,7 @@ func _on_action_button_pressed() -> void:
 	if fishing_state == FishingState.FISH_BITING:
 		catch_timer.stop()
 		animation_player.stop()
+		animation_player_2.stop()
 		animation_player.play("hook_up")
 		
 		fishing_state = FishingState.READY
@@ -118,9 +119,8 @@ func _on_bite_timer_timeout() -> void:
 
 func _on_catch_timer_timeout() -> void:
 	animation_player.stop()
-	animation_player_2.stop()
 	print("Escape timer ended")
-	
+	animation_player_2.stop()
 	animation_player.play("hook_up")
 	fishing_state = FishingState.READY
 	
