@@ -146,7 +146,7 @@ stream = ExtResource("3_kln2b")
 volume_db = -20.0
 
 [node name="SessionTimer" type="Timer" parent="." unique_id=1059133750]
-wait_time = 4.0
+wait_time = 120.0
 one_shot = true
 
 [node name="SessionTimeLabel" type="Label" parent="." unique_id=343282464]
