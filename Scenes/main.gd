@@ -14,6 +14,8 @@ extends Control
 @onready var hook_drop_sound: AudioStreamPlayer = $HookDropSound
 @onready var fish_bite_state_sound: AudioStreamPlayer = $FishBiteStateSound
 @onready var fish_caught_state_sound: AudioStreamPlayer = $FishCaughtStateSound
+@onready var session_timer: Timer = $SessionTimer
+@onready var session_time_label: Label = $SessionTimeLabel
 
 #============================CONSTs
 const STARTING_SCORE: int = 0
@@ -49,7 +51,6 @@ var fish_list: Array[Dictionary] = [
 ]
 
 var last_caught_fish: Dictionary = {}
-
 #============================HELPERS
 func choose_random_fish() -> Dictionary:
 	var total_weight: int = 0
@@ -84,6 +85,13 @@ func fade_out_fish_bite_sound() -> void:
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	randomize()
+	session_timer.start()
+
+func _process(delta: float) -> void:
+	var time_left: float = session_timer.time_left
+	#%.1f means:// f: format a floating-point number // .1: show one digit after the decimal point // 59.9999 becomes 60.0 // 59.94 becomes 59.9 // 8.26 becomes 8.3
+	session_time_label.text = "Time: %.1f" % time_left
+	
 
 func _on_action_button_pressed() -> void:
 	if fishing_state == FishingState.FISH_BITING:
@@ -153,9 +161,9 @@ func _on_catch_timer_timeout() -> void:
 	
 	status_label.text = "The fish escaped!"
 	action_button.text = "Drop Hook" 
-	
+
+func _on_session_timer_timeout() -> void:
+	pass # Replace with function body.
 
 func _on_test_button_pressed() -> void:
-	var random_sound: AudioStream = fish_caught_sounds.pick_random()
-	fish_caught_state_sound.stream = random_sound
-	fish_caught_state_sound.play()
+	print("Session timer started: ", session_timer.time_left)

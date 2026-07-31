@@ -145,7 +145,19 @@ stream = ExtResource("3_kln2b")
 [node name="FishCaughtStateSound" type="AudioStreamPlayer" parent="." unique_id=450070937]
 volume_db = -20.0
 
+[node name="SessionTimer" type="Timer" parent="." unique_id=1059133750]
+wait_time = 60.0
+one_shot = true
+
+[node name="SessionTimeLabel" type="Label" parent="." unique_id=343282464]
+layout_mode = 0
+offset_left = 268.0
+offset_right = 333.0
+offset_bottom = 23.0
+text = "Time: 60"
+
 [connection signal="pressed" from="VBoxContainer/ActionButton" to="." method="_on_action_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/TestButton" to="." method="_on_test_button_pressed"]
 [connection signal="timeout" from="BiteTimer" to="." method="_on_bite_timer_timeout"]
 [connection signal="timeout" from="CatchTimer" to="." method="_on_catch_timer_timeout"]
+[connection signal="timeout" from="SessionTimer" to="." method="_on_session_timer_timeout"]
