@@ -163,7 +163,14 @@ func _on_catch_timer_timeout() -> void:
 	action_button.text = "Drop Hook" 
 
 func _on_session_timer_timeout() -> void:
-	pass # Replace with function body.
+	catch_timer.stop()
+	bite_timer.stop()
+	animation_player.stop()
+	animation_player_2.stop()
+	fade_out_fish_bite_sound()
+	fishing_state = FishingState.READY
+	action_button.disabled = true
+	status_label.text = "The session is over"
 
 func _on_test_button_pressed() -> void:
 	print("Session timer started: ", session_timer.time_left)
