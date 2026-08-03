@@ -71,6 +71,12 @@ var sturdy_rod: Dictionary = {
 	"catch_time_bonus": 1.0
 }
 
+var reinforced_rod: Dictionary = {
+	"name": "Reinforced Rod",
+	"catch_time_bonus": 2.0
+}
+
+
 #Vars Baits
 var basic_bait: Dictionary = {
 	"name": "Basic Bait",
@@ -169,6 +175,9 @@ func initialize_equipment() -> void:
 #
 func get_rod_catch_time_bonus() -> float:
 	return float(equipped_rod["catch_time_bonus"])
+
+func get_total_catch_time() -> float:
+	return BASE_CATCH_TIME + get_rod_catch_time_bonus()
 #============================INIT
 
 func _ready() -> void:
@@ -178,6 +187,7 @@ func _ready() -> void:
 	
 	owned_rods.append(basic_rod)
 	owned_rods.append(sturdy_rod)
+	owned_rods.append(reinforced_rod)
 	owned_baits.append(basic_bait)
 	owned_baits.append(test_bait)
 	owned_hooks.append(basic_hook)
@@ -250,7 +260,7 @@ func _on_bite_timer_timeout() -> void:
 	status_label.text = "A fish is biting! Raise the hook!"
 	action_button.text = "Raise the hook!"
 	
-	catch_timer.start(BASE_CATCH_TIME + get_rod_catch_time_bonus())
+	catch_timer.start(get_total_catch_time())
 
 
 func _on_catch_timer_timeout() -> void:
