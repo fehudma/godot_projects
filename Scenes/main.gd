@@ -106,8 +106,8 @@ var basic_hook: Dictionary = {
 	"rare_fish_bonus": 0.0
 }
 
-var test_hook: Dictionary = {
-	"name": "Test Hook",
+var lucky_hook: Dictionary = {
+	"name": "Lucky Hook",
 	"rare_fish_bonus": 0.1
 }
 
@@ -244,7 +244,7 @@ func _ready() -> void:
 	owned_baits.append(fresh_bait)
 	owned_baits.append(premium_bait)
 	owned_hooks.append(basic_hook)
-	owned_hooks.append(test_hook)
+	owned_hooks.append(lucky_hook)
 	
 	initialize_equipment()
 	
