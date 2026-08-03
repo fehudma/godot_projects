@@ -77,16 +77,29 @@ var basic_bait: Dictionary = {
 	"wait_time_reduction": 0.0
 }
 
+var test_bait: Dictionary = {
+	"name": "Test Bait",
+	"wait_time_reduction": 1.0
+}
+
 #Vars Hooks
 var basic_hook: Dictionary = {
 	"name": "Basic Hook",
 	"rare_fish_bonus": 0.0
 }
 
+var test_hook: Dictionary = {
+	"name": "Test Hook",
+	"rare_fish_bonus": 0.1
+}
+
+
 var owned_rods: Array[Dictionary] = []
 var selected_rod_index: int = 0
 var owned_baits: Array[Dictionary] = []
+var selected_bait_index: int = 0
 var owned_hooks: Array[Dictionary] = []
+var selected_hook_index: int = 0
 
 #============================HELPERS
 func choose_random_fish() -> Dictionary:
@@ -142,7 +155,7 @@ func equip_hook(hook: Dictionary) -> void:
 #
 func initialize_equipment() -> void:
 	equipped_rod = owned_rods[selected_rod_index]
-	equipped_bait = basic_bait
+	equipped_bait = owned_baits[selected_bait_index]
 	equipped_hook = basic_hook
 	update_equipment_labels()
 #============================INIT
@@ -155,13 +168,19 @@ func _ready() -> void:
 	owned_rods.append(basic_rod)
 	owned_rods.append(test_rod)
 	owned_baits.append(basic_bait)
+	owned_baits.append(test_bait)
 	owned_hooks.append(basic_hook)
+	owned_hooks.append(test_hook)
 	
 	initialize_equipment()
 	
 	update_equipment_labels()
 	
 	session_timer.start()
+	
+	print(owned_hooks.size())
+	print(owned_hooks[1]["name"])
+	print(owned_hooks[1]["rare_fish_bonus"])
 
 func _process(delta: float) -> void:
 	var time_left: float = session_timer.time_left
@@ -226,6 +245,7 @@ func _on_bite_timer_timeout() -> void:
 	
 	catch_timer.start(2.0)
 
+
 func _on_catch_timer_timeout() -> void:
 	animation_player.stop()
 	###fish_bite_state_sound.stop()
@@ -238,6 +258,7 @@ func _on_catch_timer_timeout() -> void:
 	status_label.text = "The fish escaped!"
 	action_button.text = "Drop Hook" 
 
+
 func _on_session_timer_timeout() -> void:
 	catch_timer.stop()
 	bite_timer.stop()
@@ -248,10 +269,12 @@ func _on_session_timer_timeout() -> void:
 	action_button.disabled = true
 	status_label.text = "The session is over"
 
+
 func _on_test_button_pressed() -> void:
 	#print("Session timer started: ", session_timer.time_left)
 	print("***")
 	print(selected_rod_index)
+
 
 func _on_switch_rod_button_pressed() -> void:
 	selected_rod_index += 1
@@ -260,3 +283,16 @@ func _on_switch_rod_button_pressed() -> void:
 		selected_rod_index = 0
 	
 	equip_rod(owned_rods[selected_rod_index])
+
+#selected_bait_index
+func _on_switch_bait_button_pressed() -> void:
+	selected_bait_index += 1
+	
+	if selected_bait_index >= owned_baits.size():
+		selected_bait_index = 0
+	
+	equip_bait(owned_baits[selected_bait_index])
+
+
+func _on_switch_hook_button_pressed() -> void:
+	pass # Replace with function body.

@@ -177,9 +177,19 @@ text = "Hook: "
 layout_mode = 2
 text = "Switch Rod"
 
+[node name="SwitchBaitButton" type="Button" parent="EquipmentContainer" unique_id=780025818]
+layout_mode = 2
+text = "Switch Bait"
+
+[node name="SwitchHookButton" type="Button" parent="EquipmentContainer" unique_id=1547738571]
+layout_mode = 2
+text = "Switch Hook"
+
 [connection signal="pressed" from="VBoxContainer/ActionButton" to="." method="_on_action_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/TestButton" to="." method="_on_test_button_pressed"]
 [connection signal="timeout" from="BiteTimer" to="." method="_on_bite_timer_timeout"]
 [connection signal="timeout" from="CatchTimer" to="." method="_on_catch_timer_timeout"]
 [connection signal="timeout" from="SessionTimer" to="." method="_on_session_timer_timeout"]
 [connection signal="pressed" from="EquipmentContainer/SwitchRodButton" to="." method="_on_switch_rod_button_pressed"]
+[connection signal="pressed" from="EquipmentContainer/SwitchBaitButton" to="." method="_on_switch_bait_button_pressed"]
+[connection signal="pressed" from="EquipmentContainer/SwitchHookButton" to="." method="_on_switch_hook_button_pressed"]
