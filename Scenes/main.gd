@@ -21,12 +21,13 @@ extends Control
 @onready var bait_label: Label = $EquipmentContainer/BaitLabel
 @onready var hook_label: Label = $EquipmentContainer/HookLabel
 @onready var switch_rod_button: Button = $EquipmentContainer/SwitchRodButton
+@onready var switch_bait_button: Button = $EquipmentContainer/SwitchBaitButton
 
 #============================CONSTs
 const STARTING_SCORE: int = 0
 const BASE_CATCH_TIME: float = 2.0
 const MIN_BITE_WAIT_TIME: float = 0.5
-const MAX_BITE_WAIT_TIME: float = 1.0
+const MAX_BITE_WAIT_TIME: float = 2.0
 #============================VARs
 #States
 enum FishingState {
@@ -86,9 +87,14 @@ var basic_bait: Dictionary = {
 	"wait_time_reduction": 0.0
 }
 
-var test_bait: Dictionary = {
-	"name": "Test Bait",
+var fresh_bait: Dictionary = {
+	"name": "Fresh Bait",
 	"wait_time_reduction": 1.0
+}
+
+var premium_bait: Dictionary = {
+	"name": "Premium Bait",
+	"wait_time_reduction": 1.5
 }
 
 #Vars Hooks
@@ -149,7 +155,13 @@ func update_equipment_labels() -> void:
 	+ str(equipped_rod["catch_time_bonus"])
 	+ "s)"
 	)
-	bait_label.text = "Bait: " + str(equipped_bait["name"])
+	bait_label.text = (
+	"Bait: "
+	+ str(equipped_bait["name"])
+	+ " (-"
+	+ str(equipped_bait["wait_time_reduction"])
+	+ "s)"
+	)
 	hook_label.text = "Hook: " + str(equipped_hook["name"])
 
 #
@@ -197,7 +209,8 @@ func _ready() -> void:
 	owned_rods.append(sturdy_rod)
 	owned_rods.append(reinforced_rod)
 	owned_baits.append(basic_bait)
-	owned_baits.append(test_bait)
+	owned_baits.append(fresh_bait)
+	owned_baits.append(premium_bait)
 	owned_hooks.append(basic_hook)
 	owned_hooks.append(test_hook)
 	
@@ -224,6 +237,7 @@ func _on_action_button_pressed() -> void:
 		
 		fishing_state = FishingState.READY
 		switch_rod_button.disabled = false
+		switch_bait_button.disabled = false
 		
 		last_caught_fish = choose_random_fish()
 		total_points = total_points + int(last_caught_fish["points"])
@@ -246,17 +260,22 @@ func _on_action_button_pressed() -> void:
 		animation_player.play("hook_up")
 		fishing_state = FishingState.READY
 		switch_rod_button.disabled = false
+		switch_bait_button.disabled = false
 		status_label.text = "Too early! The fish was scared away."
 		action_button.text = "Drop Hook"
 		return
 	
 	fishing_state = FishingState.WAITING_FOR_BITE
 	switch_rod_button.disabled = true
+	switch_bait_button.disabled = true
 	action_button.text = "Waiting for a fish..."
 	animation_player.play("hook_down")
 	hook_drop_sound.play()
 	
-	var wait_time: float = randf_range(MIN_BITE_WAIT_TIME, MAX_BITE_WAIT_TIME)
+	var wait_time: float = randf_range(
+	get_min_bite_wait_time(),
+	get_max_bite_wait_time()
+	)
 	bite_timer.start(wait_time)
 
 #============================SIGNALS
@@ -282,6 +301,7 @@ func _on_catch_timer_timeout() -> void:
 	animation_player.play("hook_up")
 	fishing_state = FishingState.READY
 	switch_rod_button.disabled = false
+	switch_bait_button.disabled = false
 	
 	status_label.text = "The fish escaped!"
 	action_button.text = "Drop Hook" 
@@ -295,6 +315,7 @@ func _on_session_timer_timeout() -> void:
 	fade_out_fish_bite_sound()
 	fishing_state = FishingState.READY
 	action_button.disabled = true
+	switch_bait_button.disabled = true
 	status_label.text = "The session is over"
 
 func _on_switch_rod_button_pressed() -> void:
@@ -314,7 +335,7 @@ func _on_switch_bait_button_pressed() -> void:
 	
 	equip_bait(owned_baits[selected_bait_index])
 
-
+#
 func _on_switch_hook_button_pressed() -> void:
 	selected_hook_index += 1
 	
@@ -323,8 +344,22 @@ func _on_switch_hook_button_pressed() -> void:
 	
 	equip_hook(owned_hooks[selected_hook_index])
 
+#
+func get_min_bite_wait_time() -> float:
+	return max(
+		MIN_BITE_WAIT_TIME - get_bait_wait_time_reduction(),
+		0.1
+	)
+
+#
+func get_max_bite_wait_time() -> float:
+	return max(
+		MAX_BITE_WAIT_TIME - get_bait_wait_time_reduction(),
+		0.1
+	)
 #============================TEST BUTTON
 func _on_test_button_pressed() -> void:
 	#print("Session timer started: ", session_timer.time_left)
 	print("***")
-	print(get_bait_wait_time_reduction())
+	print(get_min_bite_wait_time())
+	print(get_max_bite_wait_time())
