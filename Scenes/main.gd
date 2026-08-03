@@ -59,6 +59,11 @@ var last_caught_fish: Dictionary = {}
 var equipped_rod: String = "Basic Rod"
 var equipped_bait: String = "Basic Bait"
 var equipped_hook: String = "Basic Hook"
+
+var basic_rod: Dictionary = {
+	"name": "Basic Rod",
+	"catch_time_bonus": 0.0
+}
 #============================HELPERS
 func choose_random_fish() -> Dictionary:
 	var total_weight: int = 0
@@ -98,9 +103,12 @@ func update_equipment_labels() -> void:
 #============================INIT
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	print("Game Started")
 	randomize()
 	update_equipment_labels()
 	session_timer.start()
+	print(basic_rod["name"])
+	print(basic_rod["catch_time_bonus"])
 
 func _process(delta: float) -> void:
 	var time_left: float = session_timer.time_left
