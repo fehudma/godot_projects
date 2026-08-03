@@ -216,6 +216,7 @@ func _on_action_button_pressed() -> void:
 		animation_player.play("hook_up")
 		
 		fishing_state = FishingState.READY
+		switch_rod_button.disabled = false
 		
 		last_caught_fish = choose_random_fish()
 		total_points = total_points + int(last_caught_fish["points"])
@@ -236,8 +237,8 @@ func _on_action_button_pressed() -> void:
 	if fishing_state == FishingState.WAITING_FOR_BITE:
 		bite_timer.stop()
 		animation_player.play("hook_up")
-		#TODO sound bug possible when hook up before fish bites
 		fishing_state = FishingState.READY
+		switch_rod_button.disabled = false
 		status_label.text = "Too early! The fish was scared away."
 		action_button.text = "Drop Hook"
 		return
@@ -273,6 +274,7 @@ func _on_catch_timer_timeout() -> void:
 	animation_player_2.stop()
 	animation_player.play("hook_up")
 	fishing_state = FishingState.READY
+	switch_rod_button.disabled = false
 	
 	status_label.text = "The fish escaped!"
 	action_button.text = "Drop Hook" 
