@@ -185,6 +185,12 @@ text = "Switch Bait"
 layout_mode = 2
 text = "Switch Hook"
 
+[node name="LocationLabel" type="Label" parent="." unique_id=854575815]
+layout_mode = 0
+offset_top = 396.0
+offset_right = 40.0
+offset_bottom = 419.0
+
 [connection signal="pressed" from="VBoxContainer/ActionButton" to="." method="_on_action_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/TestButton" to="." method="_on_test_button_pressed"]
 [connection signal="timeout" from="BiteTimer" to="." method="_on_bite_timer_timeout"]

@@ -23,6 +23,7 @@ extends Control
 @onready var switch_rod_button: Button = $EquipmentContainer/SwitchRodButton
 @onready var switch_bait_button: Button = $EquipmentContainer/SwitchBaitButton
 @onready var switch_hook_button: Button = $EquipmentContainer/SwitchHookButton
+@onready var location_label: Label = $LocationLabel
 
 #============================CONSTs
 const STARTING_SCORE: int = 0
@@ -40,8 +41,10 @@ enum FishingState {
 #Starting State
 var fishing_state: FishingState = FishingState.READY
 
+var fish_list: Array[Dictionary] = []
+
 #List of all possible fishes as an Array. An array stores multiple values in order. Here, each value is a fish dictionary.
-var fish_list: Array[Dictionary] = [
+var elwynn_fish_list: Array[Dictionary] = [
 	{
 		"name": "Raw Brilliant Smallfish",
 		"points": 1,
@@ -57,6 +60,27 @@ var fish_list: Array[Dictionary] = [
 	{
 		"name": "Raw Slitherskin Mackerel",
 		"points": 5,
+		"weight": 10,
+		"is_rare": true
+	}
+]
+
+var westfall_fish_list: Array[Dictionary] = [
+	{
+		"name": "Raw Rainbow Fin Albacore",
+		"points": 2,
+		"weight": 55,
+		"is_rare": false
+	},
+	{
+		"name": "Raw Rockscale Cod",
+		"points": 4,
+		"weight": 35,
+		"is_rare": false
+	},
+	{
+		"name": "Raw Spotted Yellowtail",
+		"points": 8,
 		"weight": 10,
 		"is_rare": true
 	}
@@ -241,10 +265,17 @@ func get_total_fish_weight() -> int:
 		total_weight += int(get_adjusted_fish_weight(fish))
 
 	return total_weight
+
+#
+func initialize_location_fish() -> void:
+	if GameData.selected_location == "Location 2":
+		fish_list = westfall_fish_list
+	else:
+		fish_list = elwynn_fish_list
 #============================INIT
 
 func _ready() -> void:
-	print("Game Started")
+	location_label.text = "Location: " + GameData.selected_location
 	
 	randomize()
 	
@@ -261,7 +292,7 @@ func _ready() -> void:
 	initialize_equipment()
 	
 	update_equipment_labels()
-	
+	initialize_location_fish()
 	session_timer.start()
 
 func _process(delta: float) -> void:
@@ -406,11 +437,4 @@ func get_max_bite_wait_time() -> float:
 #============================TEST BUTTON
 func _on_test_button_pressed() -> void:
 	#print("Session timer started: ", session_timer.time_left)
-	print("***")
-	print(fish_list[0]["is_rare"])
-	print(fish_list[2]["is_rare"])
-	print(get_hook_rare_fish_bonus())
-	print("***")
-	print(get_adjusted_fish_weight(fish_list[0]))
-	print(get_adjusted_fish_weight(fish_list[2]))
-	print("***")
+	print(fish_list[0]["name"])
