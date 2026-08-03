@@ -25,8 +25,8 @@ extends Control
 #============================CONSTs
 const STARTING_SCORE: int = 0
 const BASE_CATCH_TIME: float = 2.0
-const MIN_BITE_WAIT_TIME: float = 10.1
-const MAX_BITE_WAIT_TIME: float = 10.2
+const MIN_BITE_WAIT_TIME: float = 0.5
+const MAX_BITE_WAIT_TIME: float = 1.0
 #============================VARs
 #States
 enum FishingState {
@@ -179,8 +179,13 @@ func initialize_equipment() -> void:
 func get_rod_catch_time_bonus() -> float:
 	return float(equipped_rod["catch_time_bonus"])
 
+
 func get_total_catch_time() -> float:
 	return BASE_CATCH_TIME + get_rod_catch_time_bonus()
+
+#
+func get_bait_wait_time_reduction() -> float:
+	return float(equipped_bait["wait_time_reduction"])
 #============================INIT
 
 func _ready() -> void:
@@ -322,4 +327,4 @@ func _on_switch_hook_button_pressed() -> void:
 func _on_test_button_pressed() -> void:
 	#print("Session timer started: ", session_timer.time_left)
 	print("***")
-	print(get_rod_catch_time_bonus())
+	print(get_bait_wait_time_reduction())
