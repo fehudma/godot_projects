@@ -89,14 +89,18 @@ func fade_out_fish_bite_sound() -> void:
 	fish_bite_state_sound.stop()
 	fish_bite_state_sound.volume_db = 0.0
 
+#Update equipment labels from variables
+func update_equipment_labels() -> void:
+	rod_label.text = "Rod: " + equipped_rod
+	bait_label.text = "Bait: " + equipped_bait
+	hook_label.text = "Hook: " + equipped_hook
+
 #============================INIT
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	randomize()
+	update_equipment_labels()
 	session_timer.start()
-	print(equipped_rod)
-	print(equipped_bait)
-	print(equipped_hook)
 
 func _process(delta: float) -> void:
 	var time_left: float = session_timer.time_left
