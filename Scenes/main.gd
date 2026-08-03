@@ -253,3 +253,6 @@ func _on_test_button_pressed() -> void:
 	#print("Session timer started: ", session_timer.time_left)
 	print("***")
 	print(owned_rods.size())
+
+func _on_switch_rod_button_pressed() -> void:
+	pass # Replace with function body.
