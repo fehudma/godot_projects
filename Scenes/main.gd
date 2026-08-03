@@ -25,6 +25,8 @@ extends Control
 #============================CONSTs
 const STARTING_SCORE: int = 0
 const BASE_CATCH_TIME: float = 2.0
+const MIN_BITE_WAIT_TIME: float = 10.1
+const MAX_BITE_WAIT_TIME: float = 10.2
 #============================VARs
 #States
 enum FishingState {
@@ -249,7 +251,7 @@ func _on_action_button_pressed() -> void:
 	animation_player.play("hook_down")
 	hook_drop_sound.play()
 	
-	var wait_time := randf_range(0.5, 2.0) 
+	var wait_time: float = randf_range(MIN_BITE_WAIT_TIME, MAX_BITE_WAIT_TIME)
 	bite_timer.start(wait_time)
 
 #============================SIGNALS
