@@ -273,12 +273,11 @@ func initialize_location_fish() -> void:
 	if GameData.selected_location == "Location 2":
 		fish_list = westfall_fish_list
 	else:
+		GameData.selected_location = "Location 1"
 		fish_list = elwynn_fish_list
 #============================INIT
 
 func _ready() -> void:
-	location_label.text = "Location: " + GameData.selected_location
-	
 	randomize()
 	
 	owned_rods.append(basic_rod)
@@ -295,6 +294,8 @@ func _ready() -> void:
 	
 	update_equipment_labels()
 	initialize_location_fish()
+	location_label.text = "Location: " + GameData.selected_location
+	
 	session_timer.start()
 
 func _process(delta: float) -> void:
