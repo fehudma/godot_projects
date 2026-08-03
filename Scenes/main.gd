@@ -60,16 +60,24 @@ var equipped_rod: Dictionary
 var equipped_bait: Dictionary
 var equipped_hook: Dictionary
 
+#Vars Rods
 var basic_rod: Dictionary = {
 	"name": "Basic Rod",
 	"catch_time_bonus": 0.0
 }
 
+var test_rod: Dictionary = {
+	"name": "Test Rod",
+	"catch_time_bonus": 6.66
+}
+
+#Vars Baits
 var basic_bait: Dictionary = {
 	"name": "Basic Bait",
 	"wait_time_reduction": 0.0
 }
 
+#Vars Hooks
 var basic_hook: Dictionary = {
 	"name": "Basic Hook",
 	"rare_fish_bonus": 0.0
@@ -144,6 +152,7 @@ func _ready() -> void:
 	randomize()
 	
 	owned_rods.append(basic_rod)
+	owned_rods.append(test_rod)
 	owned_baits.append(basic_bait)
 	owned_hooks.append(basic_hook)
 	
@@ -241,5 +250,7 @@ func _on_session_timer_timeout() -> void:
 func _on_test_button_pressed() -> void:
 	#print("Session timer started: ", session_timer.time_left)
 	print("***")
-	print("Equipped rod: " + str(equipped_rod["name"]))
+	print(owned_rods.size())
+	print(owned_rods[1]["name"])
+	print(owned_rods[1]["catch_time_bonus"])
 	
