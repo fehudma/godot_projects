@@ -76,6 +76,8 @@ var basic_hook: Dictionary = {
 }
 
 var owned_rods: Array[Dictionary] = []
+var owned_baits: Array[Dictionary] = []
+var owned_hooks: Array[Dictionary] = []
 
 #============================HELPERS
 func choose_random_fish() -> Dictionary:
@@ -117,12 +119,19 @@ func update_equipment_labels() -> void:
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	print("Game Started")
+	
 	randomize()
+	
 	owned_rods.append(basic_rod)
+	owned_baits.append(basic_bait)
+	owned_hooks.append(basic_hook)
+	
 	equipped_rod = basic_rod
 	equipped_bait = basic_bait
 	equipped_hook = basic_hook
+	
 	update_equipment_labels()
+	
 	session_timer.start()
 
 func _process(delta: float) -> void:
@@ -212,5 +221,8 @@ func _on_session_timer_timeout() -> void:
 
 func _on_test_button_pressed() -> void:
 	#print("Session timer started: ", session_timer.time_left)
-	print(owned_rods.size())
-	print(owned_rods[0]["name"])
+	print("***")
+	print(owned_baits.size())
+	print(owned_baits[0]["name"])
+	print(owned_hooks.size())
+	print(owned_hooks[0]["name"])
