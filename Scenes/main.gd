@@ -255,3 +255,8 @@ func _on_test_button_pressed() -> void:
 
 func _on_switch_rod_button_pressed() -> void:
 	selected_rod_index += 1
+	
+	if selected_rod_index >= owned_rods.size():
+		selected_rod_index = 0
+	
+	equip_rod(owned_rods[selected_rod_index])
