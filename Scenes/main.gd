@@ -198,6 +198,14 @@ func get_total_catch_time() -> float:
 #
 func get_bait_wait_time_reduction() -> float:
 	return float(equipped_bait["wait_time_reduction"])
+
+
+#
+func get_random_bite_wait_time() -> float:
+	return randf_range(
+		get_min_bite_wait_time(),
+		get_max_bite_wait_time()
+	)
 #============================INIT
 
 func _ready() -> void:
@@ -272,10 +280,7 @@ func _on_action_button_pressed() -> void:
 	animation_player.play("hook_down")
 	hook_drop_sound.play()
 	
-	var wait_time: float = randf_range(
-	get_min_bite_wait_time(),
-	get_max_bite_wait_time()
-	)
+	var wait_time: float = get_random_bite_wait_time()
 	bite_timer.start(wait_time)
 
 #============================SIGNALS
