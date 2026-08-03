@@ -112,6 +112,10 @@ var lucky_hook: Dictionary = {
 	"rare_fish_bonus": 0.1
 }
 
+var enchanted_hook: Dictionary = {
+	"name": "Enchanted Hook",
+	"rare_fish_bonus": 50.0
+}
 
 var owned_rods: Array[Dictionary] = []
 var selected_rod_index: int = 0
@@ -246,6 +250,7 @@ func _ready() -> void:
 	owned_baits.append(premium_bait)
 	owned_hooks.append(basic_hook)
 	owned_hooks.append(lucky_hook)
+	owned_hooks.append(enchanted_hook)
 	
 	initialize_equipment()
 	
