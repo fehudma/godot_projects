@@ -16,6 +16,10 @@ extends Control
 @onready var fish_caught_state_sound: AudioStreamPlayer = $FishCaughtStateSound
 @onready var session_timer: Timer = $SessionTimer
 @onready var session_time_label: Label = $SessionTimeLabel
+@onready var equipment_container: VBoxContainer = $EquipmentContainer
+@onready var rod_label: Label = $EquipmentContainer/RodLabel
+@onready var bait_label: Label = $EquipmentContainer/BaitLabel
+@onready var hook_label: Label = $EquipmentContainer/HookLabel
 
 #============================CONSTs
 const STARTING_SCORE: int = 0
@@ -51,6 +55,10 @@ var fish_list: Array[Dictionary] = [
 ]
 
 var last_caught_fish: Dictionary = {}
+
+var equipped_rod: String = "Basic Rod"
+var equipped_bait: String = "Basic Bait"
+var equipped_hook: String = "Basic Hook"
 #============================HELPERS
 func choose_random_fish() -> Dictionary:
 	var total_weight: int = 0
@@ -86,6 +94,9 @@ func fade_out_fish_bite_sound() -> void:
 func _ready() -> void:
 	randomize()
 	session_timer.start()
+	print(equipped_rod)
+	print(equipped_bait)
+	print(equipped_hook)
 
 func _process(delta: float) -> void:
 	var time_left: float = session_timer.time_left
