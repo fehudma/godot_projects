@@ -56,9 +56,9 @@ var fish_list: Array[Dictionary] = [
 
 var last_caught_fish: Dictionary = {}
 
-var equipped_rod: String = "Basic Rod"
-var equipped_bait: String = "Basic Bait"
-var equipped_hook: String = "Basic Hook"
+var equipped_rod: Dictionary
+var equipped_bait: Dictionary
+var equipped_hook: Dictionary
 
 var basic_rod: Dictionary = {
 	"name": "Basic Rod",
@@ -74,6 +74,9 @@ var basic_hook: Dictionary = {
 	"name": "Basic Hook",
 	"rare_fish_bonus": 0.0
 }
+
+var owned_rods: Array[Dictionary] = []
+
 #============================HELPERS
 func choose_random_fish() -> Dictionary:
 	var total_weight: int = 0
@@ -106,15 +109,19 @@ func fade_out_fish_bite_sound() -> void:
 
 #Update equipment labels from variables
 func update_equipment_labels() -> void:
-	rod_label.text = "Rod: " + equipped_rod
-	bait_label.text = "Bait: " + equipped_bait
-	hook_label.text = "Hook: " + equipped_hook
+	rod_label.text = "Rod: " + str(equipped_rod["name"])
+	bait_label.text = "Bait: " + str(equipped_bait["name"])
+	hook_label.text = "Hook: " + str(equipped_hook["name"])
 
 #============================INIT
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	print("Game Started")
 	randomize()
+	owned_rods.append(basic_rod)
+	equipped_rod = basic_rod
+	equipped_bait = basic_bait
+	equipped_hook = basic_hook
 	update_equipment_labels()
 	session_timer.start()
 
@@ -204,4 +211,6 @@ func _on_session_timer_timeout() -> void:
 	status_label.text = "The session is over"
 
 func _on_test_button_pressed() -> void:
-	print("Session timer started: ", session_timer.time_left)
+	#print("Session timer started: ", session_timer.time_left)
+	print(owned_rods.size())
+	print(owned_rods[0]["name"])
