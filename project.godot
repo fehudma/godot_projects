@@ -15,6 +15,10 @@ run/main_scene="uid://k402455fm0ya"
 config/features=PackedStringArray("4.6", "Mobile")
 config/icon="res://icon.svg"
 
+[autoload]
+
+GameData="*uid://cnwfqo3l4yflr"
+
 [physics]
 
 3d/physics_engine="Jolt Physics"
