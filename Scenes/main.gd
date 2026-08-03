@@ -84,6 +84,7 @@ var basic_hook: Dictionary = {
 }
 
 var owned_rods: Array[Dictionary] = []
+var selected_rod_index: int = 0
 var owned_baits: Array[Dictionary] = []
 var owned_hooks: Array[Dictionary] = []
 
@@ -140,7 +141,7 @@ func equip_hook(hook: Dictionary) -> void:
 
 #
 func initialize_equipment() -> void:
-	equipped_rod = basic_rod
+	equipped_rod = owned_rods[selected_rod_index]
 	equipped_bait = basic_bait
 	equipped_hook = basic_hook
 	update_equipment_labels()
@@ -159,8 +160,6 @@ func _ready() -> void:
 	initialize_equipment()
 	
 	update_equipment_labels()
-	
-	equip_rod(owned_rods[1])
 	
 	session_timer.start()
 
