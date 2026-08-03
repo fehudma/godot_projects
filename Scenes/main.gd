@@ -115,8 +115,29 @@ func update_equipment_labels() -> void:
 	bait_label.text = "Bait: " + str(equipped_bait["name"])
 	hook_label.text = "Hook: " + str(equipped_hook["name"])
 
+#
+func equip_rod(rod: Dictionary) -> void:
+	equipped_rod = rod
+	update_equipment_labels()
+
+#
+func equip_bait(bait: Dictionary) -> void:
+	equipped_bait = bait
+	update_equipment_labels()
+
+#
+func equip_hook(hook: Dictionary) -> void:
+	equipped_hook = hook
+	update_equipment_labels()
+
+#
+func initialize_equipment() -> void:
+	equipped_rod = basic_rod
+	equipped_bait = basic_bait
+	equipped_hook = basic_hook
+	update_equipment_labels()
 #============================INIT
-# Called when the node enters the scene tree for the first time.
+
 func _ready() -> void:
 	print("Game Started")
 	
@@ -126,9 +147,7 @@ func _ready() -> void:
 	owned_baits.append(basic_bait)
 	owned_hooks.append(basic_hook)
 	
-	equipped_rod = basic_rod
-	equipped_bait = basic_bait
-	equipped_hook = basic_hook
+	initialize_equipment()
 	
 	update_equipment_labels()
 	
@@ -222,7 +241,5 @@ func _on_session_timer_timeout() -> void:
 func _on_test_button_pressed() -> void:
 	#print("Session timer started: ", session_timer.time_left)
 	print("***")
-	print(owned_baits.size())
-	print(owned_baits[0]["name"])
-	print(owned_hooks.size())
-	print(owned_hooks[0]["name"])
+	print("Equipped rod: " + str(equipped_rod["name"]))
+	
