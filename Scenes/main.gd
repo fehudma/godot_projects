@@ -119,7 +119,7 @@ func _on_action_button_pressed() -> void:
 		fish_caught_state_sound.stream = random_sound
 		fish_caught_state_sound.play()
 		return
-	#test code 
+
 	if fishing_state == FishingState.WAITING_FOR_BITE:
 		bite_timer.stop()
 		animation_player.play("hook_up")
