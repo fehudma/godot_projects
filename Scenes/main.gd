@@ -165,7 +165,13 @@ func update_equipment_labels() -> void:
 	+ str(equipped_bait["wait_time_reduction"])
 	+ "s)"
 	)
-	hook_label.text = "Hook: " + str(equipped_hook["name"])
+	hook_label.text = (
+	"Hook: "
+	+ str(equipped_hook["name"])
+	+ " (+"
+	+ str(equipped_hook["rare_fish_bonus"] * 100.0)
+	+ "% rare weight)"
+	)
 
 #
 func equip_rod(rod: Dictionary) -> void:
