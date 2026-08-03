@@ -114,7 +114,7 @@ var lucky_hook: Dictionary = {
 
 var enchanted_hook: Dictionary = {
 	"name": "Enchanted Hook",
-	"rare_fish_bonus": 50.0
+	"rare_fish_bonus": 0.5
 }
 
 var owned_rods: Array[Dictionary] = []
@@ -126,10 +126,7 @@ var selected_hook_index: int = 0
 
 #============================HELPERS
 func choose_random_fish() -> Dictionary:
-	var total_weight: int = 0
-
-	for fish: Dictionary in fish_list:
-		total_weight += int(get_adjusted_fish_weight(fish))
+	var total_weight: int = get_total_fish_weight()
 	print("Adjusted total weight: " + str(total_weight))
 	var roll: int = randi_range(1, total_weight)
 	var current_weight: int = 0
@@ -235,6 +232,15 @@ func get_adjusted_fish_weight(fish: Dictionary) -> float:
 		return base_weight * (1.0 + get_hook_rare_fish_bonus())
 
 	return base_weight
+
+#
+func get_total_fish_weight() -> int:
+	var total_weight: int = 0
+
+	for fish: Dictionary in fish_list:
+		total_weight += int(get_adjusted_fish_weight(fish))
+
+	return total_weight
 #============================INIT
 
 func _ready() -> void:
