@@ -24,6 +24,8 @@ extends Control
 @onready var switch_bait_button: Button = $EquipmentContainer/SwitchBaitButton
 @onready var switch_hook_button: Button = $EquipmentContainer/SwitchHookButton
 @onready var location_label: Label = $LocationLabel
+@onready var change_location_button: Button = $ChangeLocationButton
+
 
 #============================CONSTs
 const STARTING_SCORE: int = 0
@@ -314,6 +316,7 @@ func _on_action_button_pressed() -> void:
 		switch_rod_button.disabled = false
 		switch_bait_button.disabled = false
 		switch_hook_button.disabled = false
+		change_location_button.disabled = false
 		
 		last_caught_fish = choose_random_fish()
 		total_points = total_points + int(last_caught_fish["points"])
@@ -338,6 +341,7 @@ func _on_action_button_pressed() -> void:
 		switch_rod_button.disabled = false
 		switch_bait_button.disabled = false
 		switch_hook_button.disabled = false
+		change_location_button.disabled = false
 		status_label.text = "Too early! The fish was scared away."
 		action_button.text = "Drop Hook"
 		return
@@ -346,6 +350,7 @@ func _on_action_button_pressed() -> void:
 	switch_rod_button.disabled = true
 	switch_bait_button.disabled = true
 	switch_hook_button.disabled = true
+	change_location_button.disabled = true
 	action_button.text = "Waiting for a fish..."
 	animation_player.play("hook_down")
 	hook_drop_sound.play()
@@ -378,6 +383,7 @@ func _on_catch_timer_timeout() -> void:
 	switch_rod_button.disabled = false
 	switch_bait_button.disabled = false
 	switch_hook_button.disabled = false
+	change_location_button.disabled = false
 	
 	status_label.text = "The fish escaped!"
 	action_button.text = "Drop Hook" 
@@ -393,6 +399,7 @@ func _on_session_timer_timeout() -> void:
 	action_button.disabled = true
 	switch_bait_button.disabled = true
 	switch_hook_button.disabled = true
+	change_location_button.disabled = true
 	status_label.text = "The session is over"
 
 func _on_switch_rod_button_pressed() -> void:
