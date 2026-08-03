@@ -64,6 +64,16 @@ var basic_rod: Dictionary = {
 	"name": "Basic Rod",
 	"catch_time_bonus": 0.0
 }
+
+var basic_bait: Dictionary = {
+	"name": "Basic Bait",
+	"wait_time_reduction": 0.0
+}
+
+var basic_hook: Dictionary = {
+	"name": "Basic Hook",
+	"rare_fish_bonus": 0.0
+}
 #============================HELPERS
 func choose_random_fish() -> Dictionary:
 	var total_weight: int = 0
@@ -107,8 +117,6 @@ func _ready() -> void:
 	randomize()
 	update_equipment_labels()
 	session_timer.start()
-	print(basic_rod["name"])
-	print(basic_rod["catch_time_bonus"])
 
 func _process(delta: float) -> void:
 	var time_left: float = session_timer.time_left
