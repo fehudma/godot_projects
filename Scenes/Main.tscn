@@ -191,6 +191,13 @@ offset_top = 396.0
 offset_right = 40.0
 offset_bottom = 419.0
 
+[node name="ChangeLocationButton" type="Button" parent="." unique_id=463601879]
+layout_mode = 0
+offset_top = 419.0
+offset_right = 8.0
+offset_bottom = 427.0
+text = "Change Location"
+
 [connection signal="pressed" from="VBoxContainer/ActionButton" to="." method="_on_action_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/TestButton" to="." method="_on_test_button_pressed"]
 [connection signal="timeout" from="BiteTimer" to="." method="_on_bite_timer_timeout"]
@@ -199,3 +206,4 @@ offset_bottom = 419.0
 [connection signal="pressed" from="EquipmentContainer/SwitchRodButton" to="." method="_on_switch_rod_button_pressed"]
 [connection signal="pressed" from="EquipmentContainer/SwitchBaitButton" to="." method="_on_switch_bait_button_pressed"]
 [connection signal="pressed" from="EquipmentContainer/SwitchHookButton" to="." method="_on_switch_hook_button_pressed"]
+[connection signal="pressed" from="ChangeLocationButton" to="." method="_on_change_location_button_pressed"]

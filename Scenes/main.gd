@@ -422,6 +422,10 @@ func _on_switch_hook_button_pressed() -> void:
 	equip_hook(owned_hooks[selected_hook_index])
 
 #
+func _on_change_location_button_pressed() -> void:
+	get_tree().change_scene_to_file("res://scenes/location_select.tscn")
+
+#
 func get_min_bite_wait_time() -> float:
 	return max(
 		MIN_BITE_WAIT_TIME - get_bait_wait_time_reduction(),
