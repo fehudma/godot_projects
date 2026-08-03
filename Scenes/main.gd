@@ -20,6 +20,7 @@ extends Control
 @onready var rod_label: Label = $EquipmentContainer/RodLabel
 @onready var bait_label: Label = $EquipmentContainer/BaitLabel
 @onready var hook_label: Label = $EquipmentContainer/HookLabel
+@onready var switch_rod_button: Button = $EquipmentContainer/SwitchRodButton
 
 #============================CONSTs
 const STARTING_SCORE: int = 0
@@ -242,6 +243,7 @@ func _on_action_button_pressed() -> void:
 		return
 	
 	fishing_state = FishingState.WAITING_FOR_BITE
+	switch_rod_button.disabled = true
 	action_button.text = "Waiting for a fish..."
 	animation_player.play("hook_down")
 	hook_drop_sound.play()
