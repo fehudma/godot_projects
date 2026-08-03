@@ -23,7 +23,7 @@ extends Control
 
 #============================CONSTs
 const STARTING_SCORE: int = 0
-
+const BASE_CATCH_TIME: float = 2.0
 #============================VARs
 #States
 enum FishingState {
@@ -66,9 +66,9 @@ var basic_rod: Dictionary = {
 	"catch_time_bonus": 0.0
 }
 
-var test_rod: Dictionary = {
-	"name": "Test Rod",
-	"catch_time_bonus": 6.66
+var sturdy_rod: Dictionary = {
+	"name": "Sturdy Rod",
+	"catch_time_bonus": 1.0
 }
 
 #Vars Baits
@@ -133,7 +133,13 @@ func fade_out_fish_bite_sound() -> void:
 
 #Update equipment labels from variables
 func update_equipment_labels() -> void:
-	rod_label.text = "Rod: " + str(equipped_rod["name"])
+	rod_label.text = (
+	"Rod: "
+	+ str(equipped_rod["name"])
+	+ " (+"
+	+ str(equipped_rod["catch_time_bonus"])
+	+ "s)"
+	)
 	bait_label.text = "Bait: " + str(equipped_bait["name"])
 	hook_label.text = "Hook: " + str(equipped_hook["name"])
 
@@ -158,6 +164,11 @@ func initialize_equipment() -> void:
 	equipped_bait = owned_baits[selected_bait_index]
 	equipped_hook = owned_hooks[selected_hook_index]
 	update_equipment_labels()
+
+
+#
+func get_rod_catch_time_bonus() -> float:
+	return float(equipped_rod["catch_time_bonus"])
 #============================INIT
 
 func _ready() -> void:
@@ -166,7 +177,7 @@ func _ready() -> void:
 	randomize()
 	
 	owned_rods.append(basic_rod)
-	owned_rods.append(test_rod)
+	owned_rods.append(sturdy_rod)
 	owned_baits.append(basic_bait)
 	owned_baits.append(test_bait)
 	owned_hooks.append(basic_hook)
@@ -239,7 +250,7 @@ func _on_bite_timer_timeout() -> void:
 	status_label.text = "A fish is biting! Raise the hook!"
 	action_button.text = "Raise the hook!"
 	
-	catch_timer.start(2.0)
+	catch_timer.start(BASE_CATCH_TIME + get_rod_catch_time_bonus())
 
 
 func _on_catch_timer_timeout() -> void:
@@ -264,13 +275,6 @@ func _on_session_timer_timeout() -> void:
 	fishing_state = FishingState.READY
 	action_button.disabled = true
 	status_label.text = "The session is over"
-
-
-func _on_test_button_pressed() -> void:
-	#print("Session timer started: ", session_timer.time_left)
-	print("***")
-	print(selected_rod_index)
-
 
 func _on_switch_rod_button_pressed() -> void:
 	selected_rod_index += 1
@@ -297,3 +301,9 @@ func _on_switch_hook_button_pressed() -> void:
 		selected_hook_index = 0
 	
 	equip_hook(owned_hooks[selected_hook_index])
+
+#============================TEST BUTTON
+func _on_test_button_pressed() -> void:
+	#print("Session timer started: ", session_timer.time_left)
+	print("***")
+	print(get_rod_catch_time_bonus())
