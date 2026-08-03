@@ -130,7 +130,7 @@ func choose_random_fish() -> Dictionary:
 	var current_weight: int = 0
 
 	for fish: Dictionary in fish_list:
-		current_weight += fish["weight"]
+		current_weight += int(get_adjusted_fish_weight(fish))
 
 		if roll <= current_weight:
 			return fish
