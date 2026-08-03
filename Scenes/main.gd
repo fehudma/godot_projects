@@ -160,6 +160,8 @@ func _ready() -> void:
 	
 	update_equipment_labels()
 	
+	equip_rod(owned_rods[1])
+	
 	session_timer.start()
 
 func _process(delta: float) -> void:
@@ -251,6 +253,3 @@ func _on_test_button_pressed() -> void:
 	#print("Session timer started: ", session_timer.time_left)
 	print("***")
 	print(owned_rods.size())
-	print(owned_rods[1]["name"])
-	print(owned_rods[1]["catch_time_bonus"])
-	
