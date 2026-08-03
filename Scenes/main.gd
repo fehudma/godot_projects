@@ -156,7 +156,7 @@ func equip_hook(hook: Dictionary) -> void:
 func initialize_equipment() -> void:
 	equipped_rod = owned_rods[selected_rod_index]
 	equipped_bait = owned_baits[selected_bait_index]
-	equipped_hook = basic_hook
+	equipped_hook = owned_hooks[selected_hook_index]
 	update_equipment_labels()
 #============================INIT
 
@@ -177,10 +177,6 @@ func _ready() -> void:
 	update_equipment_labels()
 	
 	session_timer.start()
-	
-	print(owned_hooks.size())
-	print(owned_hooks[1]["name"])
-	print(owned_hooks[1]["rare_fish_bonus"])
 
 func _process(delta: float) -> void:
 	var time_left: float = session_timer.time_left
@@ -295,4 +291,9 @@ func _on_switch_bait_button_pressed() -> void:
 
 
 func _on_switch_hook_button_pressed() -> void:
-	pass # Replace with function body.
+	selected_hook_index += 1
+	
+	if selected_hook_index >= owned_hooks.size():
+		selected_hook_index = 0
+	
+	equip_hook(owned_hooks[selected_hook_index])
