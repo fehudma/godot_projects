@@ -44,17 +44,20 @@ var fish_list: Array[Dictionary] = [
 	{
 		"name": "Raw Brilliant Smallfish",
 		"points": 1,
-		"weight": 60
+		"weight": 60,
+		"is_rare": false
 	},
 	{
 		"name": "Raw Longjaw Mud Snapper",
 		"points": 2,
-		"weight": 30
+		"weight": 30,
+		"is_rare": false
 	},
 	{
 		"name": "Raw Slitherskin Mackerel",
 		"points": 5,
-		"weight": 10
+		"weight": 10,
+		"is_rare": true
 	}
 ]
 
@@ -121,8 +124,8 @@ func choose_random_fish() -> Dictionary:
 	var total_weight: int = 0
 
 	for fish: Dictionary in fish_list:
-		total_weight += fish["weight"]
-
+		total_weight += int(get_adjusted_fish_weight(fish))
+	print("Adjusted total weight: " + str(total_weight))
 	var roll: int = randi_range(1, total_weight)
 	var current_weight: int = 0
 
@@ -206,6 +209,21 @@ func get_random_bite_wait_time() -> float:
 		get_min_bite_wait_time(),
 		get_max_bite_wait_time()
 	)
+
+
+#
+func get_hook_rare_fish_bonus() -> float:
+	return float(equipped_hook["rare_fish_bonus"])
+
+
+#
+func get_adjusted_fish_weight(fish: Dictionary) -> float:
+	var base_weight: float = float(fish["weight"])
+
+	if bool(fish["is_rare"]):
+		return base_weight * (1.0 + get_hook_rare_fish_bonus())
+
+	return base_weight
 #============================INIT
 
 func _ready() -> void:
@@ -366,5 +384,10 @@ func get_max_bite_wait_time() -> float:
 func _on_test_button_pressed() -> void:
 	#print("Session timer started: ", session_timer.time_left)
 	print("***")
-	print(get_min_bite_wait_time())
-	print(get_max_bite_wait_time())
+	print(fish_list[0]["is_rare"])
+	print(fish_list[2]["is_rare"])
+	print(get_hook_rare_fish_bonus())
+	print("***")
+	print(get_adjusted_fish_weight(fish_list[0]))
+	print(get_adjusted_fish_weight(fish_list[2]))
+	print("***")
