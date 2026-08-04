@@ -116,6 +116,8 @@ func swap_pieces_in_grid(first_cell: Vector2i, second_cell: Vector2i) -> void:
 
 	first_piece.position = grid_to_pixel(second_cell.x, second_cell.y)
 	second_piece.position = grid_to_pixel(first_cell.x, first_cell.y)
+
+
 #==========================
 #“Where should the center of cell (column, row) be?”
 func _draw() -> void:
@@ -171,18 +173,25 @@ func _unhandled_input(event: InputEvent) -> void:
 					selected_piece.set_selected(true)
 				else:
 					second_cell = clicked_cell
-					var cells_are_adjacent: bool = are_cells_adjacent(
-						selected_cell,
-						second_cell
-					)
-
-					if cells_are_adjacent:
-						swap_pieces_in_grid(selected_cell, second_cell)
 
 					var first_piece: Piece = grid[selected_cell.x][selected_cell.y]
-					first_piece.set_selected(false)
 
-					selected_cell = Vector2i(-1, -1)
+					if second_cell == selected_cell:
+						first_piece.set_selected(false)
+						selected_cell = Vector2i(-1, -1)
+
+					elif are_cells_adjacent(selected_cell, second_cell):
+						swap_pieces_in_grid(selected_cell, second_cell)
+						first_piece.set_selected(false)
+						selected_cell = Vector2i(-1, -1)
+
+					else:
+						first_piece.set_selected(false)
+
+						selected_cell = second_cell
+						var new_selected_piece: Piece = grid[selected_cell.x][selected_cell.y]
+						new_selected_piece.set_selected(true)
+
 					second_cell = Vector2i(-1, -1)
 			
 			

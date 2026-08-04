@@ -20,7 +20,6 @@ func setup(new_letter: String, new_grid_position: Vector2i) -> void:
 #==========================INIT
 func _ready() -> void:
 	set_letter(letter)
-	set_selected(true)
 
 
 func set_letter(new_letter: String) -> void:
