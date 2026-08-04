@@ -23,8 +23,8 @@ const PIECE_LETTERS: Array[String] = [
 var grid: Array[Array] = []
 
 var selected_cell: Vector2i = Vector2i(-1, -1)
-
 var second_cell: Vector2i = Vector2i(-1, -1)
+
 #==========================HELPERS
 #
 func grid_to_pixel(column: int, row: int) -> Vector2:
@@ -97,7 +97,25 @@ func get_valid_starting_letter(grid_position: Vector2i) -> String:
 
 	return letter
 
+#check if the pieces are adjacent
+func are_cells_adjacent(first_cell: Vector2i, second_cell: Vector2i) -> bool:
+	var difference := second_cell - first_cell
+	return abs(difference.x) + abs(difference.y) == 1
 
+#
+#Swap the two pieces in the grid array
+func swap_pieces_in_grid(first_cell: Vector2i, second_cell: Vector2i) -> void:
+	var first_piece: Piece = grid[first_cell.x][first_cell.y]
+	var second_piece: Piece = grid[second_cell.x][second_cell.y]
+
+	grid[first_cell.x][first_cell.y] = second_piece
+	grid[second_cell.x][second_cell.y] = first_piece
+
+	first_piece.set_grid_position(second_cell)
+	second_piece.set_grid_position(first_cell)
+
+	first_piece.position = grid_to_pixel(second_cell.x, second_cell.y)
+	second_piece.position = grid_to_pixel(first_cell.x, first_cell.y)
 #==========================
 #“Where should the center of cell (column, row) be?”
 func _draw() -> void:
@@ -149,10 +167,22 @@ func _unhandled_input(event: InputEvent) -> void:
 			if is_inside_board(clicked_cell):
 				if selected_cell == Vector2i(-1, -1):
 					selected_cell = clicked_cell
-					print("First cell: ", selected_cell)
+					var selected_piece: Piece = grid[selected_cell.x][selected_cell.y]
+					selected_piece.set_selected(true)
 				else:
 					second_cell = clicked_cell
-					print("Second cell: ", second_cell)
+					var cells_are_adjacent: bool = are_cells_adjacent(
+						selected_cell,
+						second_cell
+					)
+
+					if cells_are_adjacent:
+						swap_pieces_in_grid(selected_cell, second_cell)
+
+					var first_piece: Piece = grid[selected_cell.x][selected_cell.y]
+					first_piece.set_selected(false)
 
 					selected_cell = Vector2i(-1, -1)
 					second_cell = Vector2i(-1, -1)
+			
+			

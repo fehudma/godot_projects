@@ -20,8 +20,15 @@ func setup(new_letter: String, new_grid_position: Vector2i) -> void:
 #==========================INIT
 func _ready() -> void:
 	set_letter(letter)
+	set_selected(true)
 
 
 func set_letter(new_letter: String) -> void:
 	letter = new_letter
 	letter_label.text = letter
+
+func set_selected(is_selected: bool) -> void:
+	if is_selected:
+		letter_label.modulate = Color.YELLOW
+	else:
+		letter_label.modulate = Color.WHITE
