@@ -8,13 +8,81 @@ const CELL_SIZE:int = 64
 #
 const PIECE_SCENE: PackedScene = preload("res://scenes/piece.tscn")
 
+
+#
+const PIECE_LETTERS: Array[String] = [
+	"A",
+	"B",
+	"C",
+	"X",
+	"Y"
+]
+
+
+#==========================VARS
+var grid: Array[Array] = []
+
+
 #==========================HELPERS
+#
 func grid_to_pixel(column: int, row: int) -> Vector2:
 	return Vector2(
 		column * CELL_SIZE + CELL_SIZE / 2.0,
 		row * CELL_SIZE + CELL_SIZE / 2.0
 	)
 
+#
+func get_random_letter() -> String:
+	return PIECE_LETTERS.pick_random()
+
+#
+func create_piece(grid_position: Vector2i) -> Piece:
+	var piece: Piece = PIECE_SCENE.instantiate()
+	add_child(piece)
+
+	piece.setup(get_random_letter(), grid_position)
+	piece.position = grid_to_pixel(grid_position.x, grid_position.y)
+
+	grid[grid_position.x][grid_position.y] = piece
+
+	return piece
+
+#
+func create_empty_grid() -> void:
+	grid.clear()
+
+	for column: int in range(COLUMNS):
+		var new_column: Array[Piece] = []
+
+		for row: int in range(ROWS):
+			new_column.append(null)
+
+		grid.append(new_column)
+
+#
+#check the two cells to the left and the two cells above
+func would_create_starting_match(
+	grid_position: Vector2i,
+	letter: String
+) -> bool:
+	var column := grid_position.x
+	var row := grid_position.y
+
+	if column >= 2:
+		var left_piece: Piece = grid[column - 1][row]
+		var far_left_piece: Piece = grid[column - 2][row]
+
+		if left_piece.letter == letter and far_left_piece.letter == letter:
+			return true
+
+	if row >= 2:
+		var above_piece: Piece = grid[column][row - 1]
+		var far_above_piece: Piece = grid[column][row - 2]
+
+		if above_piece.letter == letter and far_above_piece.letter == letter:
+			return true
+
+	return false
 #==========================
 #“Where should the center of cell (column, row) be?”
 func _draw() -> void:
@@ -51,13 +119,9 @@ func is_inside_board(grid_position: Vector2i) -> bool:
 
 #==========================INIT
 func _ready() -> void:
-	var piece: Piece = PIECE_SCENE.instantiate()
-	add_child(piece)
+	create_empty_grid()
 
-	var target_cell := Vector2i(2, 3)
-
-	piece.set_grid_position(target_cell)
-	piece.position = grid_to_pixel(target_cell.x, target_cell.y)
-	piece.set_letter("Y")
-
-	print(piece.grid_position)
+	for column: int in range(COLUMNS):
+		for row: int in range(ROWS):
+			create_piece(Vector2i(column, row))
+	print(would_create_starting_match(Vector2i(2, 0), grid[0][0].letter))

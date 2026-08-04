@@ -9,9 +9,14 @@ var letter: String = "A"
 var grid_position: Vector2i = Vector2i.ZERO
 
 #==========================HELPERS
+#
 func set_grid_position(new_grid_position: Vector2i) -> void:
 	grid_position = new_grid_position
 
+#
+func setup(new_letter: String, new_grid_position: Vector2i) -> void:
+	set_letter(new_letter)
+	set_grid_position(new_grid_position)
 #==========================INIT
 func _ready() -> void:
 	set_letter(letter)
