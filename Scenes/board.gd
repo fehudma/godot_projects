@@ -121,6 +121,10 @@ func swap_pieces_in_grid(first_cell: Vector2i, second_cell: Vector2i) -> void:
 #Detect a horizontal match at one cell
 func has_horizontal_match_at(grid_position: Vector2i) -> bool:
 	var piece: Piece = grid[grid_position.x][grid_position.y]
+
+	if piece == null:
+		return false
+
 	var matching_count: int = 1
 
 	var column: int = grid_position.x - 1
@@ -128,7 +132,7 @@ func has_horizontal_match_at(grid_position: Vector2i) -> bool:
 	while column >= 0:
 		var left_piece: Piece = grid[column][grid_position.y]
 
-		if left_piece.letter != piece.letter:
+		if left_piece == null or left_piece.letter != piece.letter:
 			break
 
 		matching_count += 1
@@ -139,7 +143,7 @@ func has_horizontal_match_at(grid_position: Vector2i) -> bool:
 	while column < COLUMNS:
 		var right_piece: Piece = grid[column][grid_position.y]
 
-		if right_piece.letter != piece.letter:
+		if right_piece == null or right_piece.letter != piece.letter:
 			break
 
 		matching_count += 1
@@ -152,6 +156,10 @@ func has_horizontal_match_at(grid_position: Vector2i) -> bool:
 #Detect a vertical match at one cell
 func has_vertical_match_at(grid_position: Vector2i) -> bool:
 	var piece: Piece = grid[grid_position.x][grid_position.y]
+
+	if piece == null:
+		return false
+
 	var matching_count: int = 1
 
 	var row: int = grid_position.y - 1
@@ -159,7 +167,7 @@ func has_vertical_match_at(grid_position: Vector2i) -> bool:
 	while row >= 0:
 		var above_piece: Piece = grid[grid_position.x][row]
 
-		if above_piece.letter != piece.letter:
+		if above_piece == null or above_piece.letter != piece.letter:
 			break
 
 		matching_count += 1
@@ -170,7 +178,7 @@ func has_vertical_match_at(grid_position: Vector2i) -> bool:
 	while row < ROWS:
 		var below_piece: Piece = grid[grid_position.x][row]
 
-		if below_piece.letter != piece.letter:
+		if below_piece == null or below_piece.letter != piece.letter:
 			break
 
 		matching_count += 1
@@ -190,6 +198,10 @@ func has_match_at(grid_position: Vector2i) -> bool:
 #Collect the horizontal matched pieces
 func get_horizontal_match_at(grid_position: Vector2i) -> Array[Piece]:
 	var center_piece: Piece = grid[grid_position.x][grid_position.y]
+
+	if center_piece == null:
+		return []
+	
 	var matched_pieces: Array[Piece] = [center_piece]
 
 	var column: int = grid_position.x - 1
@@ -197,7 +209,7 @@ func get_horizontal_match_at(grid_position: Vector2i) -> Array[Piece]:
 	while column >= 0:
 		var left_piece: Piece = grid[column][grid_position.y]
 
-		if left_piece.letter != center_piece.letter:
+		if left_piece == null or left_piece.letter != center_piece.letter:
 			break
 
 		matched_pieces.append(left_piece)
@@ -208,7 +220,7 @@ func get_horizontal_match_at(grid_position: Vector2i) -> Array[Piece]:
 	while column < COLUMNS:
 		var right_piece: Piece = grid[column][grid_position.y]
 
-		if right_piece.letter != center_piece.letter:
+		if right_piece == null or right_piece.letter != center_piece.letter:
 			break
 
 		matched_pieces.append(right_piece)
@@ -224,6 +236,9 @@ func get_horizontal_match_at(grid_position: Vector2i) -> Array[Piece]:
 #Collect the vertical matched pieces
 func get_vertical_match_at(grid_position: Vector2i) -> Array[Piece]:
 	var center_piece: Piece = grid[grid_position.x][grid_position.y]
+
+	if center_piece == null:
+		return []
 	var matched_pieces: Array[Piece] = [center_piece]
 
 	var row: int = grid_position.y - 1
@@ -231,9 +246,8 @@ func get_vertical_match_at(grid_position: Vector2i) -> Array[Piece]:
 	while row >= 0:
 		var above_piece: Piece = grid[grid_position.x][row]
 
-		if above_piece.letter != center_piece.letter:
+		if above_piece == null or above_piece.letter != center_piece.letter:
 			break
-
 		matched_pieces.append(above_piece)
 		row -= 1
 
@@ -242,7 +256,7 @@ func get_vertical_match_at(grid_position: Vector2i) -> Array[Piece]:
 	while row < ROWS:
 		var below_piece: Piece = grid[grid_position.x][row]
 
-		if below_piece.letter != center_piece.letter:
+		if below_piece == null or below_piece.letter != center_piece.letter:
 			break
 
 		matched_pieces.append(below_piece)
@@ -289,6 +303,16 @@ func get_matches_from_swap(
 			matched_pieces.append(piece)
 
 	return matched_pieces
+
+
+#
+#Remove matched pieces
+func remove_matched_pieces(matched_pieces: Array[Piece]) -> void:
+	for piece: Piece in matched_pieces:
+		var cell: Vector2i = piece.grid_position
+
+		grid[cell.x][cell.y] = null
+		piece.queue_free()
 #==========================
 #“Where should the center of cell (column, row) be?”
 func _draw() -> void:
@@ -367,7 +391,9 @@ func _unhandled_input(event: InputEvent) -> void:
 								second_cell,
 								selected_cell
 							)
-
+							
+							remove_matched_pieces(matched_pieces)
+						
 							for piece: Piece in get_matches_at(second_cell):
 								if not matched_pieces.has(piece):
 									matched_pieces.append(piece)
