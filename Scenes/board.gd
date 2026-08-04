@@ -4,8 +4,16 @@ extends Node2D
 const COLUMNS: int = 8
 const ROWS: int = 8
 const CELL_SIZE:int = 64
-
+const TEST_CELL := Vector2i(3, 4)
 #==========================HELPERS
+func grid_to_pixel(column: int, row: int) -> Vector2:
+	return Vector2(
+		column * CELL_SIZE + CELL_SIZE / 2.0,
+		row * CELL_SIZE + CELL_SIZE / 2.0
+	)
+
+#==========================
+#“Where should the center of cell (column, row) be?”
 func _draw() -> void:
 	for column: int in range(COLUMNS):
 		for row: int in range(ROWS):
@@ -13,10 +21,34 @@ func _draw() -> void:
 				column * CELL_SIZE,
 				row * CELL_SIZE
 			)
-
+	
 			var cell_rectangle := Rect2(
 				cell_position,
 				Vector2(CELL_SIZE, CELL_SIZE)
 			)
-
+	
 			draw_rect(cell_rectangle, Color.DARK_GRAY, false, 2.0)
+
+	draw_circle(grid_to_pixel(TEST_CELL.x, TEST_CELL.y), 10.0, Color.WHITE)
+#
+func pixel_to_grid(pixel_position: Vector2) -> Vector2i:
+	return Vector2i(
+		floori(pixel_position.x / CELL_SIZE),
+		floori(pixel_position.y / CELL_SIZE)
+	)
+
+#
+func is_inside_board(grid_position: Vector2i) -> bool:
+	return (
+		grid_position.x >= 0
+		and grid_position.x < COLUMNS
+		and grid_position.y >= 0
+		and grid_position.y < ROWS
+	)
+
+#==========================INIT
+func _ready() -> void:
+	print(is_inside_board(Vector2i(0, 0)))
+	print(is_inside_board(Vector2i(7, 7)))
+	print(is_inside_board(Vector2i(8, 7)))
+	print(is_inside_board(Vector2i(-1, 0)))
