@@ -137,3 +137,12 @@ func _ready() -> void:
 	for column: int in range(COLUMNS):
 		for row: int in range(ROWS):
 			create_piece(Vector2i(column, row))
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			var local_mouse_position := to_local(event.position)
+			var clicked_cell := pixel_to_grid(local_mouse_position)
+
+			if is_inside_board(clicked_cell):
+				print(clicked_cell)
