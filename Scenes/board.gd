@@ -40,7 +40,7 @@ func create_piece(grid_position: Vector2i) -> Piece:
 	var piece: Piece = PIECE_SCENE.instantiate()
 	add_child(piece)
 
-	piece.setup(get_random_letter(), grid_position)
+	piece.setup(get_valid_starting_letter(grid_position), grid_position)
 	piece.position = grid_to_pixel(grid_position.x, grid_position.y)
 
 	grid[grid_position.x][grid_position.y] = piece
@@ -83,6 +83,19 @@ func would_create_starting_match(
 			return true
 
 	return false
+
+
+#
+#Choose a letter that avoids starting matches
+func get_valid_starting_letter(grid_position: Vector2i) -> String:
+	var letter := get_random_letter()
+
+	while would_create_starting_match(grid_position, letter):
+		letter = get_random_letter()
+
+	return letter
+
+
 #==========================
 #“Where should the center of cell (column, row) be?”
 func _draw() -> void:
@@ -124,4 +137,3 @@ func _ready() -> void:
 	for column: int in range(COLUMNS):
 		for row: int in range(ROWS):
 			create_piece(Vector2i(column, row))
-	print(would_create_starting_match(Vector2i(2, 0), grid[0][0].letter))
