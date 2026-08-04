@@ -53,5 +53,11 @@ func is_inside_board(grid_position: Vector2i) -> bool:
 func _ready() -> void:
 	var piece: Piece = PIECE_SCENE.instantiate()
 	add_child(piece)
-	piece.position = grid_to_pixel(2, 3)
-	piece.set_letter("A")
+
+	var target_cell := Vector2i(2, 3)
+
+	piece.set_grid_position(target_cell)
+	piece.position = grid_to_pixel(target_cell.x, target_cell.y)
+	piece.set_letter("Y")
+
+	print(piece.grid_position)
