@@ -117,7 +117,160 @@ func swap_pieces_in_grid(first_cell: Vector2i, second_cell: Vector2i) -> void:
 	first_piece.position = grid_to_pixel(second_cell.x, second_cell.y)
 	second_piece.position = grid_to_pixel(first_cell.x, first_cell.y)
 
+#
+#Detect a horizontal match at one cell
+func has_horizontal_match_at(grid_position: Vector2i) -> bool:
+	var piece: Piece = grid[grid_position.x][grid_position.y]
+	var matching_count: int = 1
 
+	var column: int = grid_position.x - 1
+
+	while column >= 0:
+		var left_piece: Piece = grid[column][grid_position.y]
+
+		if left_piece.letter != piece.letter:
+			break
+
+		matching_count += 1
+		column -= 1
+
+	column = grid_position.x + 1
+
+	while column < COLUMNS:
+		var right_piece: Piece = grid[column][grid_position.y]
+
+		if right_piece.letter != piece.letter:
+			break
+
+		matching_count += 1
+		column += 1
+
+	return matching_count >= 3
+
+
+#
+#Detect a vertical match at one cell
+func has_vertical_match_at(grid_position: Vector2i) -> bool:
+	var piece: Piece = grid[grid_position.x][grid_position.y]
+	var matching_count: int = 1
+
+	var row: int = grid_position.y - 1
+
+	while row >= 0:
+		var above_piece: Piece = grid[grid_position.x][row]
+
+		if above_piece.letter != piece.letter:
+			break
+
+		matching_count += 1
+		row -= 1
+
+	row = grid_position.y + 1
+
+	while row < ROWS:
+		var below_piece: Piece = grid[grid_position.x][row]
+
+		if below_piece.letter != piece.letter:
+			break
+
+		matching_count += 1
+		row += 1
+
+	return matching_count >= 3
+
+#
+#Combine horizontal and vertical checks
+func has_match_at(grid_position: Vector2i) -> bool:
+	return (
+		has_horizontal_match_at(grid_position)
+		or has_vertical_match_at(grid_position)
+	)
+
+#
+#Collect the horizontal matched pieces
+func get_horizontal_match_at(grid_position: Vector2i) -> Array[Piece]:
+	var center_piece: Piece = grid[grid_position.x][grid_position.y]
+	var matched_pieces: Array[Piece] = [center_piece]
+
+	var column: int = grid_position.x - 1
+
+	while column >= 0:
+		var left_piece: Piece = grid[column][grid_position.y]
+
+		if left_piece.letter != center_piece.letter:
+			break
+
+		matched_pieces.append(left_piece)
+		column -= 1
+
+	column = grid_position.x + 1
+
+	while column < COLUMNS:
+		var right_piece: Piece = grid[column][grid_position.y]
+
+		if right_piece.letter != center_piece.letter:
+			break
+
+		matched_pieces.append(right_piece)
+		column += 1
+
+	if matched_pieces.size() < 3:
+		matched_pieces.clear()
+
+	return matched_pieces
+
+
+#
+#Collect the vertical matched pieces
+func get_vertical_match_at(grid_position: Vector2i) -> Array[Piece]:
+	var center_piece: Piece = grid[grid_position.x][grid_position.y]
+	var matched_pieces: Array[Piece] = [center_piece]
+
+	var row: int = grid_position.y - 1
+
+	while row >= 0:
+		var above_piece: Piece = grid[grid_position.x][row]
+
+		if above_piece.letter != center_piece.letter:
+			break
+
+		matched_pieces.append(above_piece)
+		row -= 1
+
+	row = grid_position.y + 1
+
+	while row < ROWS:
+		var below_piece: Piece = grid[grid_position.x][row]
+
+		if below_piece.letter != center_piece.letter:
+			break
+
+		matched_pieces.append(below_piece)
+		row += 1
+
+	if matched_pieces.size() < 3:
+		matched_pieces.clear()
+
+	return matched_pieces
+
+
+#
+#Combine horizontal and vertical matched
+func get_matches_at(grid_position: Vector2i) -> Array[Piece]:
+	var matched_pieces: Array[Piece] = []
+
+	var horizontal_match := get_horizontal_match_at(grid_position)
+	var vertical_match := get_vertical_match_at(grid_position)
+
+	for piece: Piece in horizontal_match:
+		if not matched_pieces.has(piece):
+			matched_pieces.append(piece)
+
+	for piece: Piece in vertical_match:
+		if not matched_pieces.has(piece):
+			matched_pieces.append(piece)
+
+	return matched_pieces
 #==========================
 #“Where should the center of cell (column, row) be?”
 func _draw() -> void:
@@ -159,6 +312,8 @@ func _ready() -> void:
 	for column: int in range(COLUMNS):
 		for row: int in range(ROWS):
 			create_piece(Vector2i(column, row))
+
+
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
