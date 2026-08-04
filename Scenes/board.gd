@@ -22,6 +22,8 @@ const PIECE_LETTERS: Array[String] = [
 #==========================VARS
 var grid: Array[Array] = []
 
+var selected_cell: Vector2i = Vector2i(-1, -1)
+
 
 #==========================HELPERS
 #
@@ -145,4 +147,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			var clicked_cell := pixel_to_grid(local_mouse_position)
 
 			if is_inside_board(clicked_cell):
-				print(clicked_cell)
+				selected_cell = clicked_cell
+
+				var selected_piece: Piece = grid[selected_cell.x][selected_cell.y]
+				print("Selected piece: ", selected_piece.letter)
