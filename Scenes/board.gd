@@ -271,6 +271,24 @@ func get_matches_at(grid_position: Vector2i) -> Array[Piece]:
 			matched_pieces.append(piece)
 
 	return matched_pieces
+
+#
+#
+func get_matches_from_swap(
+	first_cell: Vector2i,
+	second_cell: Vector2i
+) -> Array[Piece]:
+	var matched_pieces: Array[Piece] = []
+
+	for piece: Piece in get_matches_at(first_cell):
+		if not matched_pieces.has(piece):
+			matched_pieces.append(piece)
+
+	for piece: Piece in get_matches_at(second_cell):
+		if not matched_pieces.has(piece):
+			matched_pieces.append(piece)
+
+	return matched_pieces
 #==========================
 #“Where should the center of cell (column, row) be?”
 func _draw() -> void:
@@ -337,6 +355,28 @@ func _unhandled_input(event: InputEvent) -> void:
 
 					elif are_cells_adjacent(selected_cell, second_cell):
 						swap_pieces_in_grid(selected_cell, second_cell)
+
+						var first_has_match: bool = has_match_at(second_cell)
+						var second_has_match: bool = has_match_at(selected_cell)
+						var swap_created_match: bool = first_has_match or second_has_match
+
+						if not swap_created_match:
+							swap_pieces_in_grid(second_cell, selected_cell)
+						else:
+							var matched_pieces: Array[Piece] = get_matches_from_swap(
+								second_cell,
+								selected_cell
+							)
+
+							for piece: Piece in get_matches_at(second_cell):
+								if not matched_pieces.has(piece):
+									matched_pieces.append(piece)
+
+							for piece: Piece in get_matches_at(selected_cell):
+								if not matched_pieces.has(piece):
+									matched_pieces.append(piece)
+
+						
 						first_piece.set_selected(false)
 						selected_cell = Vector2i(-1, -1)
 
