@@ -4,7 +4,10 @@ extends Node2D
 const COLUMNS: int = 8
 const ROWS: int = 8
 const CELL_SIZE:int = 64
-const TEST_CELL := Vector2i(3, 4)
+
+#
+const PIECE_SCENE: PackedScene = preload("res://scenes/piece.tscn")
+
 #==========================HELPERS
 func grid_to_pixel(column: int, row: int) -> Vector2:
 	return Vector2(
@@ -29,7 +32,7 @@ func _draw() -> void:
 	
 			draw_rect(cell_rectangle, Color.DARK_GRAY, false, 2.0)
 
-	draw_circle(grid_to_pixel(TEST_CELL.x, TEST_CELL.y), 10.0, Color.WHITE)
+
 #
 func pixel_to_grid(pixel_position: Vector2) -> Vector2i:
 	return Vector2i(
@@ -48,7 +51,7 @@ func is_inside_board(grid_position: Vector2i) -> bool:
 
 #==========================INIT
 func _ready() -> void:
-	print(is_inside_board(Vector2i(0, 0)))
-	print(is_inside_board(Vector2i(7, 7)))
-	print(is_inside_board(Vector2i(8, 7)))
-	print(is_inside_board(Vector2i(-1, 0)))
+	var piece: Piece = PIECE_SCENE.instantiate()
+	add_child(piece)
+	piece.position = grid_to_pixel(2, 3)
+	piece.set_letter("A")

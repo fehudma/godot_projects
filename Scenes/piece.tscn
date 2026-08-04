@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://dc4xwiv50mh5b"]
+
+[ext_resource type="Script" uid="uid://25bu638bkpbe" path="res://Scenes/piece.gd" id="1_jf0mb"]
+
+[node name="Piece" type="Node2D" unique_id=1511509596]
+script = ExtResource("1_jf0mb")
+
+[node name="LetterLabel" type="Label" parent="." unique_id=1078730243]
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
+theme_override_font_sizes/font_size = 40
+text = "X"
+horizontal_alignment = 1
+vertical_alignment = 1
