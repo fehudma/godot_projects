@@ -1,5 +1,9 @@
 [gd_scene format=3 uid="uid://dpxwtpfvflnoi"]
 
+[ext_resource type="Script" uid="uid://brlwk4sxyxotl" path="res://Scenes/board.gd" id="1_ebmjs"]
+
 [node name="Game" type="Node2D" unique_id=2129177519]
 
 [node name="Board" type="Node2D" parent="." unique_id=100781173]
+position = Vector2(64, 64)
+script = ExtResource("1_ebmjs")
