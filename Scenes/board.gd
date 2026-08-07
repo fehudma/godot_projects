@@ -379,6 +379,44 @@ func resolve_cascades() -> void:
 		refill_board()
 
 		new_matches = get_all_matches()
+
+
+#
+#Check whether any valid move exists
+func swap_would_create_match(
+	first_cell: Vector2i,
+	second_cell: Vector2i
+) -> bool:
+	swap_pieces_in_grid(first_cell, second_cell)
+
+	var creates_match: bool = (
+		has_match_at(first_cell)
+		or has_match_at(second_cell)
+	)
+
+	swap_pieces_in_grid(second_cell, first_cell)
+
+	return creates_match
+
+
+#
+#Scan the board for at least one valid move
+func has_possible_move() -> bool:
+	for column: int in range(COLUMNS):
+		for row: int in range(ROWS):
+			var current_cell := Vector2i(column, row)
+
+			var right_cell := Vector2i(column + 1, row)
+			if is_inside_board(right_cell):
+				if swap_would_create_match(current_cell, right_cell):
+					return true
+
+			var below_cell := Vector2i(column, row + 1)
+			if is_inside_board(below_cell):
+				if swap_would_create_match(current_cell, below_cell):
+					return true
+
+	return false
 #==========================OTHER FUNCTIONS
 #“Where should the center of cell (column, row) be?”
 func _draw() -> void:
@@ -413,6 +451,7 @@ func is_inside_board(grid_position: Vector2i) -> bool:
 		and grid_position.y < ROWS
 	)
 
+
 #==========================INIT
 func _ready() -> void:
 	create_empty_grid()
@@ -420,7 +459,8 @@ func _ready() -> void:
 	for column: int in range(COLUMNS):
 		for row: int in range(ROWS):
 			create_piece(Vector2i(column, row))
-
+	
+	print("Possible move exists: ", has_possible_move())
 
 
 func _unhandled_input(event: InputEvent) -> void:
