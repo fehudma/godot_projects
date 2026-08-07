@@ -456,11 +456,10 @@ func is_inside_board(grid_position: Vector2i) -> bool:
 func _ready() -> void:
 	create_empty_grid()
 
+
 	for column: int in range(COLUMNS):
 		for row: int in range(ROWS):
 			create_piece(Vector2i(column, row))
-	
-	print("Possible move exists: ", has_possible_move())
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -511,6 +510,9 @@ func _unhandled_input(event: InputEvent) -> void:
 							collapse_all_columns()
 							refill_board()
 							resolve_cascades()
+							
+							if not has_possible_move():
+								print("Dead board detected")
 
 							input_locked = false
 
