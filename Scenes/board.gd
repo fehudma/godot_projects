@@ -422,10 +422,18 @@ func has_possible_move() -> bool:
 #
 #do a simple reshuffle (if dead board, for example)
 func reshuffle_board() -> void:
-	for column: int in range(COLUMNS):
-		for row: int in range(ROWS):
-			var piece: Piece = grid[column][row]
-			piece.set_letter(get_random_letter())
+	var board_is_valid: bool = false
+
+	while not board_is_valid:
+		for column: int in range(COLUMNS):
+			for row: int in range(ROWS):
+				var piece: Piece = grid[column][row]
+				piece.set_letter(get_random_letter())
+
+		var has_matches: bool = not get_all_matches().is_empty()
+		var has_move: bool = has_possible_move()
+
+		board_is_valid = not has_matches and has_move
 #==========================OTHER FUNCTIONS
 #“Where should the center of cell (column, row) be?”
 func _draw() -> void:
@@ -521,7 +529,8 @@ func _unhandled_input(event: InputEvent) -> void:
 							resolve_cascades()
 							
 							if not has_possible_move():
-								print("Dead board detected")
+								print("Dead board detected. Re-shuffling...")
+								reshuffle_board()
 
 							input_locked = false
 
