@@ -348,6 +348,25 @@ func refill_board() -> void:
 			if grid[column][row] == null:
 				create_piece(Vector2i(column, row))
 
+
+#
+#Find all matches currently on the board
+func get_all_matches() -> Array[Piece]:
+	var matched_pieces: Array[Piece] = []
+
+	for column: int in range(COLUMNS):
+		for row: int in range(ROWS):
+			var cell_matches: Array[Piece] = get_matches_at(
+				Vector2i(column, row)
+			)
+
+			for piece: Piece in cell_matches:
+				if not matched_pieces.has(piece):
+					matched_pieces.append(piece)
+
+	return matched_pieces
+
+
 #==========================OTHER FUNCTIONS
 #“Where should the center of cell (column, row) be?”
 func _draw() -> void:
@@ -434,6 +453,8 @@ func _unhandled_input(event: InputEvent) -> void:
 							remove_matched_pieces(matched_pieces)
 							collapse_all_columns()
 							refill_board()
+							var new_matches: Array[Piece] = get_all_matches()
+							print("Board matches: ", new_matches.size())
 						
 							for piece: Piece in get_matches_at(second_cell):
 								if not matched_pieces.has(piece):
