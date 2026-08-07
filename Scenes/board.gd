@@ -364,6 +364,10 @@ func _unhandled_input(event: InputEvent) -> void:
 			var clicked_cell := pixel_to_grid(local_mouse_position)
 
 			if is_inside_board(clicked_cell):
+				var clicked_piece: Piece = grid[clicked_cell.x][clicked_cell.y]
+
+				if clicked_piece == null:
+					return
 				if selected_cell == Vector2i(-1, -1):
 					selected_cell = clicked_cell
 					var selected_piece: Piece = grid[selected_cell.x][selected_cell.y]
