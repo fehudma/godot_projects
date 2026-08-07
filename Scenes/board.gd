@@ -338,6 +338,16 @@ func collapse_column(column: int) -> void:
 func collapse_all_columns() -> void:
 	for column: int in range(COLUMNS):
 		collapse_column(column)
+
+
+#
+#create new pieces in any null cells left after collapsing
+func refill_board() -> void:
+	for column: int in range(COLUMNS):
+		for row: int in range(ROWS):
+			if grid[column][row] == null:
+				create_piece(Vector2i(column, row))
+
 #==========================OTHER FUNCTIONS
 #“Where should the center of cell (column, row) be?”
 func _draw() -> void:
@@ -423,6 +433,7 @@ func _unhandled_input(event: InputEvent) -> void:
 							
 							remove_matched_pieces(matched_pieces)
 							collapse_all_columns()
+							refill_board()
 						
 							for piece: Piece in get_matches_at(second_cell):
 								if not matched_pieces.has(piece):
