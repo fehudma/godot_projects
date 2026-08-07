@@ -417,6 +417,15 @@ func has_possible_move() -> bool:
 					return true
 
 	return false
+
+
+#
+#do a simple reshuffle (if dead board, for example)
+func reshuffle_board() -> void:
+	for column: int in range(COLUMNS):
+		for row: int in range(ROWS):
+			var piece: Piece = grid[column][row]
+			piece.set_letter(get_random_letter())
 #==========================OTHER FUNCTIONS
 #“Where should the center of cell (column, row) be?”
 func _draw() -> void:
@@ -542,4 +551,5 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _on_test_button_pressed() -> void:
-	collapse_column(0)
+	#collapse_column(0)
+	reshuffle_board()
