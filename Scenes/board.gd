@@ -454,7 +454,13 @@ func _unhandled_input(event: InputEvent) -> void:
 							collapse_all_columns()
 							refill_board()
 							var new_matches: Array[Piece] = get_all_matches()
-							print("Board matches: ", new_matches.size())
+
+							while not new_matches.is_empty():
+								remove_matched_pieces(new_matches)
+								collapse_all_columns()
+								refill_board()
+
+								new_matches = get_all_matches()
 						
 							for piece: Piece in get_matches_at(second_cell):
 								if not matched_pieces.has(piece):
