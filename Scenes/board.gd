@@ -25,6 +25,7 @@ var grid: Array[Array] = []
 var selected_cell: Vector2i = Vector2i(-1, -1)
 var second_cell: Vector2i = Vector2i(-1, -1)
 
+var input_locked: bool = false
 #==========================HELPERS
 #
 func grid_to_pixel(column: int, row: int) -> Vector2:
@@ -423,6 +424,9 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if input_locked:
+		return
+
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			var local_mouse_position := to_local(event.position)
@@ -461,10 +465,14 @@ func _unhandled_input(event: InputEvent) -> void:
 								selected_cell
 							)
 							
+							input_locked = true
+							
 							remove_matched_pieces(matched_pieces)
 							collapse_all_columns()
 							refill_board()
 							resolve_cascades()
+
+							input_locked = false
 
 
 							for piece: Piece in get_matches_at(second_cell):
