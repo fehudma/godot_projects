@@ -331,6 +331,13 @@ func collapse_column(column: int) -> void:
 					piece_above.position = grid_to_pixel(column, row)
 
 					break
+
+
+#
+#Collapse every column
+func collapse_all_columns() -> void:
+	for column: int in range(COLUMNS):
+		collapse_column(column)
 #==========================OTHER FUNCTIONS
 #“Where should the center of cell (column, row) be?”
 func _draw() -> void:
@@ -415,6 +422,7 @@ func _unhandled_input(event: InputEvent) -> void:
 							)
 							
 							remove_matched_pieces(matched_pieces)
+							collapse_all_columns()
 						
 							for piece: Piece in get_matches_at(second_cell):
 								if not matched_pieces.has(piece):
