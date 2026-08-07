@@ -367,6 +367,17 @@ func get_all_matches() -> Array[Piece]:
 	return matched_pieces
 
 
+#
+#resolve matches (repeatedly if need be)
+func resolve_cascades() -> void:
+	var new_matches: Array[Piece] = get_all_matches()
+
+	while not new_matches.is_empty():
+		remove_matched_pieces(new_matches)
+		collapse_all_columns()
+		refill_board()
+
+		new_matches = get_all_matches()
 #==========================OTHER FUNCTIONS
 #“Where should the center of cell (column, row) be?”
 func _draw() -> void:
@@ -453,15 +464,9 @@ func _unhandled_input(event: InputEvent) -> void:
 							remove_matched_pieces(matched_pieces)
 							collapse_all_columns()
 							refill_board()
-							var new_matches: Array[Piece] = get_all_matches()
+							resolve_cascades()
 
-							while not new_matches.is_empty():
-								remove_matched_pieces(new_matches)
-								collapse_all_columns()
-								refill_board()
 
-								new_matches = get_all_matches()
-						
 							for piece: Piece in get_matches_at(second_cell):
 								if not matched_pieces.has(piece):
 									matched_pieces.append(piece)
