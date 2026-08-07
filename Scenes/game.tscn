@@ -7,3 +7,10 @@
 [node name="Board" type="Node2D" parent="." unique_id=100781173]
 position = Vector2(64, 64)
 script = ExtResource("1_ebmjs")
+
+[node name="TestButton" type="Button" parent="." unique_id=296336580]
+offset_right = 8.0
+offset_bottom = 8.0
+text = "Test"
+
+[connection signal="pressed" from="TestButton" to="Board" method="_on_test_button_pressed"]

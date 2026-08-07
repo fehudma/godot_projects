@@ -313,7 +313,25 @@ func remove_matched_pieces(matched_pieces: Array[Piece]) -> void:
 
 		grid[cell.x][cell.y] = null
 		piece.queue_free()
-#==========================
+
+
+#
+#Collapse one column after removals
+func collapse_column(column: int) -> void:
+	for row: int in range(ROWS - 1, -1, -1):
+		if grid[column][row] == null:
+			for search_row: int in range(row - 1, -1, -1):
+				var piece_above: Piece = grid[column][search_row]
+
+				if piece_above != null:
+					grid[column][row] = piece_above
+					grid[column][search_row] = null
+
+					piece_above.set_grid_position(Vector2i(column, row))
+					piece_above.position = grid_to_pixel(column, row)
+
+					break
+#==========================OTHER FUNCTIONS
 #“Where should the center of cell (column, row) be?”
 func _draw() -> void:
 	for column: int in range(COLUMNS):
@@ -420,3 +438,7 @@ func _unhandled_input(event: InputEvent) -> void:
 					second_cell = Vector2i(-1, -1)
 			
 			
+
+
+func _on_test_button_pressed() -> void:
+	collapse_column(0)
