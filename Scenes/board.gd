@@ -7,7 +7,7 @@ const CELL_SIZE:int = 64
 
 
 #
-const PIECE_SCENE: PackedScene = preload("res://scenes/piece.tscn")
+const PIECE_SCENE: PackedScene = preload("res://Scenes/piece.tscn")
 
 
 #
@@ -27,14 +27,16 @@ const MAX_BREAKERS: int = 5
 
 const SAVE_FILE_PATH: String = "user://save_data.json"
 #==========================onreadies
-@onready var breaker_button: Button = $"../BreakerButton"
+
 @onready var score_label: Label = $"../ScoreLabel"
 @onready var breaker_progress_label: Label = $"../BreakerProgressLabel"
 @onready var combo_label: Label = $"../ComboLabel"
-@onready var hint_button: Button = $"../HintButton"
+
 @onready var restart_button: Button = $"../RestartButton"
 @onready var status_label: Label = $"../StatusLabel"
 
+@onready var hint_button: Button = $"../Control/HintButton"
+@onready var breaker_button: Button = $"../Control/BreakerButton"
 
 #==========================VARS
 var grid: Array[Array] = []

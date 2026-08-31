@@ -14,18 +14,6 @@ offset_right = 8.0
 offset_bottom = 8.0
 text = "Test"
 
-[node name="HintButton" type="Button" parent="." unique_id=1440403269]
-offset_left = 64.0
-offset_right = 105.0
-offset_bottom = 31.0
-text = "Hint"
-
-[node name="BreakerButton" type="Button" parent="." unique_id=476545329]
-offset_left = 152.0
-offset_right = 222.0
-offset_bottom = 31.0
-text = "Breaker"
-
 [node name="ScoreLabel" type="Label" parent="." unique_id=1061135490]
 offset_left = 64.0
 offset_top = 41.0
@@ -34,16 +22,16 @@ offset_bottom = 64.0
 text = "Score: 0"
 
 [node name="BreakerProgressLabel" type="Label" parent="." unique_id=371216888]
-offset_left = 156.0
-offset_top = 41.0
-offset_right = 340.0
-offset_bottom = 64.0
+offset_left = 622.0
+offset_top = 386.0
+offset_right = 806.0
+offset_bottom = 409.0
 text = "Breaker progress: 0 / 30"
 
 [node name="ComboLabel" type="Label" parent="." unique_id=1154950233]
-offset_left = 374.0
+offset_left = 492.0
 offset_top = 40.0
-offset_right = 456.0
+offset_right = 574.0
 offset_bottom = 63.0
 text = "Combo: x1"
 
@@ -60,7 +48,31 @@ offset_top = 575.0
 offset_right = 155.0
 offset_bottom = 598.0
 
+[node name="Control" type="Control" parent="." unique_id=875048242]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="HintButton" type="Button" parent="Control" unique_id=1440403269]
+layout_mode = 0
+offset_left = 620.0
+offset_top = 71.0
+offset_right = 920.0
+offset_bottom = 206.0
+theme_override_font_sizes/font_size = 55
+text = "Hint"
+
+[node name="BreakerButton" type="Button" parent="Control" unique_id=476545329]
+layout_mode = 0
+offset_left = 619.0
+offset_top = 248.0
+offset_right = 872.0
+offset_bottom = 383.0
+theme_override_font_sizes/font_size = 55
+text = "Breaker (0)"
+
 [connection signal="pressed" from="TestButton" to="Board" method="_on_test_button_pressed"]
-[connection signal="pressed" from="HintButton" to="Board" method="_on_hint_button_pressed"]
-[connection signal="pressed" from="BreakerButton" to="Board" method="_on_breaker_button_pressed"]
 [connection signal="pressed" from="RestartButton" to="Board" method="_on_restart_button_pressed"]
+[connection signal="pressed" from="Control/HintButton" to="Board" method="_on_hint_button_pressed"]
+[connection signal="pressed" from="Control/BreakerButton" to="Board" method="_on_breaker_button_pressed"]
