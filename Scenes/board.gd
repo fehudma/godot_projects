@@ -1,7 +1,7 @@
 extends Node2D
 
 #==========================CONST
-const COLUMNS: int = 4
+const COLUMNS: int = 6
 const ROWS: int = 4
 
 const CELL_WIDTH: int = 128
@@ -31,12 +31,10 @@ const SAVE_FILE_PATH: String = "user://save_data.json"
 #==========================onreadies
 
 @onready var score_label: Label = $"../ScoreLabel"
-@onready var breaker_progress_label: Label = $"../BreakerProgressLabel"
+@onready var breaker_progress_label: Label = $"../Control/BreakerProgressLabel"
 @onready var combo_label: Label = $"../ComboLabel"
-
 @onready var restart_button: Button = $"../RestartButton"
 @onready var status_label: Label = $"../StatusLabel"
-
 @onready var hint_button: Button = $"../Control/HintButton"
 @onready var breaker_button: Button = $"../Control/BreakerButton"
 
