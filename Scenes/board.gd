@@ -32,6 +32,7 @@ const MAX_BREAKERS: int = 5
 @onready var breaker_progress_label: Label = $"../BreakerProgressLabel"
 @onready var combo_label: Label = $"../ComboLabel"
 @onready var hint_button: Button = $"../HintButton"
+@onready var restart_button: Button = $"../RestartButton"
 
 
 #==========================VARS
@@ -602,6 +603,7 @@ func ensure_playable_board() -> void:
 func update_ui_lock_state() -> void:
 	hint_button.disabled = input_locked
 	breaker_button.disabled = input_locked or breakers_remaining <= 0
+	restart_button.disabled = input_locked
 #==========================OTHER FUNCTIONS
 #“Where should the center of cell (column, row) be?”
 func _draw() -> void:
