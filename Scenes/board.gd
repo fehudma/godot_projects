@@ -434,6 +434,25 @@ func reshuffle_board() -> void:
 		var has_move: bool = has_possible_move()
 
 		board_is_valid = not has_matches and has_move
+
+#Find one possible move
+func find_possible_move() -> Array[Vector2i]:
+	for column: int in range(COLUMNS):
+		for row: int in range(ROWS):
+			var current_cell := Vector2i(column, row)
+
+			var right_cell := Vector2i(column + 1, row)
+			if is_inside_board(right_cell):
+				if swap_would_create_match(current_cell, right_cell):
+					return [current_cell, right_cell]
+
+			var below_cell := Vector2i(column, row + 1)
+			if is_inside_board(below_cell):
+				if swap_would_create_match(current_cell, below_cell):
+					return [current_cell, below_cell]
+
+	return []
+
 #==========================OTHER FUNCTIONS
 #“Where should the center of cell (column, row) be?”
 func _draw() -> void:
@@ -557,7 +576,8 @@ func _unhandled_input(event: InputEvent) -> void:
 					second_cell = Vector2i(-1, -1)
 
 func _on_hint_button_pressed() -> void:
-	print("Hint requested")
+	var possible_move: Array[Vector2i] = find_possible_move()
+	print(possible_move)
 
 func _on_test_button_pressed() -> void:
 	#collapse_column(0)
