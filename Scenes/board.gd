@@ -34,6 +34,7 @@ var input_locked: bool = false
 
 var breaker_active: bool = false
 
+var score: int = 0
 #==========================HELPERS
 #
 func grid_to_pixel(column: int, row: int) -> Vector2:
@@ -317,6 +318,9 @@ func get_matches_from_swap(
 #
 #Remove matched pieces
 func remove_matched_pieces(matched_pieces: Array[Piece]) -> void:
+	score += matched_pieces.size()
+	print("Score: ", score)
+	
 	for piece: Piece in matched_pieces:
 		var cell: Vector2i = piece.grid_position
 
