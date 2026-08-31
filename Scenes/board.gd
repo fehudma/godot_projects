@@ -1,9 +1,11 @@
 extends Node2D
 
 #==========================CONST
-const COLUMNS: int = 8
-const ROWS: int = 8
-const CELL_SIZE:int = 64
+const COLUMNS: int = 4
+const ROWS: int = 4
+
+const CELL_WIDTH: int = 128
+const CELL_HEIGHT: int = 128
 
 
 #
@@ -56,8 +58,8 @@ var pieces_cleared_toward_breaker: int = 0
 #
 func grid_to_pixel(column: int, row: int) -> Vector2:
 	return Vector2(
-		column * CELL_SIZE + CELL_SIZE / 2.0,
-		row * CELL_SIZE + CELL_SIZE / 2.0
+		column * CELL_WIDTH + CELL_WIDTH / 2.0,
+		row * CELL_HEIGHT + CELL_HEIGHT / 2.0
 	)
 
 #
@@ -398,7 +400,7 @@ func refill_board() -> void:
 			if grid[column][row] == null:
 				var new_piece: Piece = create_piece(Vector2i(column, row))
 
-				new_piece.position.y -= CELL_SIZE
+				new_piece.position.y -= CELL_HEIGHT
 
 				var tween := create_tween()
 				tween.tween_property(
@@ -717,23 +719,24 @@ func _draw() -> void:
 	for column: int in range(COLUMNS):
 		for row: int in range(ROWS):
 			var cell_position := Vector2(
-				column * CELL_SIZE,
-				row * CELL_SIZE
+				column * CELL_WIDTH,
+				row * CELL_HEIGHT
 			)
-	
+
 			var cell_rectangle := Rect2(
 				cell_position,
-				Vector2(CELL_SIZE, CELL_SIZE)
+				Vector2(CELL_WIDTH, CELL_HEIGHT)
 			)
-	
+
+
 			draw_rect(cell_rectangle, Color.DARK_GRAY, false, 2.0)
 
 
 #
 func pixel_to_grid(pixel_position: Vector2) -> Vector2i:
 	return Vector2i(
-		floori(pixel_position.x / CELL_SIZE),
-		floori(pixel_position.y / CELL_SIZE)
+		floori(pixel_position.x / CELL_WIDTH),
+		floori(pixel_position.y / CELL_HEIGHT)
 	)
 
 #
@@ -881,16 +884,19 @@ func handle_board_press(global_position: Vector2) -> void:
 
 		second_cell = Vector2i(-1, -1)
 
-func _unhandled_input(event: InputEvent) -> void:
+func _input(event: InputEvent) -> void:
 	if input_locked:
 		return
 
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+	if event is InputEventScreenTouch:
+		if event.pressed:
 			handle_board_press(event.position)
 
-	elif event is InputEventScreenTouch:
-		if event.pressed:
+	elif event is InputEventMouseButton:
+		if event.device == InputEvent.DEVICE_ID_EMULATION:
+			return
+
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			handle_board_press(event.position)
 
 
