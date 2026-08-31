@@ -436,6 +436,8 @@ func resolve_cascades() -> void:
 		cascade_multiplier += CASCADE_MULTIPLIER_STEP
 		new_matches = get_all_matches()
 
+	update_combo_display(1)
+
 
 #
 #Check whether any valid move exists
