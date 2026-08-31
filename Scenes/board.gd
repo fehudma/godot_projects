@@ -575,6 +575,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 					second_cell = Vector2i(-1, -1)
 
+
 func _on_hint_button_pressed() -> void:
 	var possible_move: Array[Vector2i] = find_possible_move()
 
@@ -586,6 +587,11 @@ func _on_hint_button_pressed() -> void:
 
 	first_piece.set_selected(true)
 	second_piece.set_selected(true)
+
+	await get_tree().create_timer(1.0).timeout
+
+	first_piece.set_selected(false)
+	second_piece.set_selected(false)
 
 func _on_test_button_pressed() -> void:
 	#collapse_column(0)
