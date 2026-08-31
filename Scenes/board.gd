@@ -125,8 +125,21 @@ func swap_pieces_in_grid(first_cell: Vector2i, second_cell: Vector2i) -> void:
 	first_piece.set_grid_position(second_cell)
 	second_piece.set_grid_position(first_cell)
 
-	first_piece.position = grid_to_pixel(second_cell.x, second_cell.y)
-	second_piece.position = grid_to_pixel(first_cell.x, first_cell.y)
+	var tween := create_tween()
+
+	tween.parallel().tween_property(
+		first_piece,
+		"position",
+		grid_to_pixel(second_cell.x, second_cell.y),
+		0.2
+	)
+
+	tween.parallel().tween_property(
+		second_piece,
+		"position",
+		grid_to_pixel(first_cell.x, first_cell.y),
+		0.2
+	)
 
 #
 #Detect a horizontal match at one cell
