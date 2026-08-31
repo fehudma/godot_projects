@@ -9,11 +9,11 @@ size = Vector2(64, 64)
 script = ExtResource("1_jf0mb")
 
 [node name="LetterLabel" type="Label" parent="." unique_id=1078730243]
-offset_left = -32.0
+offset_left = -64.0
 offset_top = -64.0
-offset_right = 32.0
+offset_right = 64.0
 offset_bottom = 64.0
-theme_override_font_sizes/font_size = 64
+theme_override_font_sizes/font_size = 80
 text = "C"
 horizontal_alignment = 1
 vertical_alignment = 1
