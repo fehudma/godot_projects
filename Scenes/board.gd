@@ -68,6 +68,7 @@ func create_piece(grid_position: Vector2i) -> Piece:
 	add_child(piece)
 
 	piece.setup(get_valid_starting_letter(grid_position), grid_position)
+	piece.set_breaker_targetable(breaker_active)
 	piece.position = grid_to_pixel(grid_position.x, grid_position.y)
 
 	grid[grid_position.x][grid_position.y] = piece
@@ -616,6 +617,15 @@ func update_ui_lock_state() -> void:
 	hint_button.disabled = input_locked
 	breaker_button.disabled = input_locked or breakers_remaining <= 0
 	restart_button.disabled = input_locked
+
+#Enable Breaker targeting state for all pieces
+func set_breaker_targeting_for_all_pieces(is_targetable: bool) -> void:
+	for column: int in range(COLUMNS):
+		for row: int in range(ROWS):
+			var piece: Piece = grid[column][row]
+
+			if piece != null:
+				piece.set_breaker_targetable(is_targetable)
 #==========================OTHER FUNCTIONS
 #“Where should the center of cell (column, row) be?”
 func _draw() -> void:
@@ -689,6 +699,9 @@ func _unhandled_input(event: InputEvent) -> void:
 					var matched_pieces: Array[Piece] = [clicked_piece]
 					breakers_remaining -= 1
 
+					breaker_active = false
+					set_breaker_targeting_for_all_pieces(false)
+
 					update_breaker_button_text()
 					update_breaker_progress_display()
 					update_ui_lock_state()
@@ -701,6 +714,7 @@ func _unhandled_input(event: InputEvent) -> void:
 					await ensure_playable_board()
 
 					breaker_active = false
+					set_breaker_targeting_for_all_pieces(false)
 					update_breaker_button_text()
 					
 					input_locked = false
@@ -824,6 +838,10 @@ func _on_breaker_button_pressed() -> void:
 		selected_cell = Vector2i(-1, -1)
 
 	breaker_active = not breaker_active
+	
+	set_breaker_targeting_for_all_pieces(breaker_active)
+	update_breaker_button_text()
+	update_ui_lock_state()
 	
 	if breaker_active:
 		update_breaker_button_text()

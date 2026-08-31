@@ -8,6 +8,7 @@ class_name Piece
 var letter: String = "A"
 var grid_position: Vector2i = Vector2i.ZERO
 var is_selected: bool = false
+var breaker_targetable: bool = false
 
 #==========================HELPERS
 #
@@ -39,6 +40,10 @@ func play_remove_animation() -> void:
 
 	await tween.finished
 	queue_free()
+
+func set_breaker_targetable(is_targetable: bool) -> void:
+	breaker_targetable = is_targetable
+
 #==========================INIT
 func _ready() -> void:
 	set_letter(letter)
@@ -57,7 +62,12 @@ func set_selected(selected: bool) -> void:
 
 
 func _on_area_2d_mouse_entered() -> void:
-	if not is_selected:
+	if is_selected:
+		return
+
+	if breaker_targetable:
+		letter_label.modulate = Color.ORANGE
+	else:
 		letter_label.modulate = Color.LIGHT_GRAY
 
 
