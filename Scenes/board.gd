@@ -31,6 +31,7 @@ const MAX_BREAKERS: int = 5
 @onready var score_label: Label = $"../ScoreLabel"
 @onready var breaker_progress_label: Label = $"../BreakerProgressLabel"
 @onready var combo_label: Label = $"../ComboLabel"
+@onready var hint_button: Button = $"../HintButton"
 
 
 #==========================VARS
@@ -596,6 +597,11 @@ func update_combo_display(multiplier: int) -> void:
 func ensure_playable_board() -> void:
 	if not has_possible_move():
 		reshuffle_board()
+
+#Disable Hint while the board is busy
+func update_ui_lock_state() -> void:
+	hint_button.disabled = input_locked
+	breaker_button.disabled = input_locked or breakers_remaining <= 0
 #==========================OTHER FUNCTIONS
 #“Where should the center of cell (column, row) be?”
 func _draw() -> void:
@@ -663,6 +669,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 				if breaker_active:
 					input_locked = true
+					update_ui_lock_state()
 
 					var matched_pieces: Array[Piece] = [clicked_piece]
 					breakers_remaining -= 1
@@ -680,6 +687,7 @@ func _unhandled_input(event: InputEvent) -> void:
 					breaker_active = false
 					update_breaker_button_text()
 					input_locked = false
+					update_ui_lock_state()
 					return
 
 				if selected_cell == Vector2i(-1, -1):
@@ -717,6 +725,7 @@ func _unhandled_input(event: InputEvent) -> void:
 							)
 
 							input_locked = true
+							update_ui_lock_state()
 
 							add_score_for_match(matched_pieces)
 							remove_matched_pieces(matched_pieces)
@@ -727,6 +736,7 @@ func _unhandled_input(event: InputEvent) -> void:
 							ensure_playable_board()
 
 							input_locked = false
+							update_ui_lock_state()
 
 						selected_cell = Vector2i(-1, -1)
 
@@ -767,6 +777,7 @@ func _on_hint_button_pressed() -> void:
 	var second_piece: Piece = grid[possible_move[1].x][possible_move[1].y]
 
 	input_locked = true
+	update_ui_lock_state()
 
 	first_piece.set_selected(true)
 	second_piece.set_selected(true)
@@ -777,6 +788,7 @@ func _on_hint_button_pressed() -> void:
 	second_piece.set_selected(false)
 
 	input_locked = false
+	update_ui_lock_state()
 
 
 func _on_breaker_button_pressed() -> void:
