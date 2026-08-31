@@ -589,6 +589,11 @@ func update_breaker_progress_display() -> void:
 #Show the current cascade multiplier briefly
 func update_combo_display(multiplier: int) -> void:
 	combo_label.text = "Combo: x" + str(multiplier)
+
+#dead-board check
+func ensure_playable_board() -> void:
+	if not has_possible_move():
+		reshuffle_board()
 #==========================OTHER FUNCTIONS
 #“Where should the center of cell (column, row) be?”
 func _draw() -> void:
@@ -632,8 +637,7 @@ func _ready() -> void:
 		for row: int in range(ROWS):
 			create_piece(Vector2i(column, row))
 
-	if not has_possible_move():
-		reshuffle_board()
+	ensure_playable_board()
 
 	update_breaker_button_text()
 	update_breaker_progress_display()
@@ -669,8 +673,7 @@ func _unhandled_input(event: InputEvent) -> void:
 					refill_board()
 					await resolve_cascades()
 
-					if not has_possible_move():
-						reshuffle_board()
+					ensure_playable_board()
 
 					breaker_active = false
 					update_breaker_button_text()
@@ -719,8 +722,7 @@ func _unhandled_input(event: InputEvent) -> void:
 							refill_board()
 							await resolve_cascades()
 
-							if not has_possible_move():
-								reshuffle_board()
+							ensure_playable_board()
 
 							input_locked = false
 
