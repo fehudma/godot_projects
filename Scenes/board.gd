@@ -517,10 +517,20 @@ func _unhandled_input(event: InputEvent) -> void:
 					return
 				
 				if breaker_active:
+					input_locked = true
+
 					var matched_pieces: Array[Piece] = [clicked_piece]
 					remove_matched_pieces(matched_pieces)
 
+					collapse_all_columns()
+					refill_board()
+					resolve_cascades()
+
+					if not has_possible_move():
+						reshuffle_board()
+
 					breaker_active = false
+					input_locked = false
 					return
 				
 				if selected_cell == Vector2i(-1, -1):
@@ -625,6 +635,14 @@ func _on_breaker_button_pressed() -> void:
 	
 	if input_locked:
 		return
+
+	if selected_cell != Vector2i(-1, -1):
+		var selected_piece: Piece = grid[selected_cell.x][selected_cell.y]
+
+		if selected_piece != null:
+			selected_piece.set_selected(false)
+
+		selected_cell = Vector2i(-1, -1)
 
 	breaker_active = true
 
