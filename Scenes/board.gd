@@ -626,6 +626,27 @@ func set_breaker_targeting_for_all_pieces(is_targetable: bool) -> void:
 
 			if piece != null:
 				piece.set_breaker_targetable(is_targetable)
+
+#a simple board reset helper for future reuse
+func clear_board() -> void:
+	for column: int in range(COLUMNS):
+		for row: int in range(ROWS):
+			var piece: Piece = grid[column][row]
+
+			if piece != null:
+				piece.queue_free()
+
+			grid[column][row] = null
+
+#a reusable board-generation helper
+func generate_board() -> void:
+	create_empty_grid()
+
+	for column: int in range(COLUMNS):
+		for row: int in range(ROWS):
+			create_piece(Vector2i(column, row))
+
+	await ensure_playable_board()
 #==========================OTHER FUNCTIONS
 #“Where should the center of cell (column, row) be?”
 func _draw() -> void:
@@ -663,12 +684,7 @@ func is_inside_board(grid_position: Vector2i) -> bool:
 
 #==========================INIT
 func _ready() -> void:
-	create_empty_grid()
-
-	for column: int in range(COLUMNS):
-		for row: int in range(ROWS):
-			create_piece(Vector2i(column, row))
-
+	await generate_board()
 	await ensure_playable_board()
 
 	update_breaker_button_text()
