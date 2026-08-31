@@ -20,9 +20,12 @@ const PIECE_LETTERS: Array[String] = [
 ]
 
 const POINTS_PER_PIECE: int = 10
+const CASCADE_MULTIPLIER_STEP: int = 1
 
-const BREAKER_PIECES_REQUIRED: int = 6
+const BREAKER_PIECES_REQUIRED: int = 30
 const MAX_BREAKERS: int = 5
+
+
 #==========================onreadies
 @onready var breaker_button: Button = $"../BreakerButton"
 @onready var score_label: Label = $"../ScoreLabel"
@@ -507,8 +510,8 @@ func update_score_display() -> void:
 	score_label.text = "Score: " + str(score)
 
 #Give points only for actual matches
-func add_score_for_match(matched_pieces: Array[Piece]) -> void:
-	score += matched_pieces.size() * POINTS_PER_PIECE
+func add_score_for_match(matched_pieces: Array[Piece], multiplier: int = 1) -> void:
+	score += matched_pieces.size() * POINTS_PER_PIECE * multiplier
 	pieces_cleared_toward_breaker += matched_pieces.size()
 
 	check_breaker_reward()
