@@ -755,114 +755,141 @@ func _ready() -> void:
 	update_combo_display(1)
 	update_ui_lock_state()
 
+func handle_board_press(global_position: Vector2) -> void:
+	var local_position := to_local(global_position)
+	var clicked_cell := pixel_to_grid(local_position)
+
+	if not is_inside_board(clicked_cell):
+		return
+
+	var clicked_piece: Piece = grid[clicked_cell.x][clicked_cell.y]
+
+	if clicked_piece == null:
+		return
+
+	if breaker_active:
+		input_locked = true
+		update_ui_lock_state()
+
+		var matched_pieces: Array[Piece] = [clicked_piece]
+		breakers_remaining -= 1
+
+		breaker_active = false
+		set_breaker_targeting_for_all_pieces(false)
+
+		update_breaker_button_text()
+		update_breaker_progress_display()
+		save_progress()
+		update_ui_lock_state()
+
+		remove_matched_pieces(matched_pieces)
+		collapse_all_columns()
+		refill_board()
+		await resolve_cascades()
+
+		await ensure_playable_board()
+
+		breaker_active = false
+		set_breaker_targeting_for_all_pieces(false)
+		update_breaker_button_text()
+
+		input_locked = false
+		update_ui_lock_state()
+		return
+
+	if selected_cell == Vector2i(-1, -1):
+		selected_cell = clicked_cell
+
+		var selected_piece: Piece = grid[selected_cell.x][selected_cell.y]
+		selected_piece.set_selected(true)
+
+	else:
+		second_cell = clicked_cell
+
+		var first_piece: Piece = grid[selected_cell.x][selected_cell.y]
+
+		if second_cell == selected_cell:
+			first_piece.set_selected(false)
+			selected_cell = Vector2i(-1, -1)
+
+		elif are_cells_adjacent(selected_cell, second_cell):
+			swap_pieces_in_grid(selected_cell, second_cell)
+
+			var first_has_match: bool = has_match_at(second_cell)
+			var second_has_match: bool = has_match_at(selected_cell)
+			var swap_created_match: bool = first_has_match or second_has_match
+
+			first_piece.set_selected(false)
+
+			if not swap_created_match:
+				input_locked = true
+				update_ui_lock_state()
+
+				status_label.text = "No match"
+				swap_pieces_in_grid(second_cell, selected_cell)
+
+				await get_tree().create_timer(0.5).timeout
+
+				if status_label.text == "No match":
+					status_label.text = ""
+
+				input_locked = false
+				update_ui_lock_state()
+
+			else:
+				var matched_pieces: Array[Piece] = get_matches_from_swap(
+					second_cell,
+					selected_cell
+				)
+
+				input_locked = true
+				update_ui_lock_state()
+
+				status_label.text = "Match!"
+
+				add_score_for_match(matched_pieces)
+				save_progress()
+
+				remove_matched_pieces(matched_pieces)
+				collapse_all_columns()
+				refill_board()
+
+				await resolve_cascades()
+				await ensure_playable_board()
+
+				if status_label.text == "Match!":
+					await get_tree().create_timer(0.6).timeout
+					status_label.text = ""
+
+				input_locked = false
+				update_ui_lock_state()
+
+			selected_cell = Vector2i(-1, -1)
+
+		else:
+			first_piece.set_selected(false)
+
+			selected_cell = second_cell
+
+			var new_selected_piece: Piece = grid[
+				selected_cell.x
+			][selected_cell.y]
+
+			new_selected_piece.set_selected(true)
+
+		second_cell = Vector2i(-1, -1)
+
 func _unhandled_input(event: InputEvent) -> void:
 	if input_locked:
 		return
 
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			var local_mouse_position := to_local(event.position)
-			var clicked_cell := pixel_to_grid(local_mouse_position)
+			handle_board_press(event.position)
 
-			if is_inside_board(clicked_cell):
-				var clicked_piece: Piece = grid[clicked_cell.x][clicked_cell.y]
-
-				if clicked_piece == null:
-					return
-
-				if breaker_active:
-					input_locked = true
-					update_ui_lock_state()
-
-					var matched_pieces: Array[Piece] = [clicked_piece]
-					breakers_remaining -= 1
-
-					breaker_active = false
-					set_breaker_targeting_for_all_pieces(false)
-
-					update_breaker_button_text()
-					update_breaker_progress_display()
-					save_progress()
-					update_ui_lock_state()
-
-					remove_matched_pieces(matched_pieces)
-					collapse_all_columns()
-					refill_board()
-					await resolve_cascades()
-
-					await ensure_playable_board()
-
-					breaker_active = false
-					set_breaker_targeting_for_all_pieces(false)
-					update_breaker_button_text()
-					
-					input_locked = false
-					update_ui_lock_state()
-					return
-
-				if selected_cell == Vector2i(-1, -1):
-					selected_cell = clicked_cell
-
-					var selected_piece: Piece = grid[selected_cell.x][selected_cell.y]
-					selected_piece.set_selected(true)
-
-				else:
-					second_cell = clicked_cell
-
-					var first_piece: Piece = grid[selected_cell.x][selected_cell.y]
-
-					if second_cell == selected_cell:
-						first_piece.set_selected(false)
-						selected_cell = Vector2i(-1, -1)
-
-					elif are_cells_adjacent(selected_cell, second_cell):
-						swap_pieces_in_grid(selected_cell, second_cell)
-
-						var first_has_match: bool = has_match_at(second_cell)
-						var second_has_match: bool = has_match_at(selected_cell)
-						var swap_created_match: bool = first_has_match or second_has_match
-
-						# Deselect before anything can remove this piece.
-						first_piece.set_selected(false)
-
-						if not swap_created_match:
-							swap_pieces_in_grid(second_cell, selected_cell)
-
-						else:
-							var matched_pieces: Array[Piece] = get_matches_from_swap(
-								second_cell,
-								selected_cell
-							)
-
-							input_locked = true
-							update_ui_lock_state()
-
-							add_score_for_match(matched_pieces)
-							save_progress()
-							remove_matched_pieces(matched_pieces)
-							collapse_all_columns()
-							refill_board()
-							await resolve_cascades()
-
-							await ensure_playable_board()
-
-							input_locked = false
-							update_ui_lock_state()
-
-						selected_cell = Vector2i(-1, -1)
-
-					else:
-						first_piece.set_selected(false)
-
-						selected_cell = second_cell
-
-						var new_selected_piece: Piece = grid[
-							selected_cell.x
-						][selected_cell.y]
-
-						new_selected_piece.set_selected(true)
-
-					second_cell = Vector2i(-1, -1)
+	elif event is InputEventScreenTouch:
+		if event.pressed:
+			handle_board_press(event.position)
 
 
 func _on_hint_button_pressed() -> void:
