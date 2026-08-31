@@ -555,10 +555,11 @@ func _unhandled_input(event: InputEvent) -> void:
 						new_selected_piece.set_selected(true)
 
 					second_cell = Vector2i(-1, -1)
-			
-			
 
+func _on_hint_button_pressed() -> void:
+	print("Hint requested")
 
 func _on_test_button_pressed() -> void:
 	#collapse_column(0)
-	reshuffle_board()
+	#reshuffle_board()
+	print("Test requested")

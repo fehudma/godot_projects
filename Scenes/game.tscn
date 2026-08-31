@@ -20,3 +20,4 @@ offset_bottom = 31.0
 text = "Hint"
 
 [connection signal="pressed" from="TestButton" to="Board" method="_on_test_button_pressed"]
+[connection signal="pressed" from="HintButton" to="Board" method="_on_hint_button_pressed"]
