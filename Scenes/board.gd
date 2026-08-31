@@ -21,7 +21,7 @@ const PIECE_LETTERS: Array[String] = [
 
 const POINTS_PER_PIECE: int = 10
 
-const BREAKER_PIECES_REQUIRED: int = 30
+const BREAKER_PIECES_REQUIRED: int = 6
 const MAX_BREAKERS: int = 5
 #==========================onreadies
 @onready var breaker_button: Button = $"../BreakerButton"
@@ -630,6 +630,9 @@ func _unhandled_input(event: InputEvent) -> void:
 
 					var matched_pieces: Array[Piece] = [clicked_piece]
 					breakers_remaining -= 1
+
+					update_breaker_button_text()
+					update_breaker_progress_display()
 
 					remove_matched_pieces(matched_pieces)
 					collapse_all_columns()
