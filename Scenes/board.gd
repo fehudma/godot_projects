@@ -631,7 +631,7 @@ func _on_hint_button_pressed() -> void:
 
 
 func _on_breaker_button_pressed() -> void:
-	print("Breaker activated")
+	print("Breaker toggled")
 	
 	if input_locked:
 		return
@@ -644,7 +644,7 @@ func _on_breaker_button_pressed() -> void:
 
 		selected_cell = Vector2i(-1, -1)
 
-	breaker_active = true
+	breaker_active = not breaker_active
 
 
 func _on_test_button_pressed() -> void:
