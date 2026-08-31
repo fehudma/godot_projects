@@ -652,6 +652,7 @@ func _ready() -> void:
 	update_breaker_button_text()
 	update_breaker_progress_display()
 	update_score_display()
+	update_ui_lock_state()
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -678,6 +679,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 					update_breaker_button_text()
 					update_breaker_progress_display()
+					update_ui_lock_state()
 
 					remove_matched_pieces(matched_pieces)
 					collapse_all_columns()
@@ -688,6 +690,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 					breaker_active = false
 					update_breaker_button_text()
+					
 					input_locked = false
 					update_ui_lock_state()
 					return
