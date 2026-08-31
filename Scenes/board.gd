@@ -333,9 +333,7 @@ func get_matches_from_swap(
 		if not matched_pieces.has(piece):
 			matched_pieces.append(piece)
 
-	for piece: Piece in get_matches_at(second_cell):
-		if not matched_pieces.has(piece):
-			matched_pieces.append(piece)
+
 
 	return matched_pieces
 
