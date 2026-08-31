@@ -7,6 +7,7 @@ class_name Piece
 #==========================VARS
 var letter: String = "A"
 var grid_position: Vector2i = Vector2i.ZERO
+var is_selected: bool = false
 
 #==========================HELPERS
 #
@@ -46,7 +47,9 @@ func set_letter(new_letter: String) -> void:
 	letter = new_letter
 	letter_label.text = letter
 
-func set_selected(is_selected: bool) -> void:
+func set_selected(selected: bool) -> void:
+	is_selected = selected
+
 	if is_selected:
 		letter_label.modulate = Color.YELLOW
 	else:
@@ -54,10 +57,10 @@ func set_selected(is_selected: bool) -> void:
 
 
 func _on_area_2d_mouse_entered() -> void:
-	if not letter_label.modulate == Color.YELLOW:
+	if not is_selected:
 		letter_label.modulate = Color.LIGHT_GRAY
 
 
 func _on_area_2d_mouse_exited() -> void:
-	if not letter_label.modulate == Color.YELLOW:
+	if not is_selected:
 		letter_label.modulate = Color.WHITE
