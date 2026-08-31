@@ -19,5 +19,12 @@ offset_right = 116.0
 offset_bottom = 31.0
 text = "Hint"
 
+[node name="BreakerButton" type="Button" parent="." unique_id=476545329]
+offset_left = 152.0
+offset_right = 222.0
+offset_bottom = 31.0
+text = "Breaker"
+
 [connection signal="pressed" from="TestButton" to="Board" method="_on_test_button_pressed"]
 [connection signal="pressed" from="HintButton" to="Board" method="_on_hint_button_pressed"]
+[connection signal="pressed" from="BreakerButton" to="Board" method="_on_breaker_button_pressed"]

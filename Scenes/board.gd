@@ -577,6 +577,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _on_hint_button_pressed() -> void:
+	print("Hint requested")
 	if input_locked:
 		return
 	
@@ -606,6 +607,11 @@ func _on_hint_button_pressed() -> void:
 	second_piece.set_selected(false)
 
 	input_locked = false
+
+
+func _on_breaker_button_pressed() -> void:
+	print("Breaker activated")
+
 
 func _on_test_button_pressed() -> void:
 	#collapse_column(0)
