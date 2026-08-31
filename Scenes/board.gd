@@ -509,8 +509,9 @@ func update_score_display() -> void:
 func add_score_for_match(matched_pieces: Array[Piece]) -> void:
 	score += matched_pieces.size() * POINTS_PER_PIECE
 	pieces_cleared_toward_breaker += matched_pieces.size()
+
+	check_breaker_reward()
 	update_score_display()
-	print("Breaker progress: ", pieces_cleared_toward_breaker)
 
 #Animate matched pieces disappearing
 func play_remove_animation() -> void:
@@ -532,6 +533,23 @@ func play_remove_animation() -> void:
 
 	await tween.finished
 	queue_free()
+
+#Award a Breaker when progress reaches 30
+func check_breaker_reward() -> void:
+	while (
+		pieces_cleared_toward_breaker >= BREAKER_PIECES_REQUIRED
+		and breakers_remaining < MAX_BREAKERS
+	):
+		pieces_cleared_toward_breaker -= BREAKER_PIECES_REQUIRED
+		breakers_remaining += 1
+		update_breaker_button_text()
+
+#Show the remaining Breaker count on the button
+func update_breaker_button_text() -> void:
+	if breaker_active:
+		breaker_button.text = "Breaker: ON (" + str(breakers_remaining) + ")"
+	else:
+		breaker_button.text = "Breaker (" + str(breakers_remaining) + ")"
 #==========================OTHER FUNCTIONS
 #“Where should the center of cell (column, row) be?”
 func _draw() -> void:
@@ -570,7 +588,7 @@ func is_inside_board(grid_position: Vector2i) -> bool:
 #==========================INIT
 func _ready() -> void:
 	create_empty_grid()
-
+	update_breaker_button_text()
 
 	for column: int in range(COLUMNS):
 		for row: int in range(ROWS):
@@ -596,8 +614,9 @@ func _unhandled_input(event: InputEvent) -> void:
 					input_locked = true
 
 					var matched_pieces: Array[Piece] = [clicked_piece]
-					remove_matched_pieces(matched_pieces)
+					breakers_remaining -= 1
 
+					remove_matched_pieces(matched_pieces)
 					collapse_all_columns()
 					refill_board()
 					resolve_cascades()
@@ -606,7 +625,7 @@ func _unhandled_input(event: InputEvent) -> void:
 						reshuffle_board()
 
 					breaker_active = false
-					breaker_button.text = "Breaker"
+					update_breaker_button_text()
 					input_locked = false
 					return
 				
@@ -725,9 +744,9 @@ func _on_breaker_button_pressed() -> void:
 	breaker_active = not breaker_active
 	
 	if breaker_active:
-		breaker_button.text = "Breaker: ON"
+		update_breaker_button_text()
 	else:
-		breaker_button.text = "Breaker"
+		update_breaker_button_text()
 
 
 func _on_test_button_pressed() -> void:

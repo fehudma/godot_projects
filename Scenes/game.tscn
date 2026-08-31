@@ -14,8 +14,8 @@ offset_bottom = 8.0
 text = "Test"
 
 [node name="HintButton" type="Button" parent="." unique_id=1440403269]
-offset_left = 75.0
-offset_right = 116.0
+offset_left = 64.0
+offset_right = 105.0
 offset_bottom = 31.0
 text = "Hint"
 
@@ -26,9 +26,10 @@ offset_bottom = 31.0
 text = "Breaker"
 
 [node name="ScoreLabel" type="Label" parent="." unique_id=1061135490]
-offset_left = 262.0
-offset_right = 323.0
-offset_bottom = 23.0
+offset_left = 64.0
+offset_top = 41.0
+offset_right = 125.0
+offset_bottom = 64.0
 text = "Score: 0"
 
 [connection signal="pressed" from="TestButton" to="Board" method="_on_test_button_pressed"]
