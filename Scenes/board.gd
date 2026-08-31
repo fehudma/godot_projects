@@ -26,6 +26,9 @@ var selected_cell: Vector2i = Vector2i(-1, -1)
 var second_cell: Vector2i = Vector2i(-1, -1)
 
 var input_locked: bool = false
+
+var breaker_active: bool = false
+
 #==========================HELPERS
 #
 func grid_to_pixel(column: int, row: int) -> Vector2:
@@ -512,6 +515,14 @@ func _unhandled_input(event: InputEvent) -> void:
 
 				if clicked_piece == null:
 					return
+				
+				if breaker_active:
+					var matched_pieces: Array[Piece] = [clicked_piece]
+					remove_matched_pieces(matched_pieces)
+
+					breaker_active = false
+					return
+				
 				if selected_cell == Vector2i(-1, -1):
 					selected_cell = clicked_cell
 					var selected_piece: Piece = grid[selected_cell.x][selected_cell.y]
@@ -611,6 +622,11 @@ func _on_hint_button_pressed() -> void:
 
 func _on_breaker_button_pressed() -> void:
 	print("Breaker activated")
+	
+	if input_locked:
+		return
+
+	breaker_active = true
 
 
 func _on_test_button_pressed() -> void:
