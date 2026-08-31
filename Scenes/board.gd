@@ -352,7 +352,14 @@ func collapse_column(column: int) -> void:
 					grid[column][search_row] = null
 
 					piece_above.set_grid_position(Vector2i(column, row))
-					piece_above.position = grid_to_pixel(column, row)
+					var tween := create_tween()
+
+					tween.tween_property(
+						piece_above,
+						"position",
+						grid_to_pixel(column, row),
+						0.2
+					)
 
 					break
 
