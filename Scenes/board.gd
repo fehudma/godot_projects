@@ -647,6 +647,11 @@ func generate_board() -> void:
 			create_piece(Vector2i(column, row))
 
 	await ensure_playable_board()
+
+#rebuild the board without reloading the entire scene
+func reset_board() -> void:
+	clear_board()
+	await generate_board()
 #==========================OTHER FUNCTIONS
 #“Where should the center of cell (column, row) be?”
 func _draw() -> void:
@@ -680,8 +685,6 @@ func is_inside_board(grid_position: Vector2i) -> bool:
 		and grid_position.y >= 0
 		and grid_position.y < ROWS
 	)
-
-
 #==========================INIT
 func _ready() -> void:
 	await generate_board()
@@ -691,6 +694,7 @@ func _ready() -> void:
 	update_breaker_progress_display()
 	update_score_display()
 	update_ui_lock_state()
+
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -874,3 +878,5 @@ func _on_test_button_pressed() -> void:
 	#collapse_column(0)
 	#reshuffle_board()
 	print("Test requested")
+	await get_tree().create_timer(1.0).timeout
+	await reset_board()
