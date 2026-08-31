@@ -743,6 +743,9 @@ func _unhandled_input(event: InputEvent) -> void:
 func _on_hint_button_pressed() -> void:
 	if input_locked:
 		return
+
+	if breaker_active:
+		return
 	
 	var selected_piece: Piece = grid[selected_cell.x][selected_cell.y]
 
