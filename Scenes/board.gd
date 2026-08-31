@@ -25,7 +25,7 @@ const CASCADE_MULTIPLIER_STEP: int = 1
 const BREAKER_PIECES_REQUIRED: int = 30
 const MAX_BREAKERS: int = 5
 
-
+const SAVE_FILE_PATH: String = "user://save_data.json"
 #==========================onreadies
 @onready var breaker_button: Button = $"../BreakerButton"
 @onready var score_label: Label = $"../ScoreLabel"
@@ -437,6 +437,7 @@ func resolve_cascades() -> void:
 		await get_tree().create_timer(0.25).timeout
 
 		add_score_for_match(new_matches, cascade_multiplier)
+		save_progress()
 		remove_matched_pieces(new_matches)
 		collapse_all_columns()
 		refill_board()
@@ -526,13 +527,19 @@ func update_score_display() -> void:
 	score_label.text = "Score: " + str(score)
 
 #Give points only for actual matches
-func add_score_for_match(matched_pieces: Array[Piece], multiplier: int = 1) -> void:
+func add_score_for_match(
+	matched_pieces: Array[Piece],
+	multiplier: int = 1
+) -> void:
 	score += matched_pieces.size() * POINTS_PER_PIECE * multiplier
 	pieces_cleared_toward_breaker += matched_pieces.size()
 
 	check_breaker_reward()
+
 	update_breaker_progress_display()
 	update_score_display()
+
+	save_progress()
 
 #Animate matched pieces disappearing
 func play_remove_animation() -> void:
@@ -652,6 +659,56 @@ func generate_board() -> void:
 func reset_board() -> void:
 	clear_board()
 	await generate_board()
+
+#Save the current score to JSON
+func save_progress() -> void:
+	var save_data: Dictionary = {
+		"score": score,
+		"breakers_remaining": breakers_remaining,
+		"pieces_cleared_toward_breaker": pieces_cleared_toward_breaker
+	}
+
+	var file: FileAccess = FileAccess.open(
+		SAVE_FILE_PATH,
+		FileAccess.WRITE
+	)
+
+	if file == null:
+		return
+
+	file.store_string(JSON.stringify(save_data))
+
+#Load the saved score from JSON
+func load_progress() -> void:
+	if not FileAccess.file_exists(SAVE_FILE_PATH):
+		return
+
+	var file: FileAccess = FileAccess.open(
+		SAVE_FILE_PATH,
+		FileAccess.READ
+	)
+
+	if file == null:
+		return
+
+	var json_text: String = file.get_as_text()
+	var parsed_data: Variant = JSON.parse_string(json_text)
+
+	if not parsed_data is Dictionary:
+		return
+
+	var save_data: Dictionary = parsed_data
+
+	if save_data.has("score"):
+		score = int(save_data["score"])
+
+	if save_data.has("breakers_remaining"):
+		breakers_remaining = int(save_data["breakers_remaining"])
+
+	if save_data.has("pieces_cleared_toward_breaker"):
+		pieces_cleared_toward_breaker = int(
+			save_data["pieces_cleared_toward_breaker"]
+		)
 #==========================OTHER FUNCTIONS
 #“Where should the center of cell (column, row) be?”
 func _draw() -> void:
@@ -690,12 +747,13 @@ func _ready() -> void:
 	await generate_board()
 	await ensure_playable_board()
 
+	load_progress()
+
+	update_score_display()
 	update_breaker_button_text()
 	update_breaker_progress_display()
-	update_score_display()
+	update_combo_display(1)
 	update_ui_lock_state()
-
-
 
 func _unhandled_input(event: InputEvent) -> void:
 	if input_locked:
@@ -724,6 +782,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 					update_breaker_button_text()
 					update_breaker_progress_display()
+					save_progress()
 					update_ui_lock_state()
 
 					remove_matched_pieces(matched_pieces)
@@ -779,6 +838,7 @@ func _unhandled_input(event: InputEvent) -> void:
 							update_ui_lock_state()
 
 							add_score_for_match(matched_pieces)
+							save_progress()
 							remove_matched_pieces(matched_pieces)
 							collapse_all_columns()
 							refill_board()
