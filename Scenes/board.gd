@@ -627,11 +627,17 @@ func is_inside_board(grid_position: Vector2i) -> bool:
 #==========================INIT
 func _ready() -> void:
 	create_empty_grid()
-	update_breaker_button_text()
 
 	for column: int in range(COLUMNS):
 		for row: int in range(ROWS):
 			create_piece(Vector2i(column, row))
+
+	if not has_possible_move():
+		reshuffle_board()
+
+	update_breaker_button_text()
+	update_breaker_progress_display()
+	update_score_display()
 
 
 func _unhandled_input(event: InputEvent) -> void:
