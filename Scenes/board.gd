@@ -33,6 +33,7 @@ const MAX_BREAKERS: int = 5
 @onready var combo_label: Label = $"../ComboLabel"
 @onready var hint_button: Button = $"../HintButton"
 @onready var restart_button: Button = $"../RestartButton"
+@onready var status_label: Label = $"../StatusLabel"
 
 
 #==========================VARS
@@ -597,7 +598,18 @@ func update_combo_display(multiplier: int) -> void:
 #dead-board check
 func ensure_playable_board() -> void:
 	if not has_possible_move():
+		input_locked = true
+		update_ui_lock_state()
+
+		status_label.text = "No moves — reshuffling..."
 		reshuffle_board()
+
+		await get_tree().create_timer(1.0).timeout
+
+		status_label.text = ""
+
+		input_locked = false
+		update_ui_lock_state()
 
 #Disable Hint while the board is busy
 func update_ui_lock_state() -> void:
@@ -647,7 +659,7 @@ func _ready() -> void:
 		for row: int in range(ROWS):
 			create_piece(Vector2i(column, row))
 
-	ensure_playable_board()
+	await ensure_playable_board()
 
 	update_breaker_button_text()
 	update_breaker_progress_display()
@@ -686,7 +698,7 @@ func _unhandled_input(event: InputEvent) -> void:
 					refill_board()
 					await resolve_cascades()
 
-					ensure_playable_board()
+					await ensure_playable_board()
 
 					breaker_active = false
 					update_breaker_button_text()
@@ -738,7 +750,7 @@ func _unhandled_input(event: InputEvent) -> void:
 							refill_board()
 							await resolve_cascades()
 
-							ensure_playable_board()
+							await ensure_playable_board()
 
 							input_locked = false
 							update_ui_lock_state()

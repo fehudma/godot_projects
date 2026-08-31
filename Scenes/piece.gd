@@ -51,3 +51,13 @@ func set_selected(is_selected: bool) -> void:
 		letter_label.modulate = Color.YELLOW
 	else:
 		letter_label.modulate = Color.WHITE
+
+
+func _on_area_2d_mouse_entered() -> void:
+	if not letter_label.modulate == Color.YELLOW:
+		letter_label.modulate = Color.LIGHT_GRAY
+
+
+func _on_area_2d_mouse_exited() -> void:
+	if not letter_label.modulate == Color.YELLOW:
+		letter_label.modulate = Color.WHITE
