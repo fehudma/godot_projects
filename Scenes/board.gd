@@ -568,6 +568,8 @@ func check_breaker_reward() -> void:
 
 #Show the remaining Breaker count on the button
 func update_breaker_button_text() -> void:
+	breaker_button.disabled = breakers_remaining <= 0
+	
 	if breaker_active:
 		breaker_button.text = "Breaker: ON (" + str(breakers_remaining) + ")"
 	else:
