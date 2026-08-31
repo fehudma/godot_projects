@@ -46,6 +46,13 @@ offset_right = 433.0
 offset_bottom = 63.0
 text = "Combo: x1"
 
+[node name="RestartButton" type="Button" parent="." unique_id=1937967821]
+offset_left = 299.0
+offset_right = 307.0
+offset_bottom = 8.0
+text = "Restart"
+
 [connection signal="pressed" from="TestButton" to="Board" method="_on_test_button_pressed"]
 [connection signal="pressed" from="HintButton" to="Board" method="_on_hint_button_pressed"]
 [connection signal="pressed" from="BreakerButton" to="Board" method="_on_breaker_button_pressed"]
+[connection signal="pressed" from="RestartButton" to="Board" method="_on_restart_button_pressed"]

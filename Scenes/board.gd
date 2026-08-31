@@ -799,6 +799,11 @@ func _on_breaker_button_pressed() -> void:
 	else:
 		update_breaker_button_text()
 
+func _on_restart_button_pressed() -> void:
+	if input_locked:
+		return
+
+	get_tree().reload_current_scene()
 
 func _on_test_button_pressed() -> void:
 	#collapse_column(0)
