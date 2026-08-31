@@ -30,6 +30,7 @@ const MAX_BREAKERS: int = 5
 @onready var breaker_button: Button = $"../BreakerButton"
 @onready var score_label: Label = $"../ScoreLabel"
 @onready var breaker_progress_label: Label = $"../BreakerProgressLabel"
+@onready var combo_label: Label = $"../ComboLabel"
 
 
 #==========================VARS
@@ -421,6 +422,7 @@ func get_all_matches() -> Array[Piece]:
 #
 #resolve matches (repeatedly if need be)
 func resolve_cascades() -> void:
+	update_combo_display(2)
 	var cascade_multiplier: int = 2
 	var new_matches: Array[Piece] = get_all_matches()
 
@@ -575,6 +577,10 @@ func update_breaker_progress_display() -> void:
 		+ " / "
 		+ str(BREAKER_PIECES_REQUIRED)
 	)
+
+#Show the current cascade multiplier briefly
+func update_combo_display(multiplier: int) -> void:
+	combo_label.text = "Combo: x" + str(multiplier)
 #==========================OTHER FUNCTIONS
 #“Where should the center of cell (column, row) be?”
 func _draw() -> void:

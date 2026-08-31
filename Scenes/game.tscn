@@ -39,6 +39,13 @@ offset_right = 340.0
 offset_bottom = 64.0
 text = "Breaker progress: 0 / 30"
 
+[node name="ComboLabel" type="Label" parent="." unique_id=1154950233]
+offset_left = 351.0
+offset_top = 40.0
+offset_right = 433.0
+offset_bottom = 63.0
+text = "Combo: x1"
+
 [connection signal="pressed" from="TestButton" to="Board" method="_on_test_button_pressed"]
 [connection signal="pressed" from="HintButton" to="Board" method="_on_hint_button_pressed"]
 [connection signal="pressed" from="BreakerButton" to="Board" method="_on_breaker_button_pressed"]
