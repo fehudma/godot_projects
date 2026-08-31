@@ -577,6 +577,9 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _on_hint_button_pressed() -> void:
+	if input_locked:
+		return
+	
 	var possible_move: Array[Vector2i] = find_possible_move()
 
 	if possible_move.is_empty():
