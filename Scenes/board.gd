@@ -126,7 +126,7 @@ func are_cells_adjacent(first_cell: Vector2i, second_cell: Vector2i) -> bool:
 
 #
 #Swap the two pieces in the grid array
-func swap_pieces_in_grid(first_cell: Vector2i, second_cell: Vector2i) -> void:
+func swap_pieces_in_grid(first_cell: Vector2i, second_cell: Vector2i, animate: bool = true) -> void:
 	var first_piece: Piece = grid[first_cell.x][first_cell.y]
 	var second_piece: Piece = grid[second_cell.x][second_cell.y]
 
@@ -136,21 +136,25 @@ func swap_pieces_in_grid(first_cell: Vector2i, second_cell: Vector2i) -> void:
 	first_piece.set_grid_position(second_cell)
 	second_piece.set_grid_position(first_cell)
 
-	var tween := create_tween()
+	if animate:
+		var tween := create_tween()
 
-	tween.parallel().tween_property(
-		first_piece,
-		"position",
-		grid_to_pixel(second_cell.x, second_cell.y),
-		0.2
-	)
+		tween.parallel().tween_property(
+			first_piece,
+			"position",
+			grid_to_pixel(second_cell.x, second_cell.y),
+			0.2
+		)
 
-	tween.parallel().tween_property(
-		second_piece,
-		"position",
-		grid_to_pixel(first_cell.x, first_cell.y),
-		0.2
-	)
+		tween.parallel().tween_property(
+			second_piece,
+			"position",
+			grid_to_pixel(first_cell.x, first_cell.y),
+			0.2
+		)
+	else:
+		first_piece.position = grid_to_pixel(second_cell.x, second_cell.y)
+		second_piece.position = grid_to_pixel(first_cell.x, first_cell.y)
 
 #
 #Detect a horizontal match at one cell
@@ -446,14 +450,14 @@ func swap_would_create_match(
 	first_cell: Vector2i,
 	second_cell: Vector2i
 ) -> bool:
-	swap_pieces_in_grid(first_cell, second_cell)
+	swap_pieces_in_grid(first_cell, second_cell, false)
 
 	var creates_match: bool = (
 		has_match_at(first_cell)
 		or has_match_at(second_cell)
 	)
 
-	swap_pieces_in_grid(second_cell, first_cell)
+	swap_pieces_in_grid(second_cell, first_cell, false)
 
 	return creates_match
 
