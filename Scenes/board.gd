@@ -577,7 +577,15 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _on_hint_button_pressed() -> void:
 	var possible_move: Array[Vector2i] = find_possible_move()
-	print(possible_move)
+
+	if possible_move.is_empty():
+		return
+
+	var first_piece: Piece = grid[possible_move[0].x][possible_move[0].y]
+	var second_piece: Piece = grid[possible_move[1].x][possible_move[1].y]
+
+	first_piece.set_selected(true)
+	second_piece.set_selected(true)
 
 func _on_test_button_pressed() -> void:
 	#collapse_column(0)
