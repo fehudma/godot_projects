@@ -5,6 +5,7 @@ const COLUMNS: int = 8
 const ROWS: int = 8
 const CELL_SIZE:int = 64
 
+
 #
 const PIECE_SCENE: PackedScene = preload("res://scenes/piece.tscn")
 
@@ -17,6 +18,10 @@ const PIECE_LETTERS: Array[String] = [
 	"X",
 	"Y"
 ]
+
+
+#==========================onreadies
+@onready var breaker_button: Button = $"../BreakerButton"
 
 
 #==========================VARS
@@ -530,6 +535,7 @@ func _unhandled_input(event: InputEvent) -> void:
 						reshuffle_board()
 
 					breaker_active = false
+					breaker_button.text = "Breaker"
 					input_locked = false
 					return
 				
@@ -645,6 +651,11 @@ func _on_breaker_button_pressed() -> void:
 		selected_cell = Vector2i(-1, -1)
 
 	breaker_active = not breaker_active
+	
+	if breaker_active:
+		breaker_button.text = "Breaker: ON"
+	else:
+		breaker_button.text = "Breaker"
 
 
 func _on_test_button_pressed() -> void:
