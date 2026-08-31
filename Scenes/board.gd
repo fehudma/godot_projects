@@ -504,6 +504,26 @@ func add_score_for_match(matched_pieces: Array[Piece]) -> void:
 	score += matched_pieces.size() * POINTS_PER_PIECE
 	update_score_display()
 
+#Animate matched pieces disappearing
+func play_remove_animation() -> void:
+	var tween := create_tween()
+
+	tween.parallel().tween_property(
+		self,
+		"scale",
+		Vector2.ZERO,
+		0.15
+	)
+
+	tween.parallel().tween_property(
+		self,
+		"modulate:a",
+		0.0,
+		0.15
+	)
+
+	await tween.finished
+	queue_free()
 #==========================OTHER FUNCTIONS
 #“Where should the center of cell (column, row) be?”
 func _draw() -> void:

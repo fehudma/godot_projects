@@ -17,10 +17,30 @@ func set_grid_position(new_grid_position: Vector2i) -> void:
 func setup(new_letter: String, new_grid_position: Vector2i) -> void:
 	set_letter(new_letter)
 	set_grid_position(new_grid_position)
+
+#
+func play_remove_animation() -> void:
+	var tween := create_tween()
+
+	tween.parallel().tween_property(
+		self,
+		"scale",
+		Vector2.ZERO,
+		0.15
+	)
+
+	tween.parallel().tween_property(
+		self,
+		"modulate:a",
+		0.0,
+		0.15
+	)
+
+	await tween.finished
+	queue_free()
 #==========================INIT
 func _ready() -> void:
 	set_letter(letter)
-
 
 func set_letter(new_letter: String) -> void:
 	letter = new_letter
