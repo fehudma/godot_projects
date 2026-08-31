@@ -545,6 +545,11 @@ func check_breaker_reward() -> void:
 		pieces_cleared_toward_breaker -= BREAKER_PIECES_REQUIRED
 		breakers_remaining += 1
 		update_breaker_button_text()
+	if breakers_remaining >= MAX_BREAKERS:
+		pieces_cleared_toward_breaker = min(
+			pieces_cleared_toward_breaker,
+			BREAKER_PIECES_REQUIRED - 1
+		)
 
 #Show the remaining Breaker count on the button
 func update_breaker_button_text() -> void:
