@@ -580,6 +580,13 @@ func _on_hint_button_pressed() -> void:
 	if input_locked:
 		return
 	
+	var selected_piece: Piece = grid[selected_cell.x][selected_cell.y]
+
+	if selected_piece != null:
+		selected_piece.set_selected(false)
+
+	selected_cell = Vector2i(-1, -1)
+	
 	var possible_move: Array[Vector2i] = find_possible_move()
 
 	if possible_move.is_empty():
