@@ -421,14 +421,16 @@ func get_all_matches() -> Array[Piece]:
 #
 #resolve matches (repeatedly if need be)
 func resolve_cascades() -> void:
+	var cascade_multiplier: int = 2
 	var new_matches: Array[Piece] = get_all_matches()
 
 	while not new_matches.is_empty():
+		add_score_for_match(new_matches, cascade_multiplier)
 		remove_matched_pieces(new_matches)
-		add_score_for_match(new_matches)
 		collapse_all_columns()
 		refill_board()
 
+		cascade_multiplier += CASCADE_MULTIPLIER_STEP
 		new_matches = get_all_matches()
 
 
