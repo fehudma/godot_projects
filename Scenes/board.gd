@@ -668,7 +668,6 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _on_hint_button_pressed() -> void:
-	print("Hint requested")
 	if input_locked:
 		return
 	
@@ -701,8 +700,6 @@ func _on_hint_button_pressed() -> void:
 
 
 func _on_breaker_button_pressed() -> void:
-	print("Breaker toggled")
-	
 	if input_locked:
 		return
 
