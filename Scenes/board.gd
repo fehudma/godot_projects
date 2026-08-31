@@ -26,6 +26,7 @@ const MAX_BREAKERS: int = 5
 #==========================onreadies
 @onready var breaker_button: Button = $"../BreakerButton"
 @onready var score_label: Label = $"../ScoreLabel"
+@onready var breaker_progress_label: Label = $"../BreakerProgressLabel"
 
 
 #==========================VARS
@@ -511,6 +512,7 @@ func add_score_for_match(matched_pieces: Array[Piece]) -> void:
 	pieces_cleared_toward_breaker += matched_pieces.size()
 
 	check_breaker_reward()
+	update_breaker_progress_display()
 	update_score_display()
 
 #Animate matched pieces disappearing
@@ -550,6 +552,19 @@ func update_breaker_button_text() -> void:
 		breaker_button.text = "Breaker: ON (" + str(breakers_remaining) + ")"
 	else:
 		breaker_button.text = "Breaker (" + str(breakers_remaining) + ")"
+
+#Update the Breaker progress label
+func update_breaker_progress_display() -> void:
+	if breakers_remaining >= MAX_BREAKERS:
+		breaker_progress_label.text = "Breaker progress: MAX"
+		return
+
+	breaker_progress_label.text = (
+		"Breaker progress: "
+		+ str(pieces_cleared_toward_breaker)
+		+ " / "
+		+ str(BREAKER_PIECES_REQUIRED)
+	)
 #==========================OTHER FUNCTIONS
 #“Where should the center of cell (column, row) be?”
 func _draw() -> void:

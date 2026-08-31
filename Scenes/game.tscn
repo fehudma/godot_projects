@@ -32,6 +32,13 @@ offset_right = 125.0
 offset_bottom = 64.0
 text = "Score: 0"
 
+[node name="BreakerProgressLabel" type="Label" parent="." unique_id=371216888]
+offset_left = 156.0
+offset_top = 41.0
+offset_right = 340.0
+offset_bottom = 64.0
+text = "Breaker progress: 0 / 30"
+
 [connection signal="pressed" from="TestButton" to="Board" method="_on_test_button_pressed"]
 [connection signal="pressed" from="HintButton" to="Board" method="_on_hint_button_pressed"]
 [connection signal="pressed" from="BreakerButton" to="Board" method="_on_breaker_button_pressed"]
