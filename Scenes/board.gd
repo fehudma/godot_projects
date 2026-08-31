@@ -595,6 +595,8 @@ func _on_hint_button_pressed() -> void:
 	var first_piece: Piece = grid[possible_move[0].x][possible_move[0].y]
 	var second_piece: Piece = grid[possible_move[1].x][possible_move[1].y]
 
+	input_locked = true
+
 	first_piece.set_selected(true)
 	second_piece.set_selected(true)
 
@@ -602,6 +604,8 @@ func _on_hint_button_pressed() -> void:
 
 	first_piece.set_selected(false)
 	second_piece.set_selected(false)
+
+	input_locked = false
 
 func _on_test_button_pressed() -> void:
 	#collapse_column(0)
