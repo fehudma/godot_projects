@@ -19,7 +19,7 @@ const PIECE_LETTERS: Array[String] = [
 	"Y"
 ]
 
-
+const POINTS_PER_PIECE: int = 10
 #==========================onreadies
 @onready var breaker_button: Button = $"../BreakerButton"
 @onready var score_label: Label = $"../ScoreLabel"
@@ -385,6 +385,7 @@ func resolve_cascades() -> void:
 
 	while not new_matches.is_empty():
 		remove_matched_pieces(new_matches)
+		add_score_for_match(new_matches)
 		collapse_all_columns()
 		refill_board()
 
@@ -470,7 +471,7 @@ func update_score_display() -> void:
 
 #Give points only for actual matches
 func add_score_for_match(matched_pieces: Array[Piece]) -> void:
-	score += matched_pieces.size()
+	score += matched_pieces.size() * POINTS_PER_PIECE
 	update_score_display()
 
 #==========================OTHER FUNCTIONS
