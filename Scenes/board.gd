@@ -336,7 +336,7 @@ func remove_matched_pieces(matched_pieces: Array[Piece]) -> void:
 		var cell: Vector2i = piece.grid_position
 
 		grid[cell.x][cell.y] = null
-		piece.queue_free()
+		piece.play_remove_animation()
 
 
 #
