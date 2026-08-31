@@ -20,6 +20,9 @@ const PIECE_LETTERS: Array[String] = [
 ]
 
 const POINTS_PER_PIECE: int = 10
+
+const BREAKER_PIECES_REQUIRED: int = 30
+const MAX_BREAKERS: int = 5
 #==========================onreadies
 @onready var breaker_button: Button = $"../BreakerButton"
 @onready var score_label: Label = $"../ScoreLabel"
@@ -37,7 +40,8 @@ var breaker_active: bool = false
 
 var score: int = 0
 
-var breakers_remaining: int = 0
+var breakers_remaining: int = 3
+var pieces_cleared_toward_breaker: int = 0
 #==========================HELPERS
 #
 func grid_to_pixel(column: int, row: int) -> Vector2:
@@ -504,7 +508,9 @@ func update_score_display() -> void:
 #Give points only for actual matches
 func add_score_for_match(matched_pieces: Array[Piece]) -> void:
 	score += matched_pieces.size() * POINTS_PER_PIECE
+	pieces_cleared_toward_breaker += matched_pieces.size()
 	update_score_display()
+	print("Breaker progress: ", pieces_cleared_toward_breaker)
 
 #Animate matched pieces disappearing
 func play_remove_animation() -> void:
