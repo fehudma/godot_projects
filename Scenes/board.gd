@@ -36,6 +36,8 @@ var input_locked: bool = false
 var breaker_active: bool = false
 
 var score: int = 0
+
+var breakers_remaining: int = 0
 #==========================HELPERS
 #
 func grid_to_pixel(column: int, row: int) -> Vector2:
@@ -701,6 +703,9 @@ func _on_hint_button_pressed() -> void:
 
 func _on_breaker_button_pressed() -> void:
 	if input_locked:
+		return
+
+	if breakers_remaining <= 0:
 		return
 
 	if selected_cell != Vector2i(-1, -1):
