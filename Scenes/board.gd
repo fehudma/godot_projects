@@ -428,6 +428,8 @@ func resolve_cascades() -> void:
 	while not new_matches.is_empty():
 		update_combo_display(cascade_multiplier)
 
+		await get_tree().create_timer(0.25).timeout
+
 		add_score_for_match(new_matches, cascade_multiplier)
 		remove_matched_pieces(new_matches)
 		collapse_all_columns()
@@ -643,7 +645,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 				if clicked_piece == null:
 					return
-				
+
 				if breaker_active:
 					input_locked = true
 
@@ -656,7 +658,7 @@ func _unhandled_input(event: InputEvent) -> void:
 					remove_matched_pieces(matched_pieces)
 					collapse_all_columns()
 					refill_board()
-					resolve_cascades()
+					await resolve_cascades()
 
 					if not has_possible_move():
 						reshuffle_board()
@@ -665,11 +667,13 @@ func _unhandled_input(event: InputEvent) -> void:
 					update_breaker_button_text()
 					input_locked = false
 					return
-				
+
 				if selected_cell == Vector2i(-1, -1):
 					selected_cell = clicked_cell
+
 					var selected_piece: Piece = grid[selected_cell.x][selected_cell.y]
 					selected_piece.set_selected(true)
+
 				else:
 					second_cell = clicked_cell
 
@@ -686,46 +690,42 @@ func _unhandled_input(event: InputEvent) -> void:
 						var second_has_match: bool = has_match_at(selected_cell)
 						var swap_created_match: bool = first_has_match or second_has_match
 
+						# Deselect before anything can remove this piece.
+						first_piece.set_selected(false)
+
 						if not swap_created_match:
 							swap_pieces_in_grid(second_cell, selected_cell)
+
 						else:
 							var matched_pieces: Array[Piece] = get_matches_from_swap(
 								second_cell,
 								selected_cell
 							)
-							
+
 							input_locked = true
-							
+
 							add_score_for_match(matched_pieces)
 							remove_matched_pieces(matched_pieces)
 							collapse_all_columns()
 							refill_board()
-							resolve_cascades()
-							
+							await resolve_cascades()
+
 							if not has_possible_move():
-								print("Dead board detected. Re-shuffling...")
 								reshuffle_board()
 
 							input_locked = false
 
-
-							for piece: Piece in get_matches_at(second_cell):
-								if not matched_pieces.has(piece):
-									matched_pieces.append(piece)
-
-							for piece: Piece in get_matches_at(selected_cell):
-								if not matched_pieces.has(piece):
-									matched_pieces.append(piece)
-
-						
-						first_piece.set_selected(false)
 						selected_cell = Vector2i(-1, -1)
 
 					else:
 						first_piece.set_selected(false)
 
 						selected_cell = second_cell
-						var new_selected_piece: Piece = grid[selected_cell.x][selected_cell.y]
+
+						var new_selected_piece: Piece = grid[
+							selected_cell.x
+						][selected_cell.y]
+
 						new_selected_piece.set_selected(true)
 
 					second_cell = Vector2i(-1, -1)
