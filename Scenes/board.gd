@@ -436,6 +436,7 @@ func resolve_cascades() -> void:
 		cascade_multiplier += CASCADE_MULTIPLIER_STEP
 		new_matches = get_all_matches()
 
+	await get_tree().create_timer(0.3).timeout
 	update_combo_display(1)
 
 
