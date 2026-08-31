@@ -377,7 +377,17 @@ func refill_board() -> void:
 	for column: int in range(COLUMNS):
 		for row: int in range(ROWS):
 			if grid[column][row] == null:
-				create_piece(Vector2i(column, row))
+				var new_piece: Piece = create_piece(Vector2i(column, row))
+
+				new_piece.position.y -= CELL_SIZE
+
+				var tween := create_tween()
+				tween.tween_property(
+					new_piece,
+					"position",
+					grid_to_pixel(column, row),
+					0.2
+				)
 
 
 #
