@@ -22,6 +22,7 @@ const PIECE_LETTERS: Array[String] = [
 
 #==========================onreadies
 @onready var breaker_button: Button = $"../BreakerButton"
+@onready var score_label: Label = $"../ScoreLabel"
 
 
 #==========================VARS
@@ -319,7 +320,7 @@ func get_matches_from_swap(
 #Remove matched pieces
 func remove_matched_pieces(matched_pieces: Array[Piece]) -> void:
 	score += matched_pieces.size()
-	print("Score: ", score)
+	update_score_display()
 	
 	for piece: Piece in matched_pieces:
 		var cell: Vector2i = piece.grid_position
@@ -464,6 +465,12 @@ func find_possible_move() -> Array[Vector2i]:
 					return [current_cell, below_cell]
 
 	return []
+
+
+#Update the visible score
+func update_score_display() -> void:
+	score_label.text = "Score: " + str(score)
+
 
 #==========================OTHER FUNCTIONS
 #“Where should the center of cell (column, row) be?”
