@@ -319,9 +319,6 @@ func get_matches_from_swap(
 #
 #Remove matched pieces
 func remove_matched_pieces(matched_pieces: Array[Piece]) -> void:
-	score += matched_pieces.size()
-	update_score_display()
-	
 	for piece: Piece in matched_pieces:
 		var cell: Vector2i = piece.grid_position
 
@@ -471,6 +468,10 @@ func find_possible_move() -> Array[Vector2i]:
 func update_score_display() -> void:
 	score_label.text = "Score: " + str(score)
 
+#Give points only for actual matches
+func add_score_for_match(matched_pieces: Array[Piece]) -> void:
+	score += matched_pieces.size()
+	update_score_display()
 
 #==========================OTHER FUNCTIONS
 #“Where should the center of cell (column, row) be?”
@@ -580,6 +581,7 @@ func _unhandled_input(event: InputEvent) -> void:
 							
 							input_locked = true
 							
+							add_score_for_match(matched_pieces)
 							remove_matched_pieces(matched_pieces)
 							collapse_all_columns()
 							refill_board()

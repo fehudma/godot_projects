@@ -26,8 +26,8 @@ offset_bottom = 31.0
 text = "Breaker"
 
 [node name="ScoreLabel" type="Label" parent="." unique_id=1061135490]
-offset_left = 240.0
-offset_right = 280.0
+offset_left = 262.0
+offset_right = 323.0
 offset_bottom = 23.0
 text = "Score: 0"
 
