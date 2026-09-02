@@ -7,3 +7,15 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="TitleLabel" type="Label" parent="." unique_id=1424236778]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Idle RPG"
+
+[node name="RecruitButton" type="Button" parent="." unique_id=1699536273]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+text = "Recruit Character"
