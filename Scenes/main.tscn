@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://4p8bo7v1clpj"]
 
+[ext_resource type="Script" uid="uid://cc4dwm8lnr6vp" path="res://Scenes/main.gd" id="1_jjgbg"]
+
 [node name="Main" type="Control" unique_id=679385996]
 layout_mode = 3
 anchors_preset = 15
@@ -7,6 +9,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_jjgbg")
 
 [node name="TitleLabel" type="Label" parent="." unique_id=1424236778]
 layout_mode = 0
@@ -19,3 +22,5 @@ layout_mode = 0
 offset_right = 8.0
 offset_bottom = 8.0
 text = "Recruit Character"
+
+[connection signal="pressed" from="RecruitButton" to="." method="_on_recruit_button_pressed"]
