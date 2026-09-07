@@ -38,6 +38,10 @@ text = "Name: Unknown"
 layout_mode = 2
 text = "Level: 99"
 
+[node name="ExperienceLabel" type="Label" parent="VBoxContainer" unique_id=280291902]
+layout_mode = 2
+text = "XP: 99"
+
 [node name="AttackLabel" type="Label" parent="VBoxContainer" unique_id=1983624152]
 layout_mode = 2
 text = "Attack: 99"
