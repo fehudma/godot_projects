@@ -44,5 +44,6 @@ text = "Defense: 99"
 
 [node name="HealthLabel" type="Label" parent="VBoxContainer" unique_id=253445038]
 layout_mode = 2
+text = "Health: 99"
 
 [connection signal="pressed" from="RecruitButton" to="." method="_on_recruit_button_pressed"]
