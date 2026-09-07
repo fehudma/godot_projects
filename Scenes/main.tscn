@@ -59,6 +59,10 @@ text = "Last item: None"
 layout_mode = 2
 text = "Weapon: None"
 
+[node name="EquippedArmorLabel" type="Label" parent="VBoxContainer" unique_id=1866552844]
+layout_mode = 2
+text = "Armor: None"
+
 [node name="VBoxContainer2" type="VBoxContainer" parent="." unique_id=1114266636]
 layout_mode = 0
 offset_left = 300.0
@@ -77,6 +81,10 @@ text = "Add Test Item"
 layout_mode = 2
 text = "Equip First Weapon"
 
+[node name="EquipArmorButton" type="Button" parent="VBoxContainer2" unique_id=1398287914]
+layout_mode = 2
+text = "Equip First Armor"
+
 [node name="TestButton" type="Button" parent="VBoxContainer2" unique_id=50078022]
 layout_mode = 2
 text = "Test"
@@ -84,4 +92,5 @@ text = "Test"
 [connection signal="pressed" from="VBoxContainer2/RecruitButton" to="." method="_on_recruit_button_pressed"]
 [connection signal="pressed" from="VBoxContainer2/AddItemButton" to="." method="_on_add_item_button_pressed"]
 [connection signal="pressed" from="VBoxContainer2/EquipWeaponButton" to="." method="_on_equip_weapon_button_pressed"]
+[connection signal="pressed" from="VBoxContainer2/EquipArmorButton" to="." method="_on_equip_armor_button_pressed"]
 [connection signal="pressed" from="VBoxContainer2/TestButton" to="." method="_on_test_button_pressed"]

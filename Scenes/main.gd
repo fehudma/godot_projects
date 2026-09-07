@@ -57,6 +57,7 @@ var inventory: Array[Dictionary] = [
 @onready var recruit_button: Button = $VBoxContainer2/RecruitButton
 @onready var add_item_button: Button = $VBoxContainer2/AddItemButton
 @onready var equip_weapon_button: Button = $VBoxContainer2/EquipWeaponButton
+@onready var equip_armor_button: Button = $VBoxContainer2/EquipArmorButton
 
 
 @onready var name_label: Label = $VBoxContainer/NameLabel
@@ -68,6 +69,7 @@ var inventory: Array[Dictionary] = [
 @onready var inventory_count_label: Label = $VBoxContainer/InventoryCountLabel
 @onready var last_item_label: Label = $VBoxContainer/LastItemLabel
 @onready var equipped_weapon_label: Label = $VBoxContainer/EquippedWeaponLabel
+@onready var equipped_armor_label: Label = $VBoxContainer/EquippedArmorLabel
 
 
 
@@ -88,7 +90,8 @@ func update_stats_display() -> void:
 	level_label.text = "Level: " + str(character["level"])
 	experience_label.text = "XP: " + str(character["experience"])
 	health_label.text = "Health: " + str(character["health"])
-	attack_label.text = "Attack: " + str(character["attack"])
+	#attack_label.text = "Attack: " + str(character["attack"])
+	attack_label.text = "Attack: " + str(get_total_attack())
 	defense_label.text = "Defense: " + str(character["defense"])
 
 #character generation
@@ -123,23 +126,43 @@ func update_inventory_display() -> void:
 
 #Equip a weapon manually from inventory
 func equip_first_weapon() -> void:
-	if inventory.is_empty():
-		return
-
-	var item: Dictionary = inventory[0]
-
-	if item["slot"] != "weapon":
-		return
-
-	character["weapon"] = item
+	for item: Dictionary in inventory:
+		if item["slot"] == "weapon":
+			character["weapon"] = item
+			return
 
 #Show the equipped weapon name
 func update_equipment_display() -> void:
 	if character["weapon"].is_empty():
 		equipped_weapon_label.text = "Weapon: None"
+	else:
+		equipped_weapon_label.text = "Weapon: " + str(character["weapon"]["name"])
+	
+	if character["armor"].is_empty():
+		equipped_armor_label.text = "Armor: None"
+	else:
+		equipped_armor_label.text = "Armor: " + str(character["armor"]["name"])
+
+#Show the equipped armor name
+func equip_first_armor() -> void:
+	if inventory.is_empty():
 		return
 
-	equipped_weapon_label.text = "Weapon: " + str(character["weapon"]["name"])
+	var item: Dictionary = inventory[0]
+
+	if item["slot"] != "armor":
+		return
+
+	character["armor"] = item
+
+#Make equipment update the character’s attack
+func get_total_attack() -> int:
+	var total_attack: int = character["attack"]
+
+	if not character["weapon"].is_empty():
+		total_attack += character["weapon"]["attack_bonus"]
+
+	return total_attack
 #=======================OTHER
 #nothing here yet...
 #=======================INIT
@@ -164,9 +187,16 @@ func _on_add_item_button_pressed() -> void:
 
 
 func _on_test_button_pressed() -> void:
-	print(character["weapon"])
+	print("weapon: " + str(character["weapon"]))
+	print("armor: " + str(character["armor"]))
 
 
 func _on_equip_weapon_button_pressed() -> void:
 	equip_first_weapon()
+	update_equipment_display()
+	update_stats_display()
+
+
+func _on_equip_armor_button_pressed() -> void:
+	equip_first_armor()
 	update_equipment_display()
