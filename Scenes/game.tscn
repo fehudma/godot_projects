@@ -1,12 +1,18 @@
 [gd_scene format=3 uid="uid://dpxwtpfvflnoi"]
 
 [ext_resource type="Script" uid="uid://brlwk4sxyxotl" path="res://Scenes/board.gd" id="1_ebmjs"]
+[ext_resource type="Script" uid="uid://k6im8grvfi31" path="res://Scenes/board_preview.gd" id="2_qxrlw"]
 
 [node name="Game" type="Node2D" unique_id=2129177519]
 
 [node name="Board" type="Node2D" parent="." unique_id=100781173]
 position = Vector2(64, 64)
 script = ExtResource("1_ebmjs")
+
+[node name="BoardPreview" type="Polygon2D" parent="Board" unique_id=1452972190]
+color = Color(1, 1, 1, 0.25882354)
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 896, 0, 896)
+script = ExtResource("2_qxrlw")
 
 [node name="TestButton" type="Button" parent="." unique_id=296336580]
 visible = false
@@ -36,10 +42,11 @@ offset_bottom = 8.0
 text = "Restart"
 
 [node name="StatusLabel" type="Label" parent="." unique_id=433130701]
-offset_left = 64.0
-offset_top = 575.0
-offset_right = 155.0
-offset_bottom = 598.0
+offset_left = 67.0
+offset_top = 960.0
+offset_right = 158.0
+offset_bottom = 983.0
+text = "status text"
 
 [node name="Control" type="Control" parent="." unique_id=875048242]
 layout_mode = 3
@@ -60,10 +67,10 @@ text = "Hint"
 
 [node name="BreakerButton" type="Button" parent="Control" unique_id=476545329]
 layout_mode = 0
-offset_left = 992.0
-offset_top = 125.0
-offset_right = 1292.0
-offset_bottom = 260.0
+offset_left = 995.0
+offset_top = 127.0
+offset_right = 1295.0
+offset_bottom = 262.0
 theme_override_font_sizes/font_size = 55
 text = "Breaker (0)"
 
@@ -74,6 +81,11 @@ offset_top = 263.0
 offset_right = 1179.0
 offset_bottom = 286.0
 text = "Breaker progress: 0 / 30"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control" unique_id=1537157319]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
 
 [connection signal="pressed" from="TestButton" to="Board" method="_on_test_button_pressed"]
 [connection signal="pressed" from="RestartButton" to="Board" method="_on_restart_button_pressed"]
