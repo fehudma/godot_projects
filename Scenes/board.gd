@@ -12,13 +12,22 @@ const CELL_HEIGHT: int = 128
 const PIECE_SCENE: PackedScene = preload("res://Scenes/piece.tscn")
 
 
+#obsolete
+#const PIECE_LETTERS: Array[String] = [
+#	"A",
+#	"B",
+#	"C",
+#	"X",
+#	"Y"
+#]
+
 #
 const PIECE_LETTERS: Array[String] = [
-	"A",
-	"B",
-	"C",
-	"X",
-	"Y"
+	"blue_orb",
+	"orange_diamond",
+	"purple_star",
+	"pink_heart",
+	"green_leaf"
 ]
 
 const POINTS_PER_PIECE: int = 10

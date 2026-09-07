@@ -11,11 +11,11 @@ const GREEN_LEAF: Texture2D = preload("res://assets/pieces/green_leaf.png")
 
 
 const PIECE_BRIGHTNESS := {
-	"A": 1.00, # Blue orb
-	"B": 1.00, # Orange diamond
-	"C": 1.00, # Purple star
-	"X": 1.00, # Pink-red heart
-	"Y": 1.00, # Green leaf
+	"blue_orb": 1.00, # Blue orb
+	"orange_diamond": 1.00, # Orange diamond
+	"purple_star": 1.00, # Purple star
+	"pink_heart": 1.00, # Pink-red heart
+	"green_leaf": 1.00, # Green leaf
 }
 #==========================ONREADYs
 @onready var piece_sprite: Sprite2D = $PieceSprite
@@ -64,19 +64,42 @@ func set_breaker_targetable(is_targetable: bool) -> void:
 func _ready() -> void:
 	set_letter(letter)
 
+#obsolete
+#func set_letter(new_letter: String) -> void:
+#	letter = new_letter
+#
+#	match letter:
+#		"A":
+#			piece_sprite.texture = BLUE_ORB
+#		"B":
+#			piece_sprite.texture = ORANGE_DIAMOND
+#		"C":
+#			piece_sprite.texture = PURPLE_STAR
+#		"X":
+#			piece_sprite.texture = PINK_HEART
+#		"Y":
+#			piece_sprite.texture = GREEN_LEAF
+#
+#	var brightness: float = PIECE_BRIGHTNESS.get(letter, 1.0)
+#	piece_sprite.self_modulate = Color(brightness, brightness, brightness, 1.0)
+
 func set_letter(new_letter: String) -> void:
 	letter = new_letter
 
 	match letter:
-		"A":
+		"blue_orb":
 			piece_sprite.texture = BLUE_ORB
-		"B":
+
+		"orange_diamond":
 			piece_sprite.texture = ORANGE_DIAMOND
-		"C":
+
+		"purple_star":
 			piece_sprite.texture = PURPLE_STAR
-		"X":
+
+		"pink_heart":
 			piece_sprite.texture = PINK_HEART
-		"Y":
+
+		"green_leaf":
 			piece_sprite.texture = GREEN_LEAF
 
 	var brightness: float = PIECE_BRIGHTNESS.get(letter, 1.0)
