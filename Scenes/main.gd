@@ -67,6 +67,7 @@ var inventory: Array[Dictionary] = [
 @onready var defense_label: Label = $VBoxContainer/DefenseLabel
 @onready var inventory_count_label: Label = $VBoxContainer/InventoryCountLabel
 @onready var last_item_label: Label = $VBoxContainer/LastItemLabel
+@onready var equipped_weapon_label: Label = $VBoxContainer/EquippedWeaponLabel
 
 
 
@@ -131,6 +132,14 @@ func equip_first_weapon() -> void:
 		return
 
 	character["weapon"] = item
+
+#Show the equipped weapon name
+func update_equipment_display() -> void:
+	if character["weapon"].is_empty():
+		equipped_weapon_label.text = "Weapon: None"
+		return
+
+	equipped_weapon_label.text = "Weapon: " + str(character["weapon"]["name"])
 #=======================OTHER
 #nothing here yet...
 #=======================INIT
@@ -160,3 +169,4 @@ func _on_test_button_pressed() -> void:
 
 func _on_equip_weapon_button_pressed() -> void:
 	equip_first_weapon()
+	update_equipment_display()

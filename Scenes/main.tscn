@@ -49,15 +49,20 @@ text = "Health: 99"
 
 [node name="InventoryCountLabel" type="Label" parent="VBoxContainer" unique_id=1915140832]
 layout_mode = 2
+text = "Inventory slots: 99"
 
 [node name="LastItemLabel" type="Label" parent="VBoxContainer" unique_id=758332261]
 layout_mode = 2
 text = "Last item: None"
 
+[node name="EquippedWeaponLabel" type="Label" parent="VBoxContainer" unique_id=541005034]
+layout_mode = 2
+text = "Weapon: None"
+
 [node name="VBoxContainer2" type="VBoxContainer" parent="." unique_id=1114266636]
 layout_mode = 0
-offset_left = 232.0
-offset_right = 390.0
+offset_left = 300.0
+offset_right = 458.0
 offset_bottom = 136.0
 
 [node name="RecruitButton" type="Button" parent="VBoxContainer2" unique_id=1699536273]
