@@ -17,13 +17,6 @@ offset_right = 40.0
 offset_bottom = 23.0
 text = "Idle RPG"
 
-[node name="RecruitButton" type="Button" parent="." unique_id=1699536273]
-layout_mode = 0
-offset_top = 23.0
-offset_right = 144.0
-offset_bottom = 54.0
-text = "Recruit Character"
-
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1866794206]
 layout_mode = 0
 offset_top = 54.0
@@ -54,4 +47,36 @@ text = "Defense: 99"
 layout_mode = 2
 text = "Health: 99"
 
-[connection signal="pressed" from="RecruitButton" to="." method="_on_recruit_button_pressed"]
+[node name="InventoryCountLabel" type="Label" parent="VBoxContainer" unique_id=1915140832]
+layout_mode = 2
+
+[node name="LastItemLabel" type="Label" parent="VBoxContainer" unique_id=758332261]
+layout_mode = 2
+text = "Last item: None"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="." unique_id=1114266636]
+layout_mode = 0
+offset_left = 232.0
+offset_right = 390.0
+offset_bottom = 136.0
+
+[node name="RecruitButton" type="Button" parent="VBoxContainer2" unique_id=1699536273]
+layout_mode = 2
+text = "Recruit Character"
+
+[node name="AddItemButton" type="Button" parent="VBoxContainer2" unique_id=553760612]
+layout_mode = 2
+text = "Add Test Item"
+
+[node name="EquipWeaponButton" type="Button" parent="VBoxContainer2" unique_id=1556275952]
+layout_mode = 2
+text = "Equip First Weapon"
+
+[node name="TestButton" type="Button" parent="VBoxContainer2" unique_id=50078022]
+layout_mode = 2
+text = "Test"
+
+[connection signal="pressed" from="VBoxContainer2/RecruitButton" to="." method="_on_recruit_button_pressed"]
+[connection signal="pressed" from="VBoxContainer2/AddItemButton" to="." method="_on_add_item_button_pressed"]
+[connection signal="pressed" from="VBoxContainer2/EquipWeaponButton" to="." method="_on_equip_weapon_button_pressed"]
+[connection signal="pressed" from="VBoxContainer2/TestButton" to="." method="_on_test_button_pressed"]
