@@ -11,11 +11,11 @@ const GREEN_LEAF: Texture2D = preload("res://assets/pieces/green_leaf.png")
 
 
 const PIECE_BRIGHTNESS := {
-	"A": 1.15, # Blue orb
-	"B": 1.35, # Orange diamond
-	"C": 0.80, # Purple star
+	"A": 1.00, # Blue orb
+	"B": 1.00, # Orange diamond
+	"C": 1.00, # Purple star
 	"X": 1.00, # Pink-red heart
-	"Y": 1.10, # Green leaf
+	"Y": 1.00, # Green leaf
 }
 #==========================ONREADYs
 @onready var piece_sprite: Sprite2D = $PieceSprite
@@ -78,6 +78,9 @@ func set_letter(new_letter: String) -> void:
 			piece_sprite.texture = PINK_HEART
 		"Y":
 			piece_sprite.texture = GREEN_LEAF
+
+	var brightness: float = PIECE_BRIGHTNESS.get(letter, 1.0)
+	piece_sprite.self_modulate = Color(brightness, brightness, brightness, 1.0)
 
 func set_selected(selected: bool) -> void:
 	is_selected = selected
