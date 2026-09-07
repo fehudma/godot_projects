@@ -1,8 +1,8 @@
 extends Node2D
 
 #==========================CONST
-const COLUMNS: int = 6
-const ROWS: int = 4
+const COLUMNS: int = 5
+const ROWS: int = 7
 
 const CELL_WIDTH: int = 128
 const CELL_HEIGHT: int = 128

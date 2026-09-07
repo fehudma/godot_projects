@@ -44,34 +44,35 @@ offset_bottom = 598.0
 [node name="Control" type="Control" parent="." unique_id=875048242]
 layout_mode = 3
 anchors_preset = 0
-offset_left = 216.0
-offset_right = 256.0
-offset_bottom = 40.0
+offset_left = -600.0
+offset_top = 864.0
+offset_right = -560.0
+offset_bottom = 904.0
 
 [node name="HintButton" type="Button" parent="Control" unique_id=1440403269]
 layout_mode = 0
-offset_left = 620.0
-offset_top = 71.0
-offset_right = 920.0
-offset_bottom = 206.0
+offset_left = 667.0
+offset_top = 127.0
+offset_right = 967.0
+offset_bottom = 262.0
 theme_override_font_sizes/font_size = 55
 text = "Hint"
 
 [node name="BreakerButton" type="Button" parent="Control" unique_id=476545329]
 layout_mode = 0
-offset_left = 619.0
-offset_top = 248.0
-offset_right = 872.0
-offset_bottom = 383.0
+offset_left = 992.0
+offset_top = 125.0
+offset_right = 1292.0
+offset_bottom = 260.0
 theme_override_font_sizes/font_size = 55
 text = "Breaker (0)"
 
 [node name="BreakerProgressLabel" type="Label" parent="Control" unique_id=371216888]
 layout_mode = 0
-offset_left = 622.0
-offset_top = 386.0
-offset_right = 806.0
-offset_bottom = 409.0
+offset_left = 995.0
+offset_top = 263.0
+offset_right = 1179.0
+offset_bottom = 286.0
 text = "Breaker progress: 0 / 30"
 
 [connection signal="pressed" from="TestButton" to="Board" method="_on_test_button_pressed"]
