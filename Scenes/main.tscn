@@ -19,8 +19,26 @@ text = "Idle RPG"
 
 [node name="RecruitButton" type="Button" parent="." unique_id=1699536273]
 layout_mode = 0
-offset_right = 8.0
-offset_bottom = 8.0
+offset_left = 95.0
+offset_top = -1.0
+offset_right = 239.0
+offset_bottom = 30.0
 text = "Recruit Character"
+
+[node name="AttackLabel" type="Label" parent="." unique_id=1983624152]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 38.0
+offset_right = 82.0
+offset_bottom = 61.0
+text = "Attack: 99"
+
+[node name="DefenseLabel" type="Label" parent="." unique_id=1853046147]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 66.0
+offset_right = 95.0
+offset_bottom = 89.0
+text = "Defense: 99"
 
 [connection signal="pressed" from="RecruitButton" to="." method="_on_recruit_button_pressed"]
