@@ -34,6 +34,10 @@ offset_bottom = 131.0
 layout_mode = 2
 text = "Name: Unknown"
 
+[node name="LevelLabel" type="Label" parent="VBoxContainer" unique_id=977112135]
+layout_mode = 2
+text = "Level: 99"
+
 [node name="AttackLabel" type="Label" parent="VBoxContainer" unique_id=1983624152]
 layout_mode = 2
 text = "Attack: 99"
