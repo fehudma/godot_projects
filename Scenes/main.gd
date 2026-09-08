@@ -37,6 +37,14 @@ var test_item: Dictionary = {
 	"health_bonus": 0
 }
 
+var item_weapon_silver: Dictionary = {
+	"slot": "weapon",
+	"name": "Silver Sword",
+	"attack_bonus": 10,
+	"defense_bonus": 0,
+	"health_bonus": 0
+}
+
 var test_armor: Dictionary = {
 	"slot": "armor",
 	"name": "Worn Armor",
@@ -45,9 +53,19 @@ var test_armor: Dictionary = {
 	"health_bonus": 5,
 }
 
+var item_armor_iron: Dictionary = {
+	"slot": "armor",
+	"name": "Iron Armor",
+	"attack_bonus": 0,
+	"defense_bonus": 10,
+	"health_bonus": 5,
+}
+
 var item_pool: Array[Dictionary] = [
 	test_item,
-	test_armor
+	test_armor,
+	item_weapon_silver,
+	item_armor_iron
 ]
 
 var inventory: Array[Dictionary] = [
@@ -89,10 +107,9 @@ func update_stats_display() -> void:
 	name_label.text = "Name: " + str(character["name"])
 	level_label.text = "Level: " + str(character["level"])
 	experience_label.text = "XP: " + str(character["experience"])
-	health_label.text = "Health: " + str(character["health"])
-	#attack_label.text = "Attack: " + str(character["attack"])
+	health_label.text = "Health: " + str(get_total_health())
 	attack_label.text = "Attack: " + str(get_total_attack())
-	defense_label.text = "Defense: " + str(character["defense"])
+	defense_label.text = "Defense: " + str(get_total_defense())
 
 #character generation
 func generate_character() -> void:
@@ -125,10 +142,35 @@ func update_inventory_display() -> void:
 	inventory_count_label.text = "Items: " + str(inventory.size())
 
 #Equip a weapon manually from inventory
+#func equip_first_weapon() -> void:
+	#for item: Dictionary in inventory:
+		#if item["slot"] == "weapon":
+			#character["weapon"] = item
+			#if not character["weapon"].is_empty():
+				#inventory.append(character["weapon"])
+			#inventory.erase(item)
+			#return
+
+#Equip a weapon manually from inventory
 func equip_first_weapon() -> void:
 	for item: Dictionary in inventory:
 		if item["slot"] == "weapon":
+			if not character["weapon"].is_empty():
+				inventory.append(character["weapon"])
+
 			character["weapon"] = item
+			inventory.erase(item)
+			return
+
+#Show the equipped armor name
+func equip_first_armor() -> void:
+	for item: Dictionary in inventory:
+		if item["slot"] == "armor":
+			if not character["armor"].is_empty():
+				inventory.append(character["armor"])
+
+			character["armor"] = item
+			inventory.erase(item)
 			return
 
 #Show the equipped weapon name
@@ -143,18 +185,6 @@ func update_equipment_display() -> void:
 	else:
 		equipped_armor_label.text = "Armor: " + str(character["armor"]["name"])
 
-#Show the equipped armor name
-func equip_first_armor() -> void:
-	if inventory.is_empty():
-		return
-
-	var item: Dictionary = inventory[0]
-
-	if item["slot"] != "armor":
-		return
-
-	character["armor"] = item
-
 #Make equipment update the character’s attack
 func get_total_attack() -> int:
 	var total_attack: int = character["attack"]
@@ -162,7 +192,34 @@ func get_total_attack() -> int:
 	if not character["weapon"].is_empty():
 		total_attack += character["weapon"]["attack_bonus"]
 
+	if not character["armor"].is_empty():
+		total_attack += character["armor"]["attack_bonus"]
+
 	return total_attack
+
+#Make armor increase displayed defense
+func get_total_defense() -> int:
+	var total_defense: int = character["defense"]
+
+	if not character["armor"].is_empty():
+		total_defense += character["armor"]["defense_bonus"]
+
+	if not character["weapon"].is_empty():
+		total_defense += character["weapon"]["defense_bonus"]
+
+	return total_defense
+
+#Make armor increase displayed health
+func get_total_health() -> int:
+	var total_health: int = character["health"]
+
+	if not character["armor"].is_empty():
+		total_health += character["armor"]["health_bonus"]
+
+	if not character["weapon"].is_empty():
+		total_health += character["weapon"]["health_bonus"]
+
+	return total_health
 #=======================OTHER
 #nothing here yet...
 #=======================INIT
@@ -195,8 +252,11 @@ func _on_equip_weapon_button_pressed() -> void:
 	equip_first_weapon()
 	update_equipment_display()
 	update_stats_display()
+	update_inventory_display()
 
 
 func _on_equip_armor_button_pressed() -> void:
 	equip_first_armor()
 	update_equipment_display()
+	update_stats_display()
+	update_inventory_display()
