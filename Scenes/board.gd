@@ -46,11 +46,10 @@ const STARTING_LIGHTNING_USAGES: int = 1
 
 const SAVE_FILE_PATH: String = "user://save_data.json"
 #==========================onreadies
-
-@onready var score_label: Label = $"../ScoreLabel"
+@onready var score_label: Label = $"../Control/VBoxContainer/ScoreLabel"
 @onready var combo_label: Label = $"../ComboLabel"
 @onready var restart_button: Button = $"../RestartButton"
-@onready var status_label: Label = $"../StatusLabel"
+@onready var status_label: Label = $"../Control/VBoxContainer/StatusLabel"
 @onready var hint_button: Button = $"../Control/VBoxContainer/HintButton"
 @onready var breaker_progress_label: Label = $"../Control/VBoxContainer/BreakerProgressLabel"
 @onready var breaker_button: Button = $"../Control/VBoxContainer/BreakerButton"
@@ -762,21 +761,12 @@ func ensure_playable_board() -> void:
 
 #Disable Hint while the board is busy
 func update_ui_lock_state() -> void:
-	hint_button.disabled = input_locked or is_power_up_active()
+	hint_button.disabled = input_locked
 	breaker_button.disabled = input_locked or breakers_remaining <= 0
 	chainsaw_button.disabled = input_locked or chainsaws_remaining <= 0
 	jackhammer_button.disabled = input_locked or jackhammers_remaining <= 0
 	lightning_button.disabled = input_locked or lightnings_remaining <= 0
 	restart_button.disabled = input_locked
-
-
-func is_power_up_active() -> bool:
-	return (
-		breaker_active
-		or chainsaw_active
-		or jackhammer_active
-		or lightning_active
-	)
 
 #Enable Breaker targeting state for all pieces
 func set_breaker_targeting_for_all_pieces(is_targetable: bool) -> void:
@@ -1274,7 +1264,7 @@ func _on_hint_button_pressed() -> void:
 	if input_locked:
 		return
 
-	if is_power_up_active():
+	if breaker_active:
 		return
 	
 	if is_inside_board(selected_cell):
