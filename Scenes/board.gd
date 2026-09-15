@@ -36,8 +36,8 @@ const PIECE_LETTERS: Array[String] = [
 const POINTS_PER_PIECE: int = 10
 const CASCADE_MULTIPLIER_STEP: int = 1
 
-const BREAKER_PIECES_REQUIRED: int = 30
-const MAX_BREAKERS: int = 5
+const BREAKER_PIECES_REQUIRED: int = 99
+const MAX_BREAKERS: int = 99
 
 const SAVE_FILE_PATH: String = "user://save_data.json"
 #==========================onreadies
