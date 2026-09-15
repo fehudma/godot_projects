@@ -6,6 +6,8 @@ const ROWS: int = 7
 
 const CELL_WIDTH: int = 128
 const CELL_HEIGHT: int = 128
+const DRAG_SWAP_THRESHOLD: float = 32.0
+const NO_ACTIVE_POINTER: int = -2
 
 
 #
@@ -54,6 +56,10 @@ var grid: Array[Array] = []
 
 var selected_cell: Vector2i = Vector2i(-1, -1)
 var second_cell: Vector2i = Vector2i(-1, -1)
+var drag_origin_cell: Vector2i = Vector2i(-1, -1)
+var drag_start_global_position: Vector2 = Vector2.ZERO
+var active_pointer_id: int = NO_ACTIVE_POINTER
+var drag_swap_triggered: bool = false
 
 var input_locked: bool = false
 
@@ -899,20 +905,88 @@ func handle_board_press(global_position: Vector2) -> void:
 
 		second_cell = Vector2i(-1, -1)
 
-func _input(event: InputEvent) -> void:
-	if input_locked:
+
+func begin_drag_swap(pointer_id: int, global_position: Vector2) -> void:
+	var pressed_cell := pixel_to_grid(to_local(global_position))
+
+	if not is_inside_board(pressed_cell):
 		return
 
+	if grid[pressed_cell.x][pressed_cell.y] == null:
+		return
+
+	active_pointer_id = pointer_id
+	drag_origin_cell = pressed_cell
+	drag_start_global_position = global_position
+	drag_swap_triggered = false
+
+	handle_board_press(global_position)
+
+
+func update_drag_swap(pointer_id: int, global_position: Vector2) -> void:
+	if pointer_id != active_pointer_id or drag_swap_triggered or input_locked:
+		return
+
+	var drag_offset := global_position - drag_start_global_position
+
+	if drag_offset.length() < DRAG_SWAP_THRESHOLD:
+		return
+
+	var drag_direction := Vector2i.ZERO
+
+	if absf(drag_offset.x) > absf(drag_offset.y):
+		drag_direction.x = 1 if drag_offset.x > 0.0 else -1
+	else:
+		drag_direction.y = 1 if drag_offset.y > 0.0 else -1
+
+	var target_cell := drag_origin_cell + drag_direction
+
+	if not is_inside_board(target_cell):
+		return
+
+	if grid[target_cell.x][target_cell.y] == null:
+		return
+
+	drag_swap_triggered = true
+	handle_board_press(to_global(grid_to_pixel(target_cell.x, target_cell.y)))
+
+
+func end_drag_swap(pointer_id: int) -> void:
+	if pointer_id != active_pointer_id:
+		return
+
+	active_pointer_id = NO_ACTIVE_POINTER
+	drag_origin_cell = Vector2i(-1, -1)
+	drag_swap_triggered = false
+
+func _input(event: InputEvent) -> void:
 	if event is InputEventScreenTouch:
 		if event.pressed:
-			handle_board_press(event.position)
+			if not input_locked:
+				begin_drag_swap(event.index, event.position)
+		else:
+			end_drag_swap(event.index)
+
+	elif event is InputEventScreenDrag:
+		update_drag_swap(event.index, event.position)
 
 	elif event is InputEventMouseButton:
 		if event.device == InputEvent.DEVICE_ID_EMULATION:
 			return
 
-		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			handle_board_press(event.position)
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			if event.pressed:
+				if not input_locked:
+					begin_drag_swap(0, event.position)
+			else:
+				end_drag_swap(0)
+
+	elif event is InputEventMouseMotion:
+		if event.device == InputEvent.DEVICE_ID_EMULATION:
+			return
+
+		if event.button_mask & MOUSE_BUTTON_MASK_LEFT:
+			update_drag_swap(0, event.position)
 
 
 func _on_hint_button_pressed() -> void:
