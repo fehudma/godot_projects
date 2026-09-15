@@ -38,6 +38,9 @@ const CASCADE_MULTIPLIER_STEP: int = 1
 
 const BREAKER_PIECES_REQUIRED: int = 99
 const MAX_BREAKERS: int = 99
+const TOOL_PIECES_REQUIRED: int = 200
+const MAX_TOOL_USAGES: int = 99
+const STARTING_TOOL_USAGES: int = 5
 
 const SAVE_FILE_PATH: String = "user://save_data.json"
 #==========================onreadies
@@ -51,6 +54,8 @@ const SAVE_FILE_PATH: String = "user://save_data.json"
 @onready var breaker_button: Button = $"../Control/VBoxContainer/BreakerButton"
 @onready var chainsaw_button: Button = $"../Control/VBoxContainer/ChainsawButton"
 @onready var jackhammer_button: Button = $"../Control/VBoxContainer/JackhammerButton"
+@onready var chainsaw_progress_label: Label = $"../Control/VBoxContainer/ChainsawProgressLabel"
+@onready var jackhammer_progress_label: Label = $"../Control/VBoxContainer/JackhammerProgressLabel"
 
 
 #==========================VARS
@@ -68,6 +73,10 @@ var input_locked: bool = false
 var breaker_active: bool = false
 var chainsaw_active: bool = false
 var jackhammer_active: bool = false
+var chainsaws_remaining: int = STARTING_TOOL_USAGES
+var jackhammers_remaining: int = STARTING_TOOL_USAGES
+var pieces_cleared_toward_chainsaw: int = 0
+var pieces_cleared_toward_jackhammer: int = 0
 
 var score: int = 0
 
@@ -559,10 +568,16 @@ func add_score_for_match(
 ) -> void:
 	score += matched_pieces.size() * POINTS_PER_PIECE * multiplier
 	pieces_cleared_toward_breaker += matched_pieces.size()
+	pieces_cleared_toward_chainsaw += matched_pieces.size()
+	pieces_cleared_toward_jackhammer += matched_pieces.size()
 
 	check_breaker_reward()
+	check_chainsaw_reward()
+	check_jackhammer_reward()
 
 	update_breaker_progress_display()
+	update_chainsaw_progress_display()
+	update_jackhammer_progress_display()
 	update_score_display()
 
 	save_progress()
@@ -603,6 +618,40 @@ func check_breaker_reward() -> void:
 			BREAKER_PIECES_REQUIRED - 1
 		)
 
+
+func check_chainsaw_reward() -> void:
+	while (
+		pieces_cleared_toward_chainsaw >= TOOL_PIECES_REQUIRED
+		and chainsaws_remaining < MAX_TOOL_USAGES
+	):
+		pieces_cleared_toward_chainsaw -= TOOL_PIECES_REQUIRED
+		chainsaws_remaining += 1
+
+	if chainsaws_remaining >= MAX_TOOL_USAGES:
+		pieces_cleared_toward_chainsaw = min(
+			pieces_cleared_toward_chainsaw,
+			TOOL_PIECES_REQUIRED - 1
+		)
+
+	update_chainsaw_button_text()
+
+
+func check_jackhammer_reward() -> void:
+	while (
+		pieces_cleared_toward_jackhammer >= TOOL_PIECES_REQUIRED
+		and jackhammers_remaining < MAX_TOOL_USAGES
+	):
+		pieces_cleared_toward_jackhammer -= TOOL_PIECES_REQUIRED
+		jackhammers_remaining += 1
+
+	if jackhammers_remaining >= MAX_TOOL_USAGES:
+		pieces_cleared_toward_jackhammer = min(
+			pieces_cleared_toward_jackhammer,
+			TOOL_PIECES_REQUIRED - 1
+		)
+
+	update_jackhammer_button_text()
+
 #Show the remaining Breaker count on the button
 func update_breaker_button_text() -> void:
 	breaker_button.disabled = breakers_remaining <= 0
@@ -623,6 +672,32 @@ func update_breaker_progress_display() -> void:
 		+ str(pieces_cleared_toward_breaker)
 		+ " / "
 		+ str(BREAKER_PIECES_REQUIRED)
+	)
+
+
+func update_chainsaw_progress_display() -> void:
+	if chainsaws_remaining >= MAX_TOOL_USAGES:
+		chainsaw_progress_label.text = "Chainsaw progress: MAX"
+		return
+
+	chainsaw_progress_label.text = (
+		"Chainsaw progress: "
+		+ str(pieces_cleared_toward_chainsaw)
+		+ " / "
+		+ str(TOOL_PIECES_REQUIRED)
+	)
+
+
+func update_jackhammer_progress_display() -> void:
+	if jackhammers_remaining >= MAX_TOOL_USAGES:
+		jackhammer_progress_label.text = "Jackhammer progress: MAX"
+		return
+
+	jackhammer_progress_label.text = (
+		"Jackhammer progress: "
+		+ str(pieces_cleared_toward_jackhammer)
+		+ " / "
+		+ str(TOOL_PIECES_REQUIRED)
 	)
 
 #Show the current cascade multiplier briefly
@@ -649,8 +724,8 @@ func ensure_playable_board() -> void:
 func update_ui_lock_state() -> void:
 	hint_button.disabled = input_locked
 	breaker_button.disabled = input_locked or breakers_remaining <= 0
-	chainsaw_button.disabled = input_locked
-	jackhammer_button.disabled = input_locked
+	chainsaw_button.disabled = input_locked or chainsaws_remaining <= 0
+	jackhammer_button.disabled = input_locked or jackhammers_remaining <= 0
 	restart_button.disabled = input_locked
 
 #Enable Breaker targeting state for all pieces
@@ -664,11 +739,17 @@ func set_breaker_targeting_for_all_pieces(is_targetable: bool) -> void:
 
 
 func update_chainsaw_button_text() -> void:
-	chainsaw_button.text = "Chainsaw: ON" if chainsaw_active else "Chainsaw"
+	if chainsaw_active:
+		chainsaw_button.text = "Chainsaw: ON (" + str(chainsaws_remaining) + ")"
+	else:
+		chainsaw_button.text = "Chainsaw (" + str(chainsaws_remaining) + ")"
 
 
 func update_jackhammer_button_text() -> void:
-	jackhammer_button.text = "Jackhammer: ON" if jackhammer_active else "Jackhammer"
+	if jackhammer_active:
+		jackhammer_button.text = "Jackhammer: ON (" + str(jackhammers_remaining) + ")"
+	else:
+		jackhammer_button.text = "Jackhammer (" + str(jackhammers_remaining) + ")"
 
 #a simple board reset helper for future reuse
 func clear_board() -> void:
@@ -701,7 +782,11 @@ func save_progress() -> void:
 	var save_data: Dictionary = {
 		"score": score,
 		"breakers_remaining": breakers_remaining,
-		"pieces_cleared_toward_breaker": pieces_cleared_toward_breaker
+		"pieces_cleared_toward_breaker": pieces_cleared_toward_breaker,
+		"chainsaws_remaining": chainsaws_remaining,
+		"jackhammers_remaining": jackhammers_remaining,
+		"pieces_cleared_toward_chainsaw": pieces_cleared_toward_chainsaw,
+		"pieces_cleared_toward_jackhammer": pieces_cleared_toward_jackhammer
 	}
 
 	var file: FileAccess = FileAccess.open(
@@ -744,6 +829,22 @@ func load_progress() -> void:
 	if save_data.has("pieces_cleared_toward_breaker"):
 		pieces_cleared_toward_breaker = int(
 			save_data["pieces_cleared_toward_breaker"]
+		)
+
+	if save_data.has("chainsaws_remaining"):
+		chainsaws_remaining = int(save_data["chainsaws_remaining"])
+
+	if save_data.has("jackhammers_remaining"):
+		jackhammers_remaining = int(save_data["jackhammers_remaining"])
+
+	if save_data.has("pieces_cleared_toward_chainsaw"):
+		pieces_cleared_toward_chainsaw = int(
+			save_data["pieces_cleared_toward_chainsaw"]
+		)
+
+	if save_data.has("pieces_cleared_toward_jackhammer"):
+		pieces_cleared_toward_jackhammer = int(
+			save_data["pieces_cleared_toward_jackhammer"]
 		)
 #==========================OTHER FUNCTIONS
 #“Where should the center of cell (column, row) be?”
@@ -794,6 +895,8 @@ func _ready() -> void:
 	update_chainsaw_button_text()
 	update_jackhammer_button_text()
 	update_breaker_progress_display()
+	update_chainsaw_progress_display()
+	update_jackhammer_progress_display()
 	update_combo_display(1)
 	update_ui_lock_state()
 
@@ -811,6 +914,7 @@ func handle_board_press(global_position: Vector2) -> void:
 
 	if jackhammer_active:
 		input_locked = true
+		jackhammers_remaining -= 1
 		jackhammer_active = false
 		update_jackhammer_button_text()
 		update_ui_lock_state()
@@ -836,6 +940,7 @@ func handle_board_press(global_position: Vector2) -> void:
 
 	if chainsaw_active:
 		input_locked = true
+		chainsaws_remaining -= 1
 		chainsaw_active = false
 		update_chainsaw_button_text()
 		update_ui_lock_state()
@@ -1126,6 +1231,9 @@ func _on_chainsaw_button_pressed() -> void:
 	if input_locked:
 		return
 
+	if chainsaws_remaining <= 0:
+		return
+
 	if selected_cell != Vector2i(-1, -1):
 		var selected_piece: Piece = grid[selected_cell.x][selected_cell.y]
 
@@ -1147,6 +1255,9 @@ func _on_chainsaw_button_pressed() -> void:
 
 func _on_jackhammer_button_pressed() -> void:
 	if input_locked:
+		return
+
+	if jackhammers_remaining <= 0:
 		return
 
 	if selected_cell != Vector2i(-1, -1):
