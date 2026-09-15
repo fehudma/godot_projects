@@ -114,6 +114,19 @@ func set_selected(selected: bool) -> void:
 		piece_sprite.modulate = Color.WHITE
 
 
+func play_lightning_target_animation() -> void:
+	var tween := create_tween()
+	var lightning_color := Color(0.35, 0.95, 1.0, 1.0)
+
+	for cycle: int in range(3):
+		tween.tween_property(piece_sprite, "modulate", lightning_color, 0.07)
+		tween.parallel().tween_property(self, "scale", Vector2(1.12, 1.12), 0.07)
+		tween.tween_property(piece_sprite, "modulate", Color.WHITE, 0.07)
+		tween.parallel().tween_property(self, "scale", Vector2.ONE, 0.07)
+
+	await tween.finished
+
+
 func _on_area_2d_mouse_entered() -> void:
 	if is_selected:
 		return

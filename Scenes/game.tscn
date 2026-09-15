@@ -73,23 +73,32 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 55
 text = "Breaker (0)"
 
-[node name="ChainsawProgressLabel" type="Label" parent="Control/VBoxContainer"]
+[node name="ChainsawProgressLabel" type="Label" parent="Control/VBoxContainer" unique_id=1557649976]
 layout_mode = 2
 text = "Chainsaw progress: 0 / 200"
 
-[node name="ChainsawButton" type="Button" parent="Control/VBoxContainer"]
+[node name="ChainsawButton" type="Button" parent="Control/VBoxContainer" unique_id=548183241]
 layout_mode = 2
 theme_override_font_sizes/font_size = 55
 text = "Chainsaw (5)"
 
-[node name="JackhammerProgressLabel" type="Label" parent="Control/VBoxContainer"]
+[node name="JackhammerProgressLabel" type="Label" parent="Control/VBoxContainer" unique_id=1771760358]
 layout_mode = 2
 text = "Jackhammer progress: 0 / 200"
 
-[node name="JackhammerButton" type="Button" parent="Control/VBoxContainer"]
+[node name="JackhammerButton" type="Button" parent="Control/VBoxContainer" unique_id=133293281]
 layout_mode = 2
 theme_override_font_sizes/font_size = 55
 text = "Jackhammer (5)"
+
+[node name="LightningProgressLabel" type="Label" parent="Control/VBoxContainer" unique_id=563701099]
+layout_mode = 2
+text = "Lightning progress: 0 / 999"
+
+[node name="LightningButton" type="Button" parent="Control/VBoxContainer" unique_id=419310029]
+layout_mode = 2
+theme_override_font_sizes/font_size = 55
+text = "Lightning (1)"
 
 [connection signal="pressed" from="TestButton" to="Board" method="_on_test_button_pressed"]
 [connection signal="pressed" from="RestartButton" to="Board" method="_on_restart_button_pressed"]
@@ -97,3 +106,4 @@ text = "Jackhammer (5)"
 [connection signal="pressed" from="Control/VBoxContainer/BreakerButton" to="Board" method="_on_breaker_button_pressed"]
 [connection signal="pressed" from="Control/VBoxContainer/ChainsawButton" to="Board" method="_on_chainsaw_button_pressed"]
 [connection signal="pressed" from="Control/VBoxContainer/JackhammerButton" to="Board" method="_on_jackhammer_button_pressed"]
+[connection signal="pressed" from="Control/VBoxContainer/LightningButton" to="Board" method="_on_lightning_button_pressed"]

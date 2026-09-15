@@ -36,11 +36,13 @@ const PIECE_LETTERS: Array[String] = [
 const POINTS_PER_PIECE: int = 10
 const CASCADE_MULTIPLIER_STEP: int = 1
 
-const BREAKER_PIECES_REQUIRED: int = 99
+const BREAKER_PIECES_REQUIRED: int = 100
 const MAX_BREAKERS: int = 99
 const TOOL_PIECES_REQUIRED: int = 200
 const MAX_TOOL_USAGES: int = 99
 const STARTING_TOOL_USAGES: int = 5
+const LIGHTNING_PIECES_REQUIRED: int = 999
+const STARTING_LIGHTNING_USAGES: int = 1
 
 const SAVE_FILE_PATH: String = "user://save_data.json"
 #==========================onreadies
@@ -56,6 +58,8 @@ const SAVE_FILE_PATH: String = "user://save_data.json"
 @onready var jackhammer_button: Button = $"../Control/VBoxContainer/JackhammerButton"
 @onready var chainsaw_progress_label: Label = $"../Control/VBoxContainer/ChainsawProgressLabel"
 @onready var jackhammer_progress_label: Label = $"../Control/VBoxContainer/JackhammerProgressLabel"
+@onready var lightning_button: Button = $"../Control/VBoxContainer/LightningButton"
+@onready var lightning_progress_label: Label = $"../Control/VBoxContainer/LightningProgressLabel"
 
 
 #==========================VARS
@@ -77,6 +81,9 @@ var chainsaws_remaining: int = STARTING_TOOL_USAGES
 var jackhammers_remaining: int = STARTING_TOOL_USAGES
 var pieces_cleared_toward_chainsaw: int = 0
 var pieces_cleared_toward_jackhammer: int = 0
+var lightning_active: bool = false
+var lightnings_remaining: int = STARTING_LIGHTNING_USAGES
+var pieces_cleared_toward_lightning: int = 0
 
 var score: int = 0
 
@@ -570,14 +577,17 @@ func add_score_for_match(
 	pieces_cleared_toward_breaker += matched_pieces.size()
 	pieces_cleared_toward_chainsaw += matched_pieces.size()
 	pieces_cleared_toward_jackhammer += matched_pieces.size()
+	pieces_cleared_toward_lightning += matched_pieces.size()
 
 	check_breaker_reward()
 	check_chainsaw_reward()
 	check_jackhammer_reward()
+	check_lightning_reward()
 
 	update_breaker_progress_display()
 	update_chainsaw_progress_display()
 	update_jackhammer_progress_display()
+	update_lightning_progress_display()
 	update_score_display()
 
 	save_progress()
@@ -652,6 +662,23 @@ func check_jackhammer_reward() -> void:
 
 	update_jackhammer_button_text()
 
+
+func check_lightning_reward() -> void:
+	while (
+		pieces_cleared_toward_lightning >= LIGHTNING_PIECES_REQUIRED
+		and lightnings_remaining < MAX_TOOL_USAGES
+	):
+		pieces_cleared_toward_lightning -= LIGHTNING_PIECES_REQUIRED
+		lightnings_remaining += 1
+
+	if lightnings_remaining >= MAX_TOOL_USAGES:
+		pieces_cleared_toward_lightning = min(
+			pieces_cleared_toward_lightning,
+			LIGHTNING_PIECES_REQUIRED - 1
+		)
+
+	update_lightning_button_text()
+
 #Show the remaining Breaker count on the button
 func update_breaker_button_text() -> void:
 	breaker_button.disabled = breakers_remaining <= 0
@@ -700,6 +727,19 @@ func update_jackhammer_progress_display() -> void:
 		+ str(TOOL_PIECES_REQUIRED)
 	)
 
+
+func update_lightning_progress_display() -> void:
+	if lightnings_remaining >= MAX_TOOL_USAGES:
+		lightning_progress_label.text = "Lightning progress: MAX"
+		return
+
+	lightning_progress_label.text = (
+		"Lightning progress: "
+		+ str(pieces_cleared_toward_lightning)
+		+ " / "
+		+ str(LIGHTNING_PIECES_REQUIRED)
+	)
+
 #Show the current cascade multiplier briefly
 func update_combo_display(multiplier: int) -> void:
 	combo_label.text = "Combo: x" + str(multiplier)
@@ -726,6 +766,7 @@ func update_ui_lock_state() -> void:
 	breaker_button.disabled = input_locked or breakers_remaining <= 0
 	chainsaw_button.disabled = input_locked or chainsaws_remaining <= 0
 	jackhammer_button.disabled = input_locked or jackhammers_remaining <= 0
+	lightning_button.disabled = input_locked or lightnings_remaining <= 0
 	restart_button.disabled = input_locked
 
 #Enable Breaker targeting state for all pieces
@@ -750,6 +791,13 @@ func update_jackhammer_button_text() -> void:
 		jackhammer_button.text = "Jackhammer: ON (" + str(jackhammers_remaining) + ")"
 	else:
 		jackhammer_button.text = "Jackhammer (" + str(jackhammers_remaining) + ")"
+
+
+func update_lightning_button_text() -> void:
+	if lightning_active:
+		lightning_button.text = "Lightning: ON (" + str(lightnings_remaining) + ")"
+	else:
+		lightning_button.text = "Lightning (" + str(lightnings_remaining) + ")"
 
 #a simple board reset helper for future reuse
 func clear_board() -> void:
@@ -786,7 +834,9 @@ func save_progress() -> void:
 		"chainsaws_remaining": chainsaws_remaining,
 		"jackhammers_remaining": jackhammers_remaining,
 		"pieces_cleared_toward_chainsaw": pieces_cleared_toward_chainsaw,
-		"pieces_cleared_toward_jackhammer": pieces_cleared_toward_jackhammer
+		"pieces_cleared_toward_jackhammer": pieces_cleared_toward_jackhammer,
+		"lightnings_remaining": lightnings_remaining,
+		"pieces_cleared_toward_lightning": pieces_cleared_toward_lightning
 	}
 
 	var file: FileAccess = FileAccess.open(
@@ -846,6 +896,14 @@ func load_progress() -> void:
 		pieces_cleared_toward_jackhammer = int(
 			save_data["pieces_cleared_toward_jackhammer"]
 		)
+
+	if save_data.has("lightnings_remaining"):
+		lightnings_remaining = int(save_data["lightnings_remaining"])
+
+	if save_data.has("pieces_cleared_toward_lightning"):
+		pieces_cleared_toward_lightning = int(
+			save_data["pieces_cleared_toward_lightning"]
+		)
 #==========================OTHER FUNCTIONS
 #“Where should the center of cell (column, row) be?”
 func _draw() -> void:
@@ -894,9 +952,11 @@ func _ready() -> void:
 	update_breaker_button_text()
 	update_chainsaw_button_text()
 	update_jackhammer_button_text()
+	update_lightning_button_text()
 	update_breaker_progress_display()
 	update_chainsaw_progress_display()
 	update_jackhammer_progress_display()
+	update_lightning_progress_display()
 	update_combo_display(1)
 	update_ui_lock_state()
 
@@ -910,6 +970,47 @@ func handle_board_press(global_position: Vector2) -> void:
 	var clicked_piece: Piece = grid[clicked_cell.x][clicked_cell.y]
 
 	if clicked_piece == null:
+		return
+
+	if lightning_active:
+		input_locked = true
+		lightnings_remaining -= 1
+		lightning_active = false
+		update_lightning_button_text()
+		update_ui_lock_state()
+
+		var lightning_pieces: Array[Piece] = []
+
+		for column: int in range(COLUMNS):
+			for row: int in range(ROWS):
+				var target_piece: Piece = grid[column][row]
+
+				if target_piece != null and target_piece.letter == clicked_piece.letter:
+					lightning_pieces.append(target_piece)
+
+		status_label.text = (
+			"Lightning: "
+			+ str(lightning_pieces.size())
+			+ " "
+			+ clicked_piece.letter.replace("_", " ").capitalize()
+			+ " pieces"
+		)
+
+		for lightning_piece: Piece in lightning_pieces:
+			lightning_piece.play_lightning_target_animation()
+
+		await get_tree().create_timer(0.45).timeout
+
+		add_score_for_match(lightning_pieces)
+		remove_matched_pieces(lightning_pieces)
+		collapse_all_columns()
+		refill_board()
+		await resolve_cascades()
+		await ensure_playable_board()
+
+		status_label.text = ""
+		input_locked = false
+		update_ui_lock_state()
 		return
 
 	if jackhammer_active:
@@ -1215,6 +1316,8 @@ func _on_breaker_button_pressed() -> void:
 	update_chainsaw_button_text()
 	jackhammer_active = false
 	update_jackhammer_button_text()
+	lightning_active = false
+	update_lightning_button_text()
 	breaker_active = not breaker_active
 	
 	set_breaker_targeting_for_all_pieces(breaker_active)
@@ -1247,6 +1350,8 @@ func _on_chainsaw_button_pressed() -> void:
 	update_breaker_button_text()
 	jackhammer_active = false
 	update_jackhammer_button_text()
+	lightning_active = false
+	update_lightning_button_text()
 
 	chainsaw_active = not chainsaw_active
 	update_chainsaw_button_text()
@@ -1273,9 +1378,39 @@ func _on_jackhammer_button_pressed() -> void:
 	update_breaker_button_text()
 	chainsaw_active = false
 	update_chainsaw_button_text()
+	lightning_active = false
+	update_lightning_button_text()
 
 	jackhammer_active = not jackhammer_active
 	update_jackhammer_button_text()
+	update_ui_lock_state()
+
+
+func _on_lightning_button_pressed() -> void:
+	if input_locked:
+		return
+
+	if lightnings_remaining <= 0:
+		return
+
+	if selected_cell != Vector2i(-1, -1):
+		var selected_piece: Piece = grid[selected_cell.x][selected_cell.y]
+
+		if selected_piece != null:
+			selected_piece.set_selected(false)
+
+		selected_cell = Vector2i(-1, -1)
+
+	breaker_active = false
+	set_breaker_targeting_for_all_pieces(false)
+	update_breaker_button_text()
+	chainsaw_active = false
+	update_chainsaw_button_text()
+	jackhammer_active = false
+	update_jackhammer_button_text()
+
+	lightning_active = not lightning_active
+	update_lightning_button_text()
 	update_ui_lock_state()
 
 func _on_restart_button_pressed() -> void:
@@ -1285,8 +1420,18 @@ func _on_restart_button_pressed() -> void:
 	get_tree().reload_current_scene()
 
 func _on_test_button_pressed() -> void:
-	#collapse_column(0)
-	#reshuffle_board()
 	print("Test requested")
-	await get_tree().create_timer(1.0).timeout
-	await reset_board()
+	breakers_remaining = min(breakers_remaining + 1, MAX_BREAKERS)
+	chainsaws_remaining = min(chainsaws_remaining + 1, MAX_TOOL_USAGES)
+	jackhammers_remaining = min(jackhammers_remaining + 1, MAX_TOOL_USAGES)
+	lightnings_remaining = min(lightnings_remaining + 1, MAX_TOOL_USAGES)
+
+	update_breaker_button_text()
+	update_chainsaw_button_text()
+	update_jackhammer_button_text()
+	update_lightning_button_text()
+
+	update_breaker_progress_display()
+	update_chainsaw_progress_display()
+	update_jackhammer_progress_display()
+	update_lightning_progress_display()
