@@ -10,6 +10,7 @@ const CELL_HEIGHT: int = 128
 
 #
 const PIECE_SCENE: PackedScene = preload("res://Scenes/piece.tscn")
+const HINT_OVERLAY_SCENE: Script = preload("res://Scenes/hint_overlay.gd")
 
 
 #obsolete
@@ -62,6 +63,7 @@ var score: int = 0
 
 var breakers_remaining: int = 3
 var pieces_cleared_toward_breaker: int = 0
+var hint_overlay: HintOverlay
 #==========================HELPERS
 #
 func grid_to_pixel(column: int, row: int) -> Vector2:
@@ -759,6 +761,9 @@ func is_inside_board(grid_position: Vector2i) -> bool:
 	)
 #==========================INIT
 func _ready() -> void:
+	hint_overlay = HINT_OVERLAY_SCENE.new()
+	add_child(hint_overlay)
+
 	await generate_board()
 	await ensure_playable_board()
 
@@ -917,10 +922,11 @@ func _on_hint_button_pressed() -> void:
 	if breaker_active:
 		return
 	
-	var selected_piece: Piece = grid[selected_cell.x][selected_cell.y]
+	if is_inside_board(selected_cell):
+		var selected_piece: Piece = grid[selected_cell.x][selected_cell.y]
 
-	if selected_piece != null:
-		selected_piece.set_selected(false)
+		if selected_piece != null:
+			selected_piece.set_selected(false)
 
 	selected_cell = Vector2i(-1, -1)
 	
@@ -935,13 +941,11 @@ func _on_hint_button_pressed() -> void:
 	input_locked = true
 	update_ui_lock_state()
 
-	first_piece.set_selected(true)
-	second_piece.set_selected(true)
+	hint_overlay.show_hint(first_piece.position, second_piece.position)
 
 	await get_tree().create_timer(1.0).timeout
 
-	first_piece.set_selected(false)
-	second_piece.set_selected(false)
+	hint_overlay.clear_hint()
 
 	input_locked = false
 	update_ui_lock_state()
