@@ -6,12 +6,12 @@
 [node name="Game" type="Node2D" unique_id=2129177519]
 
 [node name="Board" type="Node2D" parent="." unique_id=100781173]
-position = Vector2(64, 64)
+position = Vector2(99, 64)
 script = ExtResource("1_ebmjs")
 
 [node name="BoardPreview" type="Polygon2D" parent="Board" unique_id=1452972190]
 color = Color(1, 1, 1, 0.25882354)
-polygon = PackedVector2Array(0, 0, 640, 0, 640, 896, 0, 896)
+polygon = PackedVector2Array(0, 0, 896, 0, 896, 896, 0, 896)
 script = ExtResource("2_qxrlw")
 
 [node name="TestButton" type="Button" parent="." unique_id=296336580]
@@ -21,16 +21,16 @@ offset_bottom = 8.0
 text = "Test"
 
 [node name="ScoreLabel" type="Label" parent="." unique_id=1061135490]
-offset_left = 64.0
-offset_top = 41.0
-offset_right = 125.0
-offset_bottom = 64.0
+offset_left = 99.0
+offset_top = 40.0
+offset_right = 160.0
+offset_bottom = 63.0
 text = "Score: 0"
 
 [node name="ComboLabel" type="Label" parent="." unique_id=1154950233]
-offset_left = 492.0
+offset_left = 903.0
 offset_top = 40.0
-offset_right = 574.0
+offset_right = 985.0
 offset_bottom = 63.0
 text = "Combo: x1"
 
@@ -42,52 +42,38 @@ offset_bottom = 8.0
 text = "Restart"
 
 [node name="StatusLabel" type="Label" parent="." unique_id=433130701]
-offset_left = 67.0
+offset_left = 99.0
 offset_top = 960.0
-offset_right = 158.0
+offset_right = 190.0
 offset_bottom = 983.0
 text = "status text"
 
 [node name="Control" type="Control" parent="." unique_id=875048242]
 layout_mode = 3
 anchors_preset = 0
-offset_left = -600.0
-offset_top = 864.0
-offset_right = -560.0
-offset_bottom = 904.0
 
-[node name="HintButton" type="Button" parent="Control" unique_id=1440403269]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control" unique_id=1220616823]
 layout_mode = 0
-offset_left = 667.0
-offset_top = 127.0
-offset_right = 967.0
-offset_bottom = 262.0
+offset_left = 99.0
+offset_top = 983.0
+offset_right = 399.0
+offset_bottom = 1182.0
+
+[node name="HintButton" type="Button" parent="Control/VBoxContainer" unique_id=1440403269]
+layout_mode = 2
 theme_override_font_sizes/font_size = 55
 text = "Hint"
 
-[node name="BreakerButton" type="Button" parent="Control" unique_id=476545329]
-layout_mode = 0
-offset_left = 995.0
-offset_top = 127.0
-offset_right = 1295.0
-offset_bottom = 262.0
+[node name="BreakerProgressLabel" type="Label" parent="Control/VBoxContainer" unique_id=371216888]
+layout_mode = 2
+text = "Breaker progress: 0 / 30"
+
+[node name="BreakerButton" type="Button" parent="Control/VBoxContainer" unique_id=476545329]
+layout_mode = 2
 theme_override_font_sizes/font_size = 55
 text = "Breaker (0)"
 
-[node name="BreakerProgressLabel" type="Label" parent="Control" unique_id=371216888]
-layout_mode = 0
-offset_left = 995.0
-offset_top = 263.0
-offset_right = 1179.0
-offset_bottom = 286.0
-text = "Breaker progress: 0 / 30"
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Control" unique_id=1537157319]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
 [connection signal="pressed" from="TestButton" to="Board" method="_on_test_button_pressed"]
 [connection signal="pressed" from="RestartButton" to="Board" method="_on_restart_button_pressed"]
-[connection signal="pressed" from="Control/HintButton" to="Board" method="_on_hint_button_pressed"]
-[connection signal="pressed" from="Control/BreakerButton" to="Board" method="_on_breaker_button_pressed"]
+[connection signal="pressed" from="Control/VBoxContainer/HintButton" to="Board" method="_on_hint_button_pressed"]
+[connection signal="pressed" from="Control/VBoxContainer/BreakerButton" to="Board" method="_on_breaker_button_pressed"]

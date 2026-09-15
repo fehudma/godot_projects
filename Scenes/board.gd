@@ -40,12 +40,13 @@ const SAVE_FILE_PATH: String = "user://save_data.json"
 #==========================onreadies
 
 @onready var score_label: Label = $"../ScoreLabel"
-@onready var breaker_progress_label: Label = $"../Control/BreakerProgressLabel"
 @onready var combo_label: Label = $"../ComboLabel"
 @onready var restart_button: Button = $"../RestartButton"
 @onready var status_label: Label = $"../StatusLabel"
-@onready var hint_button: Button = $"../Control/HintButton"
-@onready var breaker_button: Button = $"../Control/BreakerButton"
+@onready var hint_button: Button = $"../Control/VBoxContainer/HintButton"
+@onready var breaker_progress_label: Label = $"../Control/VBoxContainer/BreakerProgressLabel"
+@onready var breaker_button: Button = $"../Control/VBoxContainer/BreakerButton"
+
 
 #==========================VARS
 var grid: Array[Array] = []
@@ -352,7 +353,9 @@ func get_matches_from_swap(
 		if not matched_pieces.has(piece):
 			matched_pieces.append(piece)
 
-
+	for piece: Piece in get_matches_at(second_cell):
+		if not matched_pieces.has(piece):
+			matched_pieces.append(piece)
 
 	return matched_pieces
 
