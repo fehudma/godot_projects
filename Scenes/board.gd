@@ -50,6 +50,7 @@ const SAVE_FILE_PATH: String = "user://save_data.json"
 @onready var breaker_progress_label: Label = $"../Control/VBoxContainer/BreakerProgressLabel"
 @onready var breaker_button: Button = $"../Control/VBoxContainer/BreakerButton"
 @onready var chainsaw_button: Button = $"../Control/VBoxContainer/ChainsawButton"
+@onready var jackhammer_button: Button = $"../Control/VBoxContainer/JackhammerButton"
 
 
 #==========================VARS
@@ -66,6 +67,7 @@ var input_locked: bool = false
 
 var breaker_active: bool = false
 var chainsaw_active: bool = false
+var jackhammer_active: bool = false
 
 var score: int = 0
 
@@ -648,6 +650,7 @@ func update_ui_lock_state() -> void:
 	hint_button.disabled = input_locked
 	breaker_button.disabled = input_locked or breakers_remaining <= 0
 	chainsaw_button.disabled = input_locked
+	jackhammer_button.disabled = input_locked
 	restart_button.disabled = input_locked
 
 #Enable Breaker targeting state for all pieces
@@ -662,6 +665,10 @@ func set_breaker_targeting_for_all_pieces(is_targetable: bool) -> void:
 
 func update_chainsaw_button_text() -> void:
 	chainsaw_button.text = "Chainsaw: ON" if chainsaw_active else "Chainsaw"
+
+
+func update_jackhammer_button_text() -> void:
+	jackhammer_button.text = "Jackhammer: ON" if jackhammer_active else "Jackhammer"
 
 #a simple board reset helper for future reuse
 func clear_board() -> void:
@@ -785,6 +792,7 @@ func _ready() -> void:
 	update_score_display()
 	update_breaker_button_text()
 	update_chainsaw_button_text()
+	update_jackhammer_button_text()
 	update_breaker_progress_display()
 	update_combo_display(1)
 	update_ui_lock_state()
@@ -799,6 +807,30 @@ func handle_board_press(global_position: Vector2) -> void:
 	var clicked_piece: Piece = grid[clicked_cell.x][clicked_cell.y]
 
 	if clicked_piece == null:
+		return
+
+	if jackhammer_active:
+		input_locked = true
+		jackhammer_active = false
+		update_jackhammer_button_text()
+		update_ui_lock_state()
+
+		var column_pieces: Array[Piece] = []
+
+		for row: int in range(ROWS):
+			var column_piece: Piece = grid[clicked_cell.x][row]
+
+			if column_piece != null:
+				column_pieces.append(column_piece)
+
+		remove_matched_pieces(column_pieces)
+		collapse_all_columns()
+		refill_board()
+		await resolve_cascades()
+		await ensure_playable_board()
+
+		input_locked = false
+		update_ui_lock_state()
 		return
 
 	if chainsaw_active:
@@ -1074,6 +1106,8 @@ func _on_breaker_button_pressed() -> void:
 
 	chainsaw_active = false
 	update_chainsaw_button_text()
+	jackhammer_active = false
+	update_jackhammer_button_text()
 	breaker_active = not breaker_active
 	
 	set_breaker_targeting_for_all_pieces(breaker_active)
@@ -1101,9 +1135,34 @@ func _on_chainsaw_button_pressed() -> void:
 	breaker_active = false
 	set_breaker_targeting_for_all_pieces(false)
 	update_breaker_button_text()
+	jackhammer_active = false
+	update_jackhammer_button_text()
 
 	chainsaw_active = not chainsaw_active
 	update_chainsaw_button_text()
+	update_ui_lock_state()
+
+
+func _on_jackhammer_button_pressed() -> void:
+	if input_locked:
+		return
+
+	if selected_cell != Vector2i(-1, -1):
+		var selected_piece: Piece = grid[selected_cell.x][selected_cell.y]
+
+		if selected_piece != null:
+			selected_piece.set_selected(false)
+
+		selected_cell = Vector2i(-1, -1)
+
+	breaker_active = false
+	set_breaker_targeting_for_all_pieces(false)
+	update_breaker_button_text()
+	chainsaw_active = false
+	update_chainsaw_button_text()
+
+	jackhammer_active = not jackhammer_active
+	update_jackhammer_button_text()
 	update_ui_lock_state()
 
 func _on_restart_button_pressed() -> void:

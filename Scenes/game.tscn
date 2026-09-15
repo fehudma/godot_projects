@@ -78,8 +78,14 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 55
 text = "Chainsaw"
 
+[node name="JackhammerButton" type="Button" parent="Control/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 55
+text = "Jackhammer"
+
 [connection signal="pressed" from="TestButton" to="Board" method="_on_test_button_pressed"]
 [connection signal="pressed" from="RestartButton" to="Board" method="_on_restart_button_pressed"]
 [connection signal="pressed" from="Control/VBoxContainer/HintButton" to="Board" method="_on_hint_button_pressed"]
 [connection signal="pressed" from="Control/VBoxContainer/BreakerButton" to="Board" method="_on_breaker_button_pressed"]
 [connection signal="pressed" from="Control/VBoxContainer/ChainsawButton" to="Board" method="_on_chainsaw_button_pressed"]
+[connection signal="pressed" from="Control/VBoxContainer/JackhammerButton" to="Board" method="_on_jackhammer_button_pressed"]
