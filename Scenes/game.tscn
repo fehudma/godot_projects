@@ -66,14 +66,20 @@ text = "Hint"
 
 [node name="BreakerProgressLabel" type="Label" parent="Control/VBoxContainer" unique_id=371216888]
 layout_mode = 2
-text = "Breaker progress: 0 / 30"
+text = "Breaker progress: 0 / 99"
 
 [node name="BreakerButton" type="Button" parent="Control/VBoxContainer" unique_id=476545329]
 layout_mode = 2
 theme_override_font_sizes/font_size = 55
 text = "Breaker (0)"
 
+[node name="ChainsawButton" type="Button" parent="Control/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 55
+text = "Chainsaw"
+
 [connection signal="pressed" from="TestButton" to="Board" method="_on_test_button_pressed"]
 [connection signal="pressed" from="RestartButton" to="Board" method="_on_restart_button_pressed"]
 [connection signal="pressed" from="Control/VBoxContainer/HintButton" to="Board" method="_on_hint_button_pressed"]
 [connection signal="pressed" from="Control/VBoxContainer/BreakerButton" to="Board" method="_on_breaker_button_pressed"]
+[connection signal="pressed" from="Control/VBoxContainer/ChainsawButton" to="Board" method="_on_chainsaw_button_pressed"]
