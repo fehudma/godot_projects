@@ -43,6 +43,15 @@ const MAX_TOOL_USAGES: int = 99
 const STARTING_TOOL_USAGES: int = 5
 const LIGHTNING_PIECES_REQUIRED: int = 999
 const STARTING_LIGHTNING_USAGES: int = 1
+const MAX_EXPLOSIVE_USAGES: int = 99
+const STARTING_EXPLOSIVE_USAGES: int = 0
+
+enum ExplosiveType {
+	NONE,
+	FIRECRACKER,
+	GRENADE,
+	DYNAMITE,
+}
 
 const SAVE_FILE_PATH: String = "user://save_data.json"
 #==========================onreadies
@@ -59,6 +68,9 @@ const SAVE_FILE_PATH: String = "user://save_data.json"
 @onready var jackhammer_progress_label: Label = $"../Control/VBoxContainer/JackhammerProgressLabel"
 @onready var lightning_button: Button = $"../Control/VBoxContainer/LightningButton"
 @onready var lightning_progress_label: Label = $"../Control/VBoxContainer/LightningProgressLabel"
+@onready var firecracker_button: Button = $"../Control/VBoxContainer/FirecrackerButton"
+@onready var grenade_button: Button = $"../Control/VBoxContainer/GrenadeButton"
+@onready var dynamite_button: Button = $"../Control/VBoxContainer/DynamiteButton"
 
 
 #==========================VARS
@@ -83,6 +95,10 @@ var pieces_cleared_toward_jackhammer: int = 0
 var lightning_active: bool = false
 var lightnings_remaining: int = STARTING_LIGHTNING_USAGES
 var pieces_cleared_toward_lightning: int = 0
+var active_explosive: ExplosiveType = ExplosiveType.NONE
+var firecrackers_remaining: int = STARTING_EXPLOSIVE_USAGES
+var grenades_remaining: int = STARTING_EXPLOSIVE_USAGES
+var dynamites_remaining: int = STARTING_EXPLOSIVE_USAGES
 
 var score: int = 0
 
@@ -761,12 +777,25 @@ func ensure_playable_board() -> void:
 
 #Disable Hint while the board is busy
 func update_ui_lock_state() -> void:
-	hint_button.disabled = input_locked
+	hint_button.disabled = input_locked or is_power_up_active()
 	breaker_button.disabled = input_locked or breakers_remaining <= 0
 	chainsaw_button.disabled = input_locked or chainsaws_remaining <= 0
 	jackhammer_button.disabled = input_locked or jackhammers_remaining <= 0
 	lightning_button.disabled = input_locked or lightnings_remaining <= 0
+	firecracker_button.disabled = input_locked or firecrackers_remaining <= 0
+	grenade_button.disabled = input_locked or grenades_remaining <= 0
+	dynamite_button.disabled = input_locked or dynamites_remaining <= 0
 	restart_button.disabled = input_locked
+
+
+func is_power_up_active() -> bool:
+	return (
+		breaker_active
+		or chainsaw_active
+		or jackhammer_active
+		or lightning_active
+		or active_explosive != ExplosiveType.NONE
+	)
 
 #Enable Breaker targeting state for all pieces
 func set_breaker_targeting_for_all_pieces(is_targetable: bool) -> void:
@@ -797,6 +826,107 @@ func update_lightning_button_text() -> void:
 		lightning_button.text = "Lightning: ON (" + str(lightnings_remaining) + ")"
 	else:
 		lightning_button.text = "Lightning (" + str(lightnings_remaining) + ")"
+
+
+func update_explosive_button_texts() -> void:
+	firecracker_button.text = _get_explosive_button_text(
+		"Firecracker",
+		firecrackers_remaining,
+		ExplosiveType.FIRECRACKER
+	)
+	grenade_button.text = _get_explosive_button_text(
+		"Grenade",
+		grenades_remaining,
+		ExplosiveType.GRENADE
+	)
+	dynamite_button.text = _get_explosive_button_text(
+		"Dynamite",
+		dynamites_remaining,
+		ExplosiveType.DYNAMITE
+	)
+
+
+func _get_explosive_button_text(
+	display_name: String,
+	remaining: int,
+	explosive_type: ExplosiveType
+) -> String:
+	if active_explosive == explosive_type:
+		return display_name + ": ON (" + str(remaining) + ")"
+
+	return display_name + " (" + str(remaining) + ")"
+
+
+func get_explosive_radius(explosive_type: ExplosiveType) -> int:
+	match explosive_type:
+		ExplosiveType.FIRECRACKER:
+			return 1
+		ExplosiveType.GRENADE:
+			return 2
+		ExplosiveType.DYNAMITE:
+			return 3
+		_:
+			return 0
+
+
+func get_explosive_name(explosive_type: ExplosiveType) -> String:
+	match explosive_type:
+		ExplosiveType.FIRECRACKER:
+			return "Firecracker"
+		ExplosiveType.GRENADE:
+			return "Grenade"
+		ExplosiveType.DYNAMITE:
+			return "Dynamite"
+		_:
+			return "Explosive"
+
+
+func consume_explosive(explosive_type: ExplosiveType) -> void:
+	match explosive_type:
+		ExplosiveType.FIRECRACKER:
+			firecrackers_remaining -= 1
+		ExplosiveType.GRENADE:
+			grenades_remaining -= 1
+		ExplosiveType.DYNAMITE:
+			dynamites_remaining -= 1
+
+
+func get_explosive_uses(explosive_type: ExplosiveType) -> int:
+	match explosive_type:
+		ExplosiveType.FIRECRACKER:
+			return firecrackers_remaining
+		ExplosiveType.GRENADE:
+			return grenades_remaining
+		ExplosiveType.DYNAMITE:
+			return dynamites_remaining
+		_:
+			return 0
+
+
+func add_explosive_uses(
+	explosive_type: ExplosiveType,
+	amount: int = 1
+) -> void:
+	match explosive_type:
+		ExplosiveType.FIRECRACKER:
+			firecrackers_remaining = mini(
+				firecrackers_remaining + amount,
+				MAX_EXPLOSIVE_USAGES
+			)
+		ExplosiveType.GRENADE:
+			grenades_remaining = mini(
+				grenades_remaining + amount,
+				MAX_EXPLOSIVE_USAGES
+			)
+		ExplosiveType.DYNAMITE:
+			dynamites_remaining = mini(
+				dynamites_remaining + amount,
+				MAX_EXPLOSIVE_USAGES
+			)
+
+	update_explosive_button_texts()
+	update_ui_lock_state()
+	save_progress()
 
 #a simple board reset helper for future reuse
 func clear_board() -> void:
@@ -835,7 +965,10 @@ func save_progress() -> void:
 		"pieces_cleared_toward_chainsaw": pieces_cleared_toward_chainsaw,
 		"pieces_cleared_toward_jackhammer": pieces_cleared_toward_jackhammer,
 		"lightnings_remaining": lightnings_remaining,
-		"pieces_cleared_toward_lightning": pieces_cleared_toward_lightning
+		"pieces_cleared_toward_lightning": pieces_cleared_toward_lightning,
+		"firecrackers_remaining": firecrackers_remaining,
+		"grenades_remaining": grenades_remaining,
+		"dynamites_remaining": dynamites_remaining
 	}
 
 	var file: FileAccess = FileAccess.open(
@@ -903,6 +1036,15 @@ func load_progress() -> void:
 		pieces_cleared_toward_lightning = int(
 			save_data["pieces_cleared_toward_lightning"]
 		)
+
+	if save_data.has("firecrackers_remaining"):
+		firecrackers_remaining = int(save_data["firecrackers_remaining"])
+
+	if save_data.has("grenades_remaining"):
+		grenades_remaining = int(save_data["grenades_remaining"])
+
+	if save_data.has("dynamites_remaining"):
+		dynamites_remaining = int(save_data["dynamites_remaining"])
 #==========================OTHER FUNCTIONS
 #“Where should the center of cell (column, row) be?”
 func _draw() -> void:
@@ -952,6 +1094,7 @@ func _ready() -> void:
 	update_chainsaw_button_text()
 	update_jackhammer_button_text()
 	update_lightning_button_text()
+	update_explosive_button_texts()
 	update_breaker_progress_display()
 	update_chainsaw_progress_display()
 	update_jackhammer_progress_display()
@@ -969,6 +1112,56 @@ func handle_board_press(global_position: Vector2) -> void:
 	var clicked_piece: Piece = grid[clicked_cell.x][clicked_cell.y]
 
 	if clicked_piece == null:
+		return
+
+	if active_explosive != ExplosiveType.NONE:
+		input_locked = true
+
+		var explosive_type := active_explosive
+		var blast_radius := get_explosive_radius(explosive_type)
+		var explosive_name := get_explosive_name(explosive_type)
+		active_explosive = ExplosiveType.NONE
+		consume_explosive(explosive_type)
+		update_explosive_button_texts()
+		update_ui_lock_state()
+
+		var blast_pieces: Array[Piece] = []
+
+		for column: int in range(
+			maxi(0, clicked_cell.x - blast_radius),
+			mini(COLUMNS, clicked_cell.x + blast_radius + 1)
+		):
+			for row: int in range(
+				maxi(0, clicked_cell.y - blast_radius),
+				mini(ROWS, clicked_cell.y + blast_radius + 1)
+			):
+				var blast_piece: Piece = grid[column][row]
+
+				if blast_piece != null:
+					blast_pieces.append(blast_piece)
+
+		status_label.text = (
+			explosive_name
+			+ ": targeting "
+			+ str(blast_pieces.size())
+			+ " pieces"
+		)
+
+		for blast_piece: Piece in blast_pieces:
+			blast_piece.play_explosive_target_animation(blast_radius)
+
+		await get_tree().create_timer(0.45).timeout
+
+		add_score_for_match(blast_pieces)
+		remove_matched_pieces(blast_pieces)
+		collapse_all_columns()
+		refill_board()
+		await resolve_cascades()
+		await ensure_playable_board()
+
+		status_label.text = ""
+		input_locked = false
+		update_ui_lock_state()
 		return
 
 	if lightning_active:
@@ -1264,7 +1457,7 @@ func _on_hint_button_pressed() -> void:
 	if input_locked:
 		return
 
-	if breaker_active:
+	if is_power_up_active():
 		return
 	
 	if is_inside_board(selected_cell):
@@ -1317,6 +1510,8 @@ func _on_breaker_button_pressed() -> void:
 	update_jackhammer_button_text()
 	lightning_active = false
 	update_lightning_button_text()
+	active_explosive = ExplosiveType.NONE
+	update_explosive_button_texts()
 	breaker_active = not breaker_active
 	
 	set_breaker_targeting_for_all_pieces(breaker_active)
@@ -1351,6 +1546,8 @@ func _on_chainsaw_button_pressed() -> void:
 	update_jackhammer_button_text()
 	lightning_active = false
 	update_lightning_button_text()
+	active_explosive = ExplosiveType.NONE
+	update_explosive_button_texts()
 
 	chainsaw_active = not chainsaw_active
 	update_chainsaw_button_text()
@@ -1379,6 +1576,8 @@ func _on_jackhammer_button_pressed() -> void:
 	update_chainsaw_button_text()
 	lightning_active = false
 	update_lightning_button_text()
+	active_explosive = ExplosiveType.NONE
+	update_explosive_button_texts()
 
 	jackhammer_active = not jackhammer_active
 	update_jackhammer_button_text()
@@ -1407,10 +1606,55 @@ func _on_lightning_button_pressed() -> void:
 	update_chainsaw_button_text()
 	jackhammer_active = false
 	update_jackhammer_button_text()
+	active_explosive = ExplosiveType.NONE
+	update_explosive_button_texts()
 
 	lightning_active = not lightning_active
 	update_lightning_button_text()
 	update_ui_lock_state()
+
+
+func toggle_explosive(explosive_type: ExplosiveType) -> void:
+	if input_locked or get_explosive_uses(explosive_type) <= 0:
+		return
+
+	if selected_cell != Vector2i(-1, -1):
+		var selected_piece: Piece = grid[selected_cell.x][selected_cell.y]
+
+		if selected_piece != null:
+			selected_piece.set_selected(false)
+
+		selected_cell = Vector2i(-1, -1)
+
+	breaker_active = false
+	set_breaker_targeting_for_all_pieces(false)
+	chainsaw_active = false
+	jackhammer_active = false
+	lightning_active = false
+	active_explosive = (
+		ExplosiveType.NONE
+		if active_explosive == explosive_type
+		else explosive_type
+	)
+
+	update_breaker_button_text()
+	update_chainsaw_button_text()
+	update_jackhammer_button_text()
+	update_lightning_button_text()
+	update_explosive_button_texts()
+	update_ui_lock_state()
+
+
+func _on_firecracker_button_pressed() -> void:
+	toggle_explosive(ExplosiveType.FIRECRACKER)
+
+
+func _on_grenade_button_pressed() -> void:
+	toggle_explosive(ExplosiveType.GRENADE)
+
+
+func _on_dynamite_button_pressed() -> void:
+	toggle_explosive(ExplosiveType.DYNAMITE)
 
 func _on_restart_button_pressed() -> void:
 	if input_locked:

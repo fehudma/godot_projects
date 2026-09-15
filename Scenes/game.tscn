@@ -99,6 +99,21 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 55
 text = "Lightning (1)"
 
+[node name="FirecrackerButton" type="Button" parent="Control/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 55
+text = "Firecracker (0)"
+
+[node name="GrenadeButton" type="Button" parent="Control/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 55
+text = "Grenade (0)"
+
+[node name="DynamiteButton" type="Button" parent="Control/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 55
+text = "Dynamite (0)"
+
 [connection signal="pressed" from="TestButton" to="Board" method="_on_test_button_pressed"]
 [connection signal="pressed" from="RestartButton" to="Board" method="_on_restart_button_pressed"]
 [connection signal="pressed" from="Control/VBoxContainer/HintButton" to="Board" method="_on_hint_button_pressed"]
@@ -106,3 +121,6 @@ text = "Lightning (1)"
 [connection signal="pressed" from="Control/VBoxContainer/ChainsawButton" to="Board" method="_on_chainsaw_button_pressed"]
 [connection signal="pressed" from="Control/VBoxContainer/JackhammerButton" to="Board" method="_on_jackhammer_button_pressed"]
 [connection signal="pressed" from="Control/VBoxContainer/LightningButton" to="Board" method="_on_lightning_button_pressed"]
+[connection signal="pressed" from="Control/VBoxContainer/FirecrackerButton" to="Board" method="_on_firecracker_button_pressed"]
+[connection signal="pressed" from="Control/VBoxContainer/GrenadeButton" to="Board" method="_on_grenade_button_pressed"]
+[connection signal="pressed" from="Control/VBoxContainer/DynamiteButton" to="Board" method="_on_dynamite_button_pressed"]

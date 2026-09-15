@@ -127,6 +127,27 @@ func play_lightning_target_animation() -> void:
 	await tween.finished
 
 
+func play_explosive_target_animation(blast_radius: int) -> void:
+	var warning_color := Color(1.0, 0.85, 0.25, 1.0)
+
+	if blast_radius == 2:
+		warning_color = Color(1.0, 0.5, 0.12, 1.0)
+	elif blast_radius >= 3:
+		warning_color = Color(1.0, 0.2, 0.12, 1.0)
+
+	var tween := create_tween()
+
+	for cycle: int in range(3):
+		tween.tween_property(piece_sprite, "modulate", warning_color, 0.07)
+		tween.parallel().tween_property(self, "scale", Vector2(1.1, 1.1), 0.07)
+		tween.parallel().tween_property(self, "rotation", -0.06, 0.07)
+		tween.tween_property(piece_sprite, "modulate", Color.WHITE, 0.07)
+		tween.parallel().tween_property(self, "scale", Vector2.ONE, 0.07)
+		tween.parallel().tween_property(self, "rotation", 0.06, 0.07)
+
+	await tween.finished
+
+
 func _on_area_2d_mouse_entered() -> void:
 	if is_selected:
 		return
