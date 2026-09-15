@@ -762,12 +762,21 @@ func ensure_playable_board() -> void:
 
 #Disable Hint while the board is busy
 func update_ui_lock_state() -> void:
-	hint_button.disabled = input_locked
+	hint_button.disabled = input_locked or is_power_up_active()
 	breaker_button.disabled = input_locked or breakers_remaining <= 0
 	chainsaw_button.disabled = input_locked or chainsaws_remaining <= 0
 	jackhammer_button.disabled = input_locked or jackhammers_remaining <= 0
 	lightning_button.disabled = input_locked or lightnings_remaining <= 0
 	restart_button.disabled = input_locked
+
+
+func is_power_up_active() -> bool:
+	return (
+		breaker_active
+		or chainsaw_active
+		or jackhammer_active
+		or lightning_active
+	)
 
 #Enable Breaker targeting state for all pieces
 func set_breaker_targeting_for_all_pieces(is_targetable: bool) -> void:
@@ -1265,7 +1274,7 @@ func _on_hint_button_pressed() -> void:
 	if input_locked:
 		return
 
-	if breaker_active:
+	if is_power_up_active():
 		return
 	
 	if is_inside_board(selected_cell):
