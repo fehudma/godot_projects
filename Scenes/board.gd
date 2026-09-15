@@ -823,6 +823,7 @@ func handle_board_press(global_position: Vector2) -> void:
 			if column_piece != null:
 				column_pieces.append(column_piece)
 
+		add_score_for_match(column_pieces)
 		remove_matched_pieces(column_pieces)
 		collapse_all_columns()
 		refill_board()
@@ -847,6 +848,7 @@ func handle_board_press(global_position: Vector2) -> void:
 			if row_piece != null:
 				row_pieces.append(row_piece)
 
+		add_score_for_match(row_pieces)
 		remove_matched_pieces(row_pieces)
 		collapse_all_columns()
 		refill_board()
