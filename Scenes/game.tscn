@@ -69,7 +69,12 @@ text = "status text"
 [node name="HintButton" type="Button" parent="Control/VBoxContainer" unique_id=1440403269]
 layout_mode = 2
 theme_override_font_sizes/font_size = 55
-text = "Hint"
+text = "UI_HINT"
+
+[node name="LanguageButton" type="Button" parent="Control/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 38
+text = "UI_LANGUAGE"
 
 [node name="PowerUpsSeparator" type="HSeparator" parent="Control/VBoxContainer"]
 layout_mode = 2
@@ -78,7 +83,7 @@ layout_mode = 2
 layout_mode = 2
 theme_override_colors/font_color = Color(0.45, 0.85, 1, 1)
 theme_override_font_sizes/font_size = 34
-text = "MATCH POWER-UPS"
+text = "UI_MATCH_POWERUPS"
 horizontal_alignment = 1
 
 [node name="BreakerProgressLabel" type="ProgressBar" parent="Control/VBoxContainer" unique_id=371216888]
@@ -132,7 +137,7 @@ layout_mode = 2
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.72, 0.22, 1)
 theme_override_font_sizes/font_size = 34
-text = "STORE EXPLOSIVES"
+text = "UI_STORE_EXPLOSIVES"
 horizontal_alignment = 1
 
 [node name="FirecrackerButton" type="Button" parent="Control/VBoxContainer"]
@@ -153,7 +158,7 @@ text = "Dynamite (0)"
 [node name="StoreButton" type="Button" parent="Control/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 55
-text = "Store"
+text = "UI_STORE"
 
 [node name="StorePanel" type="PanelContainer" parent="Control"]
 visible = false
@@ -179,13 +184,13 @@ alignment = 1
 [node name="StoreTitle" type="Label" parent="Control/StorePanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 48
-text = "Explosives Store"
+text = "UI_STORE_TITLE"
 horizontal_alignment = 1
 
 [node name="TotalSpentLabel" type="Label" parent="Control/StorePanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
-text = "Total spent: $0.00"
+text = "UI_TOTAL_SPENT"
 horizontal_alignment = 1
 
 [node name="Separator" type="HSeparator" parent="Control/StorePanel/MarginContainer/VBoxContainer"]
@@ -194,7 +199,7 @@ layout_mode = 2
 [node name="FirecrackerDescription" type="Label" parent="Control/StorePanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
-text = "Firecracker — 3x3 blast"
+text = "UI_FIRECRACKER_DESCRIPTION"
 
 [node name="FirecrackerInventoryLabel" type="Label" parent="Control/StorePanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -208,7 +213,7 @@ text = "Buy 1 — $0.99"
 [node name="GrenadeDescription" type="Label" parent="Control/StorePanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
-text = "Grenade — 5x5 blast"
+text = "UI_GRENADE_DESCRIPTION"
 
 [node name="GrenadeInventoryLabel" type="Label" parent="Control/StorePanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -222,7 +227,7 @@ text = "Buy 1 — $1.99"
 [node name="DynamiteDescription" type="Label" parent="Control/StorePanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
-text = "Dynamite — 7x7 blast"
+text = "UI_DYNAMITE_DESCRIPTION"
 
 [node name="DynamiteInventoryLabel" type="Label" parent="Control/StorePanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -241,11 +246,12 @@ horizontal_alignment = 1
 [node name="CloseStoreButton" type="Button" parent="Control/StorePanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 34
-text = "Close"
+text = "UI_CLOSE"
 
 [connection signal="pressed" from="TestButton" to="Board" method="_on_test_button_pressed"]
 [connection signal="pressed" from="RestartButton" to="Board" method="_on_restart_button_pressed"]
 [connection signal="pressed" from="Control/VBoxContainer/HintButton" to="Board" method="_on_hint_button_pressed"]
+[connection signal="pressed" from="Control/VBoxContainer/LanguageButton" to="Board" method="_on_language_button_pressed"]
 [connection signal="pressed" from="Control/VBoxContainer/BreakerButton" to="Board" method="_on_breaker_button_pressed"]
 [connection signal="pressed" from="Control/VBoxContainer/ChainsawButton" to="Board" method="_on_chainsaw_button_pressed"]
 [connection signal="pressed" from="Control/VBoxContainer/JackhammerButton" to="Board" method="_on_jackhammer_button_pressed"]

@@ -1,0 +1,38 @@
+keys,en,uk
+UI_HINT,Hint,Підказка
+UI_LANGUAGE,EN / УКР,EN / УКР
+UI_MATCH_POWERUPS,MATCH POWER-UPS,БОНУСИ ЗА ЗБІГИ
+UI_BREAKER,Breaker,Руйнівник
+UI_CHAINSAW,Chainsaw,Бензопила
+UI_JACKHAMMER,Jackhammer,Відбійний молоток
+UI_LIGHTNING,Lightning,Блискавка
+UI_STORE_EXPLOSIVES,STORE EXPLOSIVES,ВИБУХІВКА З МАГАЗИНУ
+UI_FIRECRACKER,Firecracker,Петарда
+UI_GRENADE,Grenade,Граната
+UI_DYNAMITE,Dynamite,Динаміт
+UI_STORE,Store,Магазин
+UI_CLOSE_STORE,Close Store,Закрити магазин
+UI_CLOSE,Close,Закрити
+UI_STORE_TITLE,Explosives Store,Магазин вибухівки
+UI_TOTAL_SPENT,Total spent: $%.2f,Усього витрачено: $%.2f
+UI_OWNED,Owned: %d / %d,В запасі: %d / %d
+UI_BUY_ONE,Buy 1 — $%.2f,Купити 1 — $%.2f
+UI_COUNT,%s (%d),%s (%d)
+UI_ACTIVE_COUNT,%s: ON (%d),%s: УВІМК. (%d)
+UI_PURCHASED,%s purchased,Придбано: %s
+UI_INVENTORY_FULL,%s inventory is full,Запас «%s» заповнений
+UI_FIRECRACKER_DESCRIPTION,Firecracker — 3x3 blast,Петарда — вибух 3x3
+UI_GRENADE_DESCRIPTION,Grenade — 5x5 blast,Граната — вибух 5x5
+UI_DYNAMITE_DESCRIPTION,Dynamite — 7x7 blast,Динаміт — вибух 7x7
+UI_SCORE,Score: %d,Рахунок: %d
+UI_COMBO,Combo: x%d,Комбо: x%d
+STATUS_NO_MOVES,No moves — reshuffling...,Немає ходів — перемішування...
+STATUS_NO_MATCH,No match,Немає збігу
+STATUS_MATCH,Match!,Збіг!
+STATUS_EXPLOSIVE_TARGETING,%s: targeting %d pieces,%s: ціль — %d фішок
+STATUS_LIGHTNING_TARGETING,Lightning: %d %s pieces,Блискавка: %d фішок типу «%s»
+PIECE_BLUE_ORB,Blue Orb,Синя куля
+PIECE_ORANGE_DIAMOND,Orange Diamond,Помаранчевий діамант
+PIECE_PURPLE_STAR,Purple Star,Фіолетова зірка
+PIECE_PINK_HEART,Pink Heart,Рожеве серце
+PIECE_GREEN_LEAF,Green Leaf,Зелений листок

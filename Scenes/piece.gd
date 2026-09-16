@@ -11,11 +11,11 @@ const GREEN_LEAF: Texture2D = preload("res://assets/pieces/green_leaf.png")
 
 
 const PIECE_BRIGHTNESS := {
-	"blue_orb": 1.00, # Blue orb
-	"orange_diamond": 1.00, # Orange diamond
+	"blue_orb": 0.9, # Blue orb
+	"orange_diamond": 0.85, # Orange diamond
 	"purple_star": 1.00, # Purple star
-	"pink_heart": 1.00, # Pink-red heart
-	"green_leaf": 1.00, # Green leaf
+	"pink_heart": 0.9, # Pink-red heart
+	"green_leaf": 0.85, # Green leaf
 }
 #==========================ONREADYs
 @onready var piece_sprite: Sprite2D = $PieceSprite

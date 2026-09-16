@@ -596,7 +596,7 @@ func find_possible_move() -> Array[Vector2i]:
 
 #Update the visible score
 func update_score_display() -> void:
-	score_label.text = "Score: " + str(score)
+	score_label.text = tr("UI_SCORE") % score
 
 #Give points only for actual matches
 func add_score_for_match(
@@ -712,11 +712,11 @@ func check_lightning_reward() -> void:
 #Show the remaining Breaker count on the button
 func update_breaker_button_text() -> void:
 	breaker_button.disabled = breakers_remaining <= 0
-	
-	if breaker_active:
-		breaker_button.text = "Breaker: ON (" + str(breakers_remaining) + ")"
-	else:
-		breaker_button.text = "Breaker (" + str(breakers_remaining) + ")"
+	breaker_button.text = get_localized_count_text(
+		"UI_BREAKER",
+		breakers_remaining,
+		breaker_active
+	)
 
 #Update the Breaker progress label
 func update_breaker_progress_display() -> void:
@@ -780,7 +780,7 @@ func update_lightning_progress_display() -> void:
 
 #Show the current cascade multiplier briefly
 func update_combo_display(multiplier: int) -> void:
-	combo_label.text = "Combo: x" + str(multiplier)
+	combo_label.text = tr("UI_COMBO") % multiplier
 
 #dead-board check
 func ensure_playable_board() -> void:
@@ -788,7 +788,7 @@ func ensure_playable_board() -> void:
 		input_locked = true
 		update_ui_lock_state()
 
-		status_label.text = "No moves — reshuffling..."
+		status_label.text = tr("STATUS_NO_MOVES")
 		reshuffle_board()
 
 		await get_tree().create_timer(1.0).timeout
@@ -834,53 +834,70 @@ func set_breaker_targeting_for_all_pieces(is_targetable: bool) -> void:
 
 
 func update_chainsaw_button_text() -> void:
-	if chainsaw_active:
-		chainsaw_button.text = "Chainsaw: ON (" + str(chainsaws_remaining) + ")"
-	else:
-		chainsaw_button.text = "Chainsaw (" + str(chainsaws_remaining) + ")"
+	chainsaw_button.text = get_localized_count_text(
+		"UI_CHAINSAW",
+		chainsaws_remaining,
+		chainsaw_active
+	)
 
 
 func update_jackhammer_button_text() -> void:
-	if jackhammer_active:
-		jackhammer_button.text = "Jackhammer: ON (" + str(jackhammers_remaining) + ")"
-	else:
-		jackhammer_button.text = "Jackhammer (" + str(jackhammers_remaining) + ")"
+	jackhammer_button.text = get_localized_count_text(
+		"UI_JACKHAMMER",
+		jackhammers_remaining,
+		jackhammer_active
+	)
 
 
 func update_lightning_button_text() -> void:
-	if lightning_active:
-		lightning_button.text = "Lightning: ON (" + str(lightnings_remaining) + ")"
-	else:
-		lightning_button.text = "Lightning (" + str(lightnings_remaining) + ")"
+	lightning_button.text = get_localized_count_text(
+		"UI_LIGHTNING",
+		lightnings_remaining,
+		lightning_active
+	)
+
+
+func get_localized_count_text(
+	translation_key: String,
+	remaining: int,
+	is_active: bool
+) -> String:
+	var translated_name := tr(translation_key)
+
+	if is_active:
+		return tr("UI_ACTIVE_COUNT") % [translated_name, remaining]
+
+	return tr("UI_COUNT") % [translated_name, remaining]
 
 
 func update_explosive_button_texts() -> void:
 	firecracker_button.text = _get_explosive_button_text(
-		"Firecracker",
+		"UI_FIRECRACKER",
 		firecrackers_remaining,
 		ExplosiveType.FIRECRACKER
 	)
 	grenade_button.text = _get_explosive_button_text(
-		"Grenade",
+		"UI_GRENADE",
 		grenades_remaining,
 		ExplosiveType.GRENADE
 	)
 	dynamite_button.text = _get_explosive_button_text(
-		"Dynamite",
+		"UI_DYNAMITE",
 		dynamites_remaining,
 		ExplosiveType.DYNAMITE
 	)
 
 
 func _get_explosive_button_text(
-	display_name: String,
+	translation_key: String,
 	remaining: int,
 	explosive_type: ExplosiveType
 ) -> String:
-	if active_explosive == explosive_type:
-		return display_name + ": ON (" + str(remaining) + ")"
-
-	return display_name + " (" + str(remaining) + ")"
+	return get_localized_count_text(
+		translation_key,
+		remaining,
+		active_explosive == explosive_type
+	)
 
 
 func get_explosive_radius(explosive_type: ExplosiveType) -> int:
@@ -898,13 +915,29 @@ func get_explosive_radius(explosive_type: ExplosiveType) -> int:
 func get_explosive_name(explosive_type: ExplosiveType) -> String:
 	match explosive_type:
 		ExplosiveType.FIRECRACKER:
-			return "Firecracker"
+			return tr("UI_FIRECRACKER")
 		ExplosiveType.GRENADE:
-			return "Grenade"
+			return tr("UI_GRENADE")
 		ExplosiveType.DYNAMITE:
-			return "Dynamite"
+			return tr("UI_DYNAMITE")
 		_:
-			return "Explosive"
+			return tr("UI_STORE_EXPLOSIVES")
+
+
+func get_piece_display_name(letter: String) -> String:
+	match letter:
+		"blue_orb":
+			return tr("PIECE_BLUE_ORB")
+		"orange_diamond":
+			return tr("PIECE_ORANGE_DIAMOND")
+		"purple_star":
+			return tr("PIECE_PURPLE_STAR")
+		"pink_heart":
+			return tr("PIECE_PINK_HEART")
+		"green_leaf":
+			return tr("PIECE_GREEN_LEAF")
+		_:
+			return letter
 
 
 func consume_explosive(explosive_type: ExplosiveType) -> void:
@@ -956,16 +989,19 @@ func add_explosive_uses(
 
 
 func update_store_display() -> void:
-	total_spent_label.text = "Total spent: $%.2f" % total_money_spent
+	total_spent_label.text = tr("UI_TOTAL_SPENT") % total_money_spent
 	firecracker_inventory_label.text = (
-		"Owned: " + str(firecrackers_remaining) + " / " + str(MAX_EXPLOSIVE_USAGES)
+		tr("UI_OWNED") % [firecrackers_remaining, MAX_EXPLOSIVE_USAGES]
 	)
 	grenade_inventory_label.text = (
-		"Owned: " + str(grenades_remaining) + " / " + str(MAX_EXPLOSIVE_USAGES)
+		tr("UI_OWNED") % [grenades_remaining, MAX_EXPLOSIVE_USAGES]
 	)
 	dynamite_inventory_label.text = (
-		"Owned: " + str(dynamites_remaining) + " / " + str(MAX_EXPLOSIVE_USAGES)
+		tr("UI_OWNED") % [dynamites_remaining, MAX_EXPLOSIVE_USAGES]
 	)
+	buy_firecracker_button.text = tr("UI_BUY_ONE") % FIRECRACKER_PRICE
+	buy_grenade_button.text = tr("UI_BUY_ONE") % GRENADE_PRICE
+	buy_dynamite_button.text = tr("UI_BUY_ONE") % DYNAMITE_PRICE
 
 	buy_firecracker_button.disabled = firecrackers_remaining >= MAX_EXPLOSIVE_USAGES
 	buy_grenade_button.disabled = grenades_remaining >= MAX_EXPLOSIVE_USAGES
@@ -977,13 +1013,17 @@ func purchase_explosive(
 	price: float
 ) -> void:
 	if get_explosive_uses(explosive_type) >= MAX_EXPLOSIVE_USAGES:
-		store_message_label.text = get_explosive_name(explosive_type) + " inventory is full"
+		store_message_label.text = (
+			tr("UI_INVENTORY_FULL") % get_explosive_name(explosive_type)
+		)
 		return
 
 	total_money_spent += price
 	add_explosive_uses(explosive_type)
 	update_store_display()
-	store_message_label.text = get_explosive_name(explosive_type) + " purchased"
+	store_message_label.text = (
+		tr("UI_PURCHASED") % get_explosive_name(explosive_type)
+	)
 
 #a simple board reset helper for future reuse
 func clear_board() -> void:
@@ -1026,7 +1066,8 @@ func save_progress() -> void:
 		"firecrackers_remaining": firecrackers_remaining,
 		"grenades_remaining": grenades_remaining,
 		"dynamites_remaining": dynamites_remaining,
-		"total_money_spent": total_money_spent
+		"total_money_spent": total_money_spent,
+		"locale": TranslationServer.get_locale()
 	}
 
 	var file: FileAccess = FileAccess.open(
@@ -1106,6 +1147,14 @@ func load_progress() -> void:
 
 	if save_data.has("total_money_spent"):
 		total_money_spent = float(save_data["total_money_spent"])
+
+	if save_data.has("locale"):
+		var saved_locale := str(save_data["locale"])
+
+		if saved_locale.begins_with("uk"):
+			TranslationServer.set_locale("uk")
+		else:
+			TranslationServer.set_locale("en")
 #==========================OTHER FUNCTIONS
 #“Where should the center of cell (column, row) be?”
 func _draw() -> void:
@@ -1142,6 +1191,7 @@ func is_inside_board(grid_position: Vector2i) -> bool:
 	)
 #==========================INIT
 func _ready() -> void:
+	TranslationServer.set_locale("en")
 	hint_overlay = HINT_OVERLAY_SCENE.new()
 	add_child(hint_overlay)
 
@@ -1205,12 +1255,10 @@ func handle_board_press(global_position: Vector2) -> void:
 				if blast_piece != null:
 					blast_pieces.append(blast_piece)
 
-		status_label.text = (
-			explosive_name
-			+ ": targeting "
-			+ str(blast_pieces.size())
-			+ " pieces"
-		)
+		status_label.text = tr("STATUS_EXPLOSIVE_TARGETING") % [
+			explosive_name,
+			blast_pieces.size(),
+		]
 
 		for blast_piece: Piece in blast_pieces:
 			blast_piece.play_explosive_target_animation(blast_radius)
@@ -1245,13 +1293,10 @@ func handle_board_press(global_position: Vector2) -> void:
 				if target_piece != null and target_piece.letter == clicked_piece.letter:
 					lightning_pieces.append(target_piece)
 
-		status_label.text = (
-			"Lightning: "
-			+ str(lightning_pieces.size())
-			+ " "
-			+ clicked_piece.letter.replace("_", " ").capitalize()
-			+ " pieces"
-		)
+		status_label.text = tr("STATUS_LIGHTNING_TARGETING") % [
+			lightning_pieces.size(),
+			get_piece_display_name(clicked_piece.letter),
+		]
 
 		for lightning_piece: Piece in lightning_pieces:
 			lightning_piece.play_lightning_target_animation()
@@ -1399,12 +1444,13 @@ func handle_board_press(global_position: Vector2) -> void:
 				input_locked = true
 				update_ui_lock_state()
 
-				status_label.text = "No match"
+				var no_match_text := tr("STATUS_NO_MATCH")
+				status_label.text = no_match_text
 				swap_pieces_in_grid(second_cell, selected_cell)
 
 				await get_tree().create_timer(0.5).timeout
 
-				if status_label.text == "No match":
+				if status_label.text == no_match_text:
 					status_label.text = ""
 
 				input_locked = false
@@ -1419,7 +1465,8 @@ func handle_board_press(global_position: Vector2) -> void:
 				input_locked = true
 				update_ui_lock_state()
 
-				status_label.text = "Match!"
+				var match_text := tr("STATUS_MATCH")
+				status_label.text = match_text
 
 				add_score_for_match(matched_pieces)
 				save_progress()
@@ -1431,7 +1478,7 @@ func handle_board_press(global_position: Vector2) -> void:
 				await resolve_cascades()
 				await ensure_playable_board()
 
-				if status_label.text == "Match!":
+				if status_label.text == match_text:
 					await get_tree().create_timer(0.6).timeout
 					status_label.text = ""
 
@@ -1750,7 +1797,7 @@ func set_store_open(is_open: bool) -> void:
 
 	store_open = is_open
 	store_panel.visible = store_open
-	store_button.text = "Close Store" if store_open else "Store"
+	store_button.text = tr("UI_CLOSE_STORE") if store_open else tr("UI_STORE")
 	store_message_label.text = ""
 
 	if store_open:
@@ -1789,6 +1836,27 @@ func _on_buy_grenade_button_pressed() -> void:
 
 func _on_buy_dynamite_button_pressed() -> void:
 	purchase_explosive(ExplosiveType.DYNAMITE, DYNAMITE_PRICE)
+
+
+func update_all_localized_text() -> void:
+	update_score_display()
+	update_combo_display(1)
+	update_breaker_button_text()
+	update_chainsaw_button_text()
+	update_jackhammer_button_text()
+	update_lightning_button_text()
+	update_explosive_button_texts()
+	update_store_display()
+	store_button.text = tr("UI_CLOSE_STORE") if store_open else tr("UI_STORE")
+
+
+func _on_language_button_pressed() -> void:
+	var current_locale := TranslationServer.get_locale()
+	var new_locale := "en" if current_locale.begins_with("uk") else "uk"
+
+	TranslationServer.set_locale(new_locale)
+	update_all_localized_text()
+	save_progress()
 
 func _on_restart_button_pressed() -> void:
 	if input_locked:
