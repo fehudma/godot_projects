@@ -45,6 +45,9 @@ const LIGHTNING_PIECES_REQUIRED: int = 999
 const STARTING_LIGHTNING_USAGES: int = 1
 const MAX_EXPLOSIVE_USAGES: int = 99
 const STARTING_EXPLOSIVE_USAGES: int = 0
+const FIRECRACKER_PRICE: float = 0.99
+const GRENADE_PRICE: float = 1.99
+const DYNAMITE_PRICE: float = 2.99
 
 enum ExplosiveType {
 	NONE,
@@ -71,6 +74,16 @@ const SAVE_FILE_PATH: String = "user://save_data.json"
 @onready var firecracker_button: Button = $"../Control/VBoxContainer/FirecrackerButton"
 @onready var grenade_button: Button = $"../Control/VBoxContainer/GrenadeButton"
 @onready var dynamite_button: Button = $"../Control/VBoxContainer/DynamiteButton"
+@onready var store_button: Button = $"../Control/VBoxContainer/StoreButton"
+@onready var store_panel: PanelContainer = $"../Control/StorePanel"
+@onready var total_spent_label: Label = $"../Control/StorePanel/MarginContainer/VBoxContainer/TotalSpentLabel"
+@onready var firecracker_inventory_label: Label = $"../Control/StorePanel/MarginContainer/VBoxContainer/FirecrackerInventoryLabel"
+@onready var grenade_inventory_label: Label = $"../Control/StorePanel/MarginContainer/VBoxContainer/GrenadeInventoryLabel"
+@onready var dynamite_inventory_label: Label = $"../Control/StorePanel/MarginContainer/VBoxContainer/DynamiteInventoryLabel"
+@onready var buy_firecracker_button: Button = $"../Control/StorePanel/MarginContainer/VBoxContainer/BuyFirecrackerButton"
+@onready var buy_grenade_button: Button = $"../Control/StorePanel/MarginContainer/VBoxContainer/BuyGrenadeButton"
+@onready var buy_dynamite_button: Button = $"../Control/StorePanel/MarginContainer/VBoxContainer/BuyDynamiteButton"
+@onready var store_message_label: Label = $"../Control/StorePanel/MarginContainer/VBoxContainer/StoreMessageLabel"
 
 
 #==========================VARS
@@ -99,6 +112,8 @@ var active_explosive: ExplosiveType = ExplosiveType.NONE
 var firecrackers_remaining: int = STARTING_EXPLOSIVE_USAGES
 var grenades_remaining: int = STARTING_EXPLOSIVE_USAGES
 var dynamites_remaining: int = STARTING_EXPLOSIVE_USAGES
+var total_money_spent: float = 0.0
+var store_open: bool = false
 
 var score: int = 0
 
@@ -777,15 +792,18 @@ func ensure_playable_board() -> void:
 
 #Disable Hint while the board is busy
 func update_ui_lock_state() -> void:
-	hint_button.disabled = input_locked or is_power_up_active()
-	breaker_button.disabled = input_locked or breakers_remaining <= 0
-	chainsaw_button.disabled = input_locked or chainsaws_remaining <= 0
-	jackhammer_button.disabled = input_locked or jackhammers_remaining <= 0
-	lightning_button.disabled = input_locked or lightnings_remaining <= 0
-	firecracker_button.disabled = input_locked or firecrackers_remaining <= 0
-	grenade_button.disabled = input_locked or grenades_remaining <= 0
-	dynamite_button.disabled = input_locked or dynamites_remaining <= 0
-	restart_button.disabled = input_locked
+	var gameplay_locked := input_locked or store_open
+
+	hint_button.disabled = gameplay_locked or is_power_up_active()
+	breaker_button.disabled = gameplay_locked or breakers_remaining <= 0
+	chainsaw_button.disabled = gameplay_locked or chainsaws_remaining <= 0
+	jackhammer_button.disabled = gameplay_locked or jackhammers_remaining <= 0
+	lightning_button.disabled = gameplay_locked or lightnings_remaining <= 0
+	firecracker_button.disabled = gameplay_locked or firecrackers_remaining <= 0
+	grenade_button.disabled = gameplay_locked or grenades_remaining <= 0
+	dynamite_button.disabled = gameplay_locked or dynamites_remaining <= 0
+	restart_button.disabled = gameplay_locked
+	store_button.disabled = input_locked
 
 
 func is_power_up_active() -> bool:
@@ -928,6 +946,37 @@ func add_explosive_uses(
 	update_ui_lock_state()
 	save_progress()
 
+
+func update_store_display() -> void:
+	total_spent_label.text = "Total spent: $%.2f" % total_money_spent
+	firecracker_inventory_label.text = (
+		"Owned: " + str(firecrackers_remaining) + " / " + str(MAX_EXPLOSIVE_USAGES)
+	)
+	grenade_inventory_label.text = (
+		"Owned: " + str(grenades_remaining) + " / " + str(MAX_EXPLOSIVE_USAGES)
+	)
+	dynamite_inventory_label.text = (
+		"Owned: " + str(dynamites_remaining) + " / " + str(MAX_EXPLOSIVE_USAGES)
+	)
+
+	buy_firecracker_button.disabled = firecrackers_remaining >= MAX_EXPLOSIVE_USAGES
+	buy_grenade_button.disabled = grenades_remaining >= MAX_EXPLOSIVE_USAGES
+	buy_dynamite_button.disabled = dynamites_remaining >= MAX_EXPLOSIVE_USAGES
+
+
+func purchase_explosive(
+	explosive_type: ExplosiveType,
+	price: float
+) -> void:
+	if get_explosive_uses(explosive_type) >= MAX_EXPLOSIVE_USAGES:
+		store_message_label.text = get_explosive_name(explosive_type) + " inventory is full"
+		return
+
+	total_money_spent += price
+	add_explosive_uses(explosive_type)
+	update_store_display()
+	store_message_label.text = get_explosive_name(explosive_type) + " purchased"
+
 #a simple board reset helper for future reuse
 func clear_board() -> void:
 	for column: int in range(COLUMNS):
@@ -968,7 +1017,8 @@ func save_progress() -> void:
 		"pieces_cleared_toward_lightning": pieces_cleared_toward_lightning,
 		"firecrackers_remaining": firecrackers_remaining,
 		"grenades_remaining": grenades_remaining,
-		"dynamites_remaining": dynamites_remaining
+		"dynamites_remaining": dynamites_remaining,
+		"total_money_spent": total_money_spent
 	}
 
 	var file: FileAccess = FileAccess.open(
@@ -1045,6 +1095,9 @@ func load_progress() -> void:
 
 	if save_data.has("dynamites_remaining"):
 		dynamites_remaining = int(save_data["dynamites_remaining"])
+
+	if save_data.has("total_money_spent"):
+		total_money_spent = float(save_data["total_money_spent"])
 #==========================OTHER FUNCTIONS
 #“Where should the center of cell (column, row) be?”
 func _draw() -> void:
@@ -1099,10 +1152,14 @@ func _ready() -> void:
 	update_chainsaw_progress_display()
 	update_jackhammer_progress_display()
 	update_lightning_progress_display()
+	update_store_display()
 	update_combo_display(1)
 	update_ui_lock_state()
 
 func handle_board_press(global_position: Vector2) -> void:
+	if store_open:
+		return
+
 	var local_position := to_local(global_position)
 	var clicked_cell := pixel_to_grid(local_position)
 
@@ -1424,6 +1481,9 @@ func end_drag_swap(pointer_id: int) -> void:
 	drag_swap_triggered = false
 
 func _input(event: InputEvent) -> void:
+	if store_open:
+		return
+
 	if event is InputEventScreenTouch:
 		if event.pressed:
 			if not input_locked:
@@ -1655,6 +1715,53 @@ func _on_grenade_button_pressed() -> void:
 
 func _on_dynamite_button_pressed() -> void:
 	toggle_explosive(ExplosiveType.DYNAMITE)
+
+
+func set_store_open(is_open: bool) -> void:
+	if input_locked:
+		return
+
+	store_open = is_open
+	store_panel.visible = store_open
+	store_button.text = "Close Store" if store_open else "Store"
+	store_message_label.text = ""
+
+	if store_open:
+		breaker_active = false
+		set_breaker_targeting_for_all_pieces(false)
+		chainsaw_active = false
+		jackhammer_active = false
+		lightning_active = false
+		active_explosive = ExplosiveType.NONE
+
+		update_breaker_button_text()
+		update_chainsaw_button_text()
+		update_jackhammer_button_text()
+		update_lightning_button_text()
+		update_explosive_button_texts()
+		update_store_display()
+
+	update_ui_lock_state()
+
+
+func _on_store_button_pressed() -> void:
+	set_store_open(not store_open)
+
+
+func _on_close_store_button_pressed() -> void:
+	set_store_open(false)
+
+
+func _on_buy_firecracker_button_pressed() -> void:
+	purchase_explosive(ExplosiveType.FIRECRACKER, FIRECRACKER_PRICE)
+
+
+func _on_buy_grenade_button_pressed() -> void:
+	purchase_explosive(ExplosiveType.GRENADE, GRENADE_PRICE)
+
+
+func _on_buy_dynamite_button_pressed() -> void:
+	purchase_explosive(ExplosiveType.DYNAMITE, DYNAMITE_PRICE)
 
 func _on_restart_button_pressed() -> void:
 	if input_locked:
