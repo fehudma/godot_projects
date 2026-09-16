@@ -1277,6 +1277,13 @@ func handle_board_press(global_position: Vector2) -> void:
 			if column_piece != null:
 				column_pieces.append(column_piece)
 
+		for column_piece: Piece in column_pieces:
+			column_piece.play_power_up_target_animation(
+				Color(0.45, 0.85, 1.0, 1.0)
+			)
+
+		await get_tree().create_timer(0.4).timeout
+
 		add_score_for_match(column_pieces)
 		remove_matched_pieces(column_pieces)
 		collapse_all_columns()
@@ -1303,6 +1310,13 @@ func handle_board_press(global_position: Vector2) -> void:
 			if row_piece != null:
 				row_pieces.append(row_piece)
 
+		for row_piece: Piece in row_pieces:
+			row_piece.play_power_up_target_animation(
+				Color(1.0, 0.85, 0.25, 1.0)
+			)
+
+		await get_tree().create_timer(0.4).timeout
+
 		add_score_for_match(row_pieces)
 		remove_matched_pieces(row_pieces)
 		collapse_all_columns()
@@ -1328,6 +1342,11 @@ func handle_board_press(global_position: Vector2) -> void:
 		update_breaker_progress_display()
 		save_progress()
 		update_ui_lock_state()
+
+		clicked_piece.play_power_up_target_animation(
+			Color(1.0, 0.45, 0.12, 1.0)
+		)
+		await get_tree().create_timer(0.4).timeout
 
 		remove_matched_pieces(matched_pieces)
 		collapse_all_columns()

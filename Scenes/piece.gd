@@ -148,6 +148,18 @@ func play_explosive_target_animation(blast_radius: int) -> void:
 	await tween.finished
 
 
+func play_power_up_target_animation(warning_color: Color) -> void:
+	var tween := create_tween()
+
+	for cycle: int in range(3):
+		tween.tween_property(piece_sprite, "modulate", warning_color, 0.06)
+		tween.parallel().tween_property(self, "scale", Vector2(1.1, 1.1), 0.06)
+		tween.tween_property(piece_sprite, "modulate", Color.WHITE, 0.06)
+		tween.parallel().tween_property(self, "scale", Vector2.ONE, 0.06)
+
+	await tween.finished
+
+
 func _on_area_2d_mouse_entered() -> void:
 	if is_selected:
 		return
