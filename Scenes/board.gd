@@ -63,7 +63,7 @@ const SAVE_FILE_PATH: String = "user://save_data.json"
 @onready var restart_button: Button = $"../RestartButton"
 @onready var status_label: Label = $"../Control/VBoxContainer/StatusLabel"
 @onready var hint_button: Button = $"../Control/VBoxContainer/HintButton"
-@onready var breaker_progress_label: Label = $"../Control/VBoxContainer/BreakerProgressLabel"
+@onready var breaker_progress_label: ProgressBar = $"../Control/VBoxContainer/BreakerProgressLabel"
 @onready var breaker_button: Button = $"../Control/VBoxContainer/BreakerButton"
 @onready var chainsaw_button: Button = $"../Control/VBoxContainer/ChainsawButton"
 @onready var jackhammer_button: Button = $"../Control/VBoxContainer/JackhammerButton"
@@ -720,16 +720,18 @@ func update_breaker_button_text() -> void:
 
 #Update the Breaker progress label
 func update_breaker_progress_display() -> void:
-	if breakers_remaining >= MAX_BREAKERS:
-		breaker_progress_label.text = "Breaker progress: MAX"
-		return
-
-	breaker_progress_label.text = (
-		"Breaker progress: "
-		+ str(pieces_cleared_toward_breaker)
+	breaker_progress_label.max_value = BREAKER_PIECES_REQUIRED
+	breaker_progress_label.tooltip_text = (
+		str(pieces_cleared_toward_breaker)
 		+ " / "
 		+ str(BREAKER_PIECES_REQUIRED)
 	)
+
+	if breakers_remaining >= MAX_BREAKERS:
+		breaker_progress_label.value = BREAKER_PIECES_REQUIRED
+		return
+
+	breaker_progress_label.value = pieces_cleared_toward_breaker
 
 
 func update_chainsaw_progress_display() -> void:

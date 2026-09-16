@@ -81,10 +81,11 @@ theme_override_font_sizes/font_size = 34
 text = "MATCH POWER-UPS"
 horizontal_alignment = 1
 
-[node name="BreakerProgressLabel" type="Label" parent="Control/VBoxContainer" unique_id=371216888]
+[node name="BreakerProgressLabel" type="ProgressBar" parent="Control/VBoxContainer" unique_id=371216888]
+custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
-theme_override_font_sizes/font_size = 42
-text = "Breaker progress: 0 / 99"
+max_value = 100.0
+show_percentage = true
 
 [node name="BreakerButton" type="Button" parent="Control/VBoxContainer" unique_id=476545329]
 layout_mode = 2
