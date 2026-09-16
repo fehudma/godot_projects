@@ -67,10 +67,10 @@ const SAVE_FILE_PATH: String = "user://save_data.json"
 @onready var breaker_button: Button = $"../Control/VBoxContainer/BreakerButton"
 @onready var chainsaw_button: Button = $"../Control/VBoxContainer/ChainsawButton"
 @onready var jackhammer_button: Button = $"../Control/VBoxContainer/JackhammerButton"
-@onready var chainsaw_progress_label: Label = $"../Control/VBoxContainer/ChainsawProgressLabel"
-@onready var jackhammer_progress_label: Label = $"../Control/VBoxContainer/JackhammerProgressLabel"
+@onready var chainsaw_progress_label: ProgressBar = $"../Control/VBoxContainer/ChainsawProgressLabel"
+@onready var jackhammer_progress_label: ProgressBar = $"../Control/VBoxContainer/JackhammerProgressLabel"
 @onready var lightning_button: Button = $"../Control/VBoxContainer/LightningButton"
-@onready var lightning_progress_label: Label = $"../Control/VBoxContainer/LightningProgressLabel"
+@onready var lightning_progress_label: ProgressBar = $"../Control/VBoxContainer/LightningProgressLabel"
 @onready var firecracker_button: Button = $"../Control/VBoxContainer/FirecrackerButton"
 @onready var grenade_button: Button = $"../Control/VBoxContainer/GrenadeButton"
 @onready var dynamite_button: Button = $"../Control/VBoxContainer/DynamiteButton"
@@ -735,42 +735,48 @@ func update_breaker_progress_display() -> void:
 
 
 func update_chainsaw_progress_display() -> void:
-	if chainsaws_remaining >= MAX_TOOL_USAGES:
-		chainsaw_progress_label.text = "Chainsaw progress: MAX"
-		return
-
-	chainsaw_progress_label.text = (
-		"Chainsaw progress: "
-		+ str(pieces_cleared_toward_chainsaw)
+	chainsaw_progress_label.max_value = TOOL_PIECES_REQUIRED
+	chainsaw_progress_label.tooltip_text = (
+		str(pieces_cleared_toward_chainsaw)
 		+ " / "
 		+ str(TOOL_PIECES_REQUIRED)
 	)
+
+	if chainsaws_remaining >= MAX_TOOL_USAGES:
+		chainsaw_progress_label.value = TOOL_PIECES_REQUIRED
+		return
+
+	chainsaw_progress_label.value = pieces_cleared_toward_chainsaw
 
 
 func update_jackhammer_progress_display() -> void:
-	if jackhammers_remaining >= MAX_TOOL_USAGES:
-		jackhammer_progress_label.text = "Jackhammer progress: MAX"
-		return
-
-	jackhammer_progress_label.text = (
-		"Jackhammer progress: "
-		+ str(pieces_cleared_toward_jackhammer)
+	jackhammer_progress_label.max_value = TOOL_PIECES_REQUIRED
+	jackhammer_progress_label.tooltip_text = (
+		str(pieces_cleared_toward_jackhammer)
 		+ " / "
 		+ str(TOOL_PIECES_REQUIRED)
 	)
 
-
-func update_lightning_progress_display() -> void:
-	if lightnings_remaining >= MAX_TOOL_USAGES:
-		lightning_progress_label.text = "Lightning progress: MAX"
+	if jackhammers_remaining >= MAX_TOOL_USAGES:
+		jackhammer_progress_label.value = TOOL_PIECES_REQUIRED
 		return
 
-	lightning_progress_label.text = (
-		"Lightning progress: "
-		+ str(pieces_cleared_toward_lightning)
+	jackhammer_progress_label.value = pieces_cleared_toward_jackhammer
+
+
+func update_lightning_progress_display() -> void:
+	lightning_progress_label.max_value = LIGHTNING_PIECES_REQUIRED
+	lightning_progress_label.tooltip_text = (
+		str(pieces_cleared_toward_lightning)
 		+ " / "
 		+ str(LIGHTNING_PIECES_REQUIRED)
 	)
+
+	if lightnings_remaining >= MAX_TOOL_USAGES:
+		lightning_progress_label.value = LIGHTNING_PIECES_REQUIRED
+		return
+
+	lightning_progress_label.value = pieces_cleared_toward_lightning
 
 #Show the current cascade multiplier briefly
 func update_combo_display(multiplier: int) -> void:

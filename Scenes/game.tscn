@@ -92,30 +92,33 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 55
 text = "Breaker (0)"
 
-[node name="ChainsawProgressLabel" type="Label" parent="Control/VBoxContainer" unique_id=1557649976]
+[node name="ChainsawProgressLabel" type="ProgressBar" parent="Control/VBoxContainer" unique_id=1557649976]
+custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
-theme_override_font_sizes/font_size = 42
-text = "Chainsaw progress: 0 / 200"
+max_value = 200.0
+show_percentage = true
 
 [node name="ChainsawButton" type="Button" parent="Control/VBoxContainer" unique_id=548183241]
 layout_mode = 2
 theme_override_font_sizes/font_size = 55
 text = "Chainsaw (5)"
 
-[node name="JackhammerProgressLabel" type="Label" parent="Control/VBoxContainer" unique_id=1771760358]
+[node name="JackhammerProgressLabel" type="ProgressBar" parent="Control/VBoxContainer" unique_id=1771760358]
+custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
-theme_override_font_sizes/font_size = 42
-text = "Jackhammer progress: 0 / 200"
+max_value = 200.0
+show_percentage = true
 
 [node name="JackhammerButton" type="Button" parent="Control/VBoxContainer" unique_id=133293281]
 layout_mode = 2
 theme_override_font_sizes/font_size = 55
 text = "Jackhammer (5)"
 
-[node name="LightningProgressLabel" type="Label" parent="Control/VBoxContainer" unique_id=563701099]
+[node name="LightningProgressLabel" type="ProgressBar" parent="Control/VBoxContainer" unique_id=563701099]
+custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
-theme_override_font_sizes/font_size = 42
-text = "Lightning progress: 0 / 999"
+max_value = 999.0
+show_percentage = true
 
 [node name="LightningButton" type="Button" parent="Control/VBoxContainer" unique_id=419310029]
 layout_mode = 2
