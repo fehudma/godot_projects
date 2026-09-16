@@ -71,6 +71,16 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 55
 text = "Hint"
 
+[node name="PowerUpsSeparator" type="HSeparator" parent="Control/VBoxContainer"]
+layout_mode = 2
+
+[node name="PowerUpsSectionLabel" type="Label" parent="Control/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 0.85, 1, 1)
+theme_override_font_sizes/font_size = 34
+text = "MATCH POWER-UPS"
+horizontal_alignment = 1
+
 [node name="BreakerProgressLabel" type="Label" parent="Control/VBoxContainer" unique_id=371216888]
 layout_mode = 2
 theme_override_font_sizes/font_size = 42
@@ -110,6 +120,16 @@ text = "Lightning progress: 0 / 999"
 layout_mode = 2
 theme_override_font_sizes/font_size = 55
 text = "Lightning (1)"
+
+[node name="ExplosivesSeparator" type="HSeparator" parent="Control/VBoxContainer"]
+layout_mode = 2
+
+[node name="ExplosivesSectionLabel" type="Label" parent="Control/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.72, 0.22, 1)
+theme_override_font_sizes/font_size = 34
+text = "STORE EXPLOSIVES"
+horizontal_alignment = 1
 
 [node name="FirecrackerButton" type="Button" parent="Control/VBoxContainer"]
 layout_mode = 2
